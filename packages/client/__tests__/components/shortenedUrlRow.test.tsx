@@ -66,3 +66,9 @@ test('"Copied" button changes to "Copy" after 5 secs', async () => {
 
   await assertCopiedChangesToCopyAfter5secs();
 }, 10000);
+
+test('displays chart icon', async () => {
+  renderSUT();
+
+  expect(screen.getByTitle('Charts Icon')).toBeInTheDocument();
+});
