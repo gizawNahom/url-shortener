@@ -1,17 +1,15 @@
 import userEvent from '@testing-library/user-event';
 import { ShortenedUrlRow } from '@/components/shortenedUrlRow';
 import { act, render, screen } from '../wrapper';
-import {
-  copyText,
-  queryElementByRole,
-  queryElementByText,
-} from '__tests__/testUtils';
+import { copyText, queryElementByText } from '__tests__/testUtils';
 
 const copiedText = /^copied/i;
+const id = 'googleId1';
 const url = {
   longUrl: 'https://google.com',
-  shortUrl: 'https://sh.rt/g',
+  shortUrl: `https://sh.rt/${id}`,
 };
+const statLinkTitle = 'Charts Icon';
 
 Object.assign(navigator, {
   clipboard: {
@@ -28,9 +26,14 @@ async function clickCopyButton() {
 }
 
 function assertCorrectLinkIsVisible() {
-  const link = queryElementByRole('link');
+  const linkName = url.shortUrl.slice(8);
+  const link = getLink(linkName);
   expect(link).toHaveAttribute('href', url.shortUrl);
   expect(link).toHaveAttribute('target', '_blank');
+}
+
+function getLink(name: string) {
+  return screen.getByRole('link', { name });
 }
 
 async function assertClickingCopyButtonChangesText() {
@@ -67,8 +70,16 @@ test('"Copied" button changes to "Copy" after 5 secs', async () => {
   await assertCopiedChangesToCopyAfter5secs();
 }, 10000);
 
-test('displays chart icon', async () => {
+test('displays charts icon', () => {
   renderSUT();
 
-  expect(screen.getByTitle('Charts Icon')).toBeInTheDocument();
+  expect(screen.getByTitle(statLinkTitle)).toBeInTheDocument();
+});
+
+test('displays charts icon link', () => {
+  renderSUT();
+
+  const link = getLink(statLinkTitle);
+  expect(link).toBeVisible();
+  expect(link).toHaveAttribute('href', `/stat/${id}`);
 });
