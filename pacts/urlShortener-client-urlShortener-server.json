@@ -90,6 +90,64 @@
         },
         "status": 201
       }
+    },
+    {
+      "description": "a request for total clicks by day",
+      "providerStates": [
+        {
+          "name": "a url is saved and clicked once"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/api/urls/googleId1/total-clicks-by-day"
+      },
+      "response": {
+        "body": {
+          "dailyClickCounts": [
+            {
+              "day": "1/1/1999",
+              "totalClicks": 1
+            }
+          ],
+          "totalClicks": 1
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.dailyClickCounts[0].day": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.dailyClickCounts[0].totalClicks": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            },
+            "$.totalClicks": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
     }
   ],
   "metadata": {

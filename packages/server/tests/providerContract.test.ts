@@ -1,6 +1,10 @@
 import { Verifier } from '@pact-foundation/pact';
 import app from '../src/adapter-restapi-express/app';
 import path from 'path';
+import Context from '../src/adapter-restapi-express/context';
+import { Url } from '../src/core/url';
+import { Click } from '../src/core/click';
+import { UrlId } from '../src/core/urlId';
 
 const port = 8081;
 const baseUrl = `http://localhost:${port}`;
@@ -19,6 +23,14 @@ describe('Pact verification', () => {
           './pacts/urlShortener-client-urlShortener-server.json'
         ),
       ],
+      stateHandlers: {
+        'a url is saved and clicked once': async () => {
+          const url = new Url('https://google.com', 'googleId1');
+          await Context.urlStorage.save(url);
+          const uId = new UrlId(url.getShortenedId());
+          await Context.urlStorage.saveClick(new Click(uId, new Date()));
+        },
+      },
     })
       .verifyProvider()
       .then(() => {

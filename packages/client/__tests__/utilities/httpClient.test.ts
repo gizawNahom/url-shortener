@@ -1,8 +1,8 @@
 import path from 'path';
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';
-import { fetch, shortenUrl } from '@/utilities/httpClient';
+import { fetch, geTotalClicksByDay, shortenUrl } from '@/utilities/httpClient';
 
-const { string } = MatchersV3;
+const { string, number } = MatchersV3;
 
 const provider = new PactV3({
   dir: path.resolve(process.cwd(), 'pacts'),
@@ -63,6 +63,44 @@ test('POST /api/urls returns 201 with a shortened url', () => {
     expect(result).toStrictEqual({
       longUrl,
       shortUrl,
+    });
+  });
+});
+
+test('GET /api/urls/<id>/total-clicks-by-day', () => {
+  const validId = 'googleId1';
+  const path = `/api/urls/${validId}/total-clicks-by-day`;
+
+  const totalClicks = 1;
+  const clickDate = '1/1/1999';
+  provider
+    .given('a url is saved and clicked once')
+    .uponReceiving('a request for total clicks by day')
+    .withRequest({
+      method: 'GET',
+      path,
+      headers: { Accept: 'application/json' },
+    })
+    .willRespondWith({
+      status: 200,
+      contentType: 'application/json',
+      body: {
+        totalClicks: number(totalClicks),
+        dailyClickCounts: [
+          {
+            day: string(clickDate),
+            totalClicks: number(totalClicks),
+          },
+        ],
+      },
+    });
+
+  return provider.executeTest(async (mockServer) => {
+    process.env.NEXT_PUBLIC_API_BASE_URL = mockServer.url;
+    const response = await geTotalClicksByDay(validId);
+    expect(response).toEqual({
+      totalClicks: totalClicks,
+      dailyClickCounts: [{ day: clickDate, totalClicks: totalClicks }],
     });
   });
 });
