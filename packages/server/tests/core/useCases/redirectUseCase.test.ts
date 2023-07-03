@@ -12,17 +12,17 @@ const ID_INVALID = 'Id is invalid';
 const ID_REQUIRED = 'Id is required';
 const url = new Url('https://google.com', 'googleId1');
 
-let storageStub: UrlStorage;
+let storageFake: UrlStorage;
 
 function createUseCase() {
-  storageStub = new FakeUrlStorage();
-  return new RedirectUseCase(storageStub);
+  storageFake = new FakeUrlStorage();
+  return new RedirectUseCase(storageFake);
 }
 
 async function assertCorrectClickCountStat() {
   const dateString = getTodayString();
   expect(
-    await storageStub.getTotalClicksByDay(new UrlId(url.getShortenedId()))
+    await storageFake.getTotalClicksByDay(new UrlId(url.getShortenedId()))
   ).toEqual(new DailyClickCountStat(1, [new DailyClickCount(dateString, 1)]));
 }
 
@@ -93,7 +93,7 @@ test('throws if id contains "-"', async () => {
 
 test('returns redirect url', async () => {
   const rUC = createUseCase();
-  storageStub.save(url);
+  storageFake.save(url);
 
   const longUrl = await rUC.execute(url.getShortenedId());
 
@@ -102,7 +102,7 @@ test('returns redirect url', async () => {
 
 test('registers click', async () => {
   const rUC = createUseCase();
-  storageStub.save(url);
+  storageFake.save(url);
 
   await rUC.execute(url.getShortenedId());
 
