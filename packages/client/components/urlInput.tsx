@@ -1,5 +1,6 @@
 import { KeyboardEvent, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import { Loading } from './loading';
 
 const Button = dynamic(() => import('@/components/button'), { ssr: false });
 
@@ -61,18 +62,7 @@ export function UrlInput({
           disabled={isLoading}
           data-testid="shorten-button"
         >
-          {isLoading ? (
-            <div
-              className="align-middle inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]"
-              role="status"
-            >
-              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                Loading...
-              </span>
-            </div>
-          ) : (
-            'Shorten'
-          )}
+          {isLoading ? <Loading /> : 'Shorten'}
         </Button>
       </div>
       {error && <p className="text-red-600 text-sm pt-2">{error}</p>}

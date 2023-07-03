@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { totalClicksByDay } from './values';
 
 export const handlers = [
   rest.get('/api', (_req, res, ctx) => {
@@ -17,5 +18,8 @@ export const handlers = [
         shortUrl: 'https://sh.rt/go',
       })
     );
+  }),
+  rest.get('/api/urls/googleId1/total-clicks-by-day', async (req, res, ctx) => {
+    return res(ctx.json(totalClicksByDay));
   }),
 ];

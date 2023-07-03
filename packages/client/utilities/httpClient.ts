@@ -24,7 +24,7 @@ export async function shortenUrl(longUrl: string): Promise<ShortenedUrl> {
   return response.data;
 }
 
-export async function geTotalClicksByDay(validId: string) {
+export async function geTotalClicksByDay(validId: string): Promise<ClickStat> {
   const response = await axios.request({
     baseURL: getBaseUrl(),
     headers: { Accept: 'application/json' },
@@ -37,6 +37,16 @@ export async function geTotalClicksByDay(validId: string) {
 export interface ShortenedUrl {
   longUrl: string;
   shortUrl: string;
+}
+
+export interface ClickStat {
+  totalClicks: number;
+  dailyClickCounts: Array<DailyClickCount>;
+}
+
+export interface DailyClickCount {
+  day: string;
+  totalClicks: number;
 }
 
 function getBaseUrl() {

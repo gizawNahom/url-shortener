@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
+import { server } from './mocks/server';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -12,4 +13,16 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
+});
+
+beforeAll(() => {
+  server.listen();
+});
+
+afterEach(() => {
+  server.resetHandlers();
+});
+
+afterAll(() => {
+  server.close();
 });
