@@ -1,4 +1,4 @@
-import { UrlId } from './domain/urlId';
+import { UrlId } from '../domain/urlId';
 
 export interface UrlIdGenerator {
   generateUrlId(): Promise<UrlId>;

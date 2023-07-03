@@ -1,4 +1,4 @@
-import { UrlIdGenerator } from './urlIdGenerator';
+import { UrlIdGenerator } from './ports/urlIdGenerator';
 import { customAlphabet } from 'nanoid/async';
 import { UrlId } from './domain/urlId';
 

@@ -2,7 +2,7 @@ import DailyClickCountStat, {
   DailyClickCount,
 } from '../domain/dailyClickCountStat';
 import { UrlId } from '../domain/urlId';
-import { UrlStorage } from '../urlStorage';
+import { UrlStorage } from '../ports/urlStorage';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';
 

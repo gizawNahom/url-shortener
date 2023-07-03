@@ -1,6 +1,6 @@
 import { UrlId } from '../domain/urlId';
 import { Url } from '../domain/url';
-import { UrlStorage } from '../urlStorage';
+import { UrlStorage } from '../ports/urlStorage';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';
 import { Click } from '../domain/click';

@@ -4,7 +4,7 @@ import DailyClickCountStat, {
 } from '../core/domain/dailyClickCountStat';
 import { Url } from '../core/domain/url';
 import { UrlId } from '../core/domain/urlId';
-import { UrlStorage } from '../core/urlStorage';
+import { UrlStorage } from '../core/ports/urlStorage';
 
 export class FakeUrlStorage implements UrlStorage {
   private urls: Array<Url> = [];

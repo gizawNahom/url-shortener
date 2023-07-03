@@ -4,7 +4,7 @@ import { ValidationMessages } from '../../src/core/validationMessages';
 import Context from '../../src/adapter-restapi-express/context';
 import { GeneratorSpy } from '../core/generatorSpy';
 import { Url } from '../../src/core/domain/url';
-import { UrlStorage } from '../../src/core/urlStorage';
+import { UrlStorage } from '../../src/core/ports/urlStorage';
 import { ExceptionStorageStub } from './ExceptionStorageStub';
 import {
   Messages,

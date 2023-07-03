@@ -1,6 +1,6 @@
 import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
 import { Url } from '../../src/core/domain/url';
-import { UrlStorage } from '../../src/core/urlStorage';
+import { UrlStorage } from '../../src/core/ports/urlStorage';
 
 export class ExceptionStorageStub implements UrlStorage {
   saveClick(): Promise<void> {

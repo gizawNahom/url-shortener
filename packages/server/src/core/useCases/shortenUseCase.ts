@@ -1,6 +1,6 @@
 import { Url } from '../domain/url';
-import { UrlIdGenerator } from '../urlIdGenerator';
-import { UrlStorage } from '../urlStorage';
+import { UrlIdGenerator } from '../ports/urlIdGenerator';
+import { UrlStorage } from '../ports/urlStorage';
 import validUrl from 'valid-url';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';

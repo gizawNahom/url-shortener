@@ -2,7 +2,7 @@ import { RedirectUseCase } from '../../../src/core/useCases/redirectUseCase';
 import { Url } from '../../../src/core/domain/url';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
 import { assertValidationErrorWithMessage, getTodayString } from '../utilities';
-import { UrlStorage } from '../../../src/core/urlStorage';
+import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import DailyClickCountStat, {
   DailyClickCount,
 } from '../../../src/core/domain/dailyClickCountStat';

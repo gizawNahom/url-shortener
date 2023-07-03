@@ -1,4 +1,4 @@
-import { UrlIdGenerator } from '../../src/core/urlIdGenerator';
+import { UrlIdGenerator } from '../../src/core/ports/urlIdGenerator';
 import { UrlId } from '../../src/core/domain/urlId';
 
 export class GeneratorSpy implements UrlIdGenerator {

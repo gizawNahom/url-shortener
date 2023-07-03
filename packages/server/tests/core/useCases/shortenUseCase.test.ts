@@ -3,7 +3,7 @@ import {
   ShortenUseCaseResponse,
 } from '../../../src/core/useCases/shortenUseCase';
 import { Url } from '../../../src/core/domain/url';
-import { UrlStorage } from '../../../src/core/urlStorage';
+import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import { GeneratorSpy } from '../generatorSpy';
 import { assertValidationErrorWithMessage } from '../utilities';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
