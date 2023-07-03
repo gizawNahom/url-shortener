@@ -21,8 +21,16 @@ export class TotalClicksUseCase {
   }
 
   private async checkIfUrlWasSaved(uId: UrlId) {
-    const url = await this.urlStorage.findById(uId.getId());
-    if (!url) throw new ValidationError(ValidationMessages.ID_DOES_NOT_EXIST);
+    const url = await this.findUrl(uId);
+    if (!url) this.throwIdDoesNotExistError();
+  }
+
+  private findUrl(uId: UrlId) {
+    return this.urlStorage.findById(uId.getId());
+  }
+
+  private throwIdDoesNotExistError() {
+    throw new ValidationError(ValidationMessages.ID_DOES_NOT_EXIST);
   }
 
   private async getDailyClickCountStat(uId: UrlId) {
