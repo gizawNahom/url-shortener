@@ -1,4 +1,4 @@
-import { Url } from '../url';
+import { Url } from '../domain/url';
 import { UrlIdGenerator } from '../urlIdGenerator';
 import { UrlStorage } from '../urlStorage';
 import validUrl from 'valid-url';

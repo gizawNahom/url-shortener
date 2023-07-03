@@ -1,9 +1,9 @@
-import { Click } from '../core/click';
+import { Click } from '../core/domain/click';
 import DailyClickCountStat, {
   DailyClickCount,
-} from '../core/dailyClickCountStat';
-import { Url } from '../core/url';
-import { UrlId } from '../core/urlId';
+} from '../core/domain/dailyClickCountStat';
+import { Url } from '../core/domain/url';
+import { UrlId } from '../core/domain/urlId';
 import { UrlStorage } from '../core/urlStorage';
 
 export class FakeUrlStorage implements UrlStorage {

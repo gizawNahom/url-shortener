@@ -2,12 +2,12 @@ import {
   ShortenUseCase,
   ShortenUseCaseResponse,
 } from '../../../src/core/useCases/shortenUseCase';
-import { Url } from '../../../src/core/url';
+import { Url } from '../../../src/core/domain/url';
 import { UrlStorage } from '../../../src/core/urlStorage';
 import { GeneratorSpy } from '../generatorSpy';
 import { assertValidationErrorWithMessage } from '../utilities';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
-import DailyClickCountStat from '../../../src/core/dailyClickCountStat';
+import DailyClickCountStat from '../../../src/core/domain/dailyClickCountStat';
 
 const url = new Url('https://yahoo.com', 'fe23fe');
 const URL_REQUIRED = 'URL is required';

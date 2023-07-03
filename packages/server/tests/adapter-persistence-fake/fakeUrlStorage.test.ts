@@ -1,5 +1,5 @@
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Url } from '../../src/core/url';
+import { Url } from '../../src/core/domain/url';
 import { UrlStorage } from '../../src/core/urlStorage';
 
 function createFakeUrlStorage(): UrlStorage {

@@ -1,8 +1,8 @@
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Click } from '../../../src/core/click';
+import { Click } from '../../../src/core/domain/click';
 import { TotalClicksUseCase } from '../../../src/core/useCases/totalClicksUseCase';
-import { Url } from '../../../src/core/url';
-import { UrlId } from '../../../src/core/urlId';
+import { Url } from '../../../src/core/domain/url';
+import { UrlId } from '../../../src/core/domain/urlId';
 import { assertValidationErrorWithMessage, getDateString } from '../utilities';
 
 let storage;

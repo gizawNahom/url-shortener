@@ -1,5 +1,7 @@
-import DailyClickCountStat, { DailyClickCount } from '../dailyClickCountStat';
-import { UrlId } from '../urlId';
+import DailyClickCountStat, {
+  DailyClickCount,
+} from '../domain/dailyClickCountStat';
+import { UrlId } from '../domain/urlId';
 import { UrlStorage } from '../urlStorage';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';

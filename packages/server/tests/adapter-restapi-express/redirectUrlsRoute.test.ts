@@ -10,7 +10,7 @@ import {
 import Context from '../../src/adapter-restapi-express/context';
 import { ExceptionStorageStub } from './ExceptionStorageStub';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Url } from '../../src/core/url';
+import { Url } from '../../src/core/domain/url';
 
 const validId = 'googleId1';
 

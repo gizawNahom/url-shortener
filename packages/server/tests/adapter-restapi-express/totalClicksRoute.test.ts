@@ -10,9 +10,9 @@ import { ValidationMessages } from '../../src/core/validationMessages';
 import { ExceptionStorageStub } from './ExceptionStorageStub';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Click } from '../../src/core/click';
-import { UrlId } from '../../src/core/urlId';
-import { Url } from '../../src/core/url';
+import { Click } from '../../src/core/domain/click';
+import { UrlId } from '../../src/core/domain/urlId';
+import { Url } from '../../src/core/domain/url';
 
 const validId = 'googleId1';
 

@@ -1,5 +1,5 @@
-import DailyClickCountStat from '../../src/core/dailyClickCountStat';
-import { Url } from '../../src/core/url';
+import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
+import { Url } from '../../src/core/domain/url';
 import { UrlStorage } from '../../src/core/urlStorage';
 
 export class ExceptionStorageStub implements UrlStorage {

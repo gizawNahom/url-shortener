@@ -1,9 +1,9 @@
-import { UrlId } from '../urlId';
-import { Url } from '../url';
+import { UrlId } from '../domain/urlId';
+import { Url } from '../domain/url';
 import { UrlStorage } from '../urlStorage';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';
-import { Click } from '../click';
+import { Click } from '../domain/click';
 
 export class RedirectUseCase {
   constructor(private storage: UrlStorage) {}

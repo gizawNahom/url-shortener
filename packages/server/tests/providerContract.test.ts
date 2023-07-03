@@ -2,9 +2,9 @@ import { Verifier } from '@pact-foundation/pact';
 import app from '../src/adapter-restapi-express/app';
 import path from 'path';
 import Context from '../src/adapter-restapi-express/context';
-import { Url } from '../src/core/url';
-import { Click } from '../src/core/click';
-import { UrlId } from '../src/core/urlId';
+import { Url } from '../src/core/domain/url';
+import { Click } from '../src/core/domain/click';
+import { UrlId } from '../src/core/domain/urlId';
 
 const port = 8081;
 const baseUrl = `http://localhost:${port}`;

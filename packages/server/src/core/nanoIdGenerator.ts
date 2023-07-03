@@ -1,6 +1,6 @@
 import { UrlIdGenerator } from './urlIdGenerator';
 import { customAlphabet } from 'nanoid/async';
-import { UrlId } from './urlId';
+import { UrlId } from './domain/urlId';
 
 export class NanoIdGenerator implements UrlIdGenerator {
   private readonly characterLength = 9;

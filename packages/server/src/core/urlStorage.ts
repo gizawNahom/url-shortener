@@ -1,7 +1,7 @@
-import { Click } from './click';
-import DailyClickCountStat from './dailyClickCountStat';
-import { Url } from './url';
-import { UrlId } from './urlId';
+import { Click } from './domain/click';
+import DailyClickCountStat from './domain/dailyClickCountStat';
+import { Url } from './domain/url';
+import { UrlId } from './domain/urlId';
 
 export interface UrlStorage {
   save(shortenedUrl: Url): Promise<void>;

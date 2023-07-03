@@ -3,7 +3,7 @@ import app from '../../src/adapter-restapi-express/app';
 import { ValidationMessages } from '../../src/core/validationMessages';
 import Context from '../../src/adapter-restapi-express/context';
 import { GeneratorSpy } from '../core/generatorSpy';
-import { Url } from '../../src/core/url';
+import { Url } from '../../src/core/domain/url';
 import { UrlStorage } from '../../src/core/urlStorage';
 import { ExceptionStorageStub } from './ExceptionStorageStub';
 import {
@@ -12,7 +12,7 @@ import {
   assertBody,
   assertStatusCode,
 } from './utilities';
-import DailyClickCountStat from '../../src/core/dailyClickCountStat';
+import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
 
 const longUrl = 'https://google.com';
 const domain = 'sh.rt';

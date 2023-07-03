@@ -1,5 +1,5 @@
 import { UrlIdGenerator } from '../../src/core/urlIdGenerator';
-import { UrlId } from '../../src/core/urlId';
+import { UrlId } from '../../src/core/domain/urlId';
 
 export class GeneratorSpy implements UrlIdGenerator {
   wasCalled = false;

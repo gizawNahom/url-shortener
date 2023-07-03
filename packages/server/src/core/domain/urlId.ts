@@ -1,5 +1,5 @@
-import { ValidationError } from './validationError';
-import { ValidationMessages } from './validationMessages';
+import { ValidationError } from '../validationError';
+import { ValidationMessages } from '../validationMessages';
 
 export class UrlId {
   constructor(private id: string) {
