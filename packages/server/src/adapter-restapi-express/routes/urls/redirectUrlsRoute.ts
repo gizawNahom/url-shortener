@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { RedirectUseCase } from '../../../core/redirectUseCase';
+import { RedirectUseCase } from '../../../core/useCases/redirectUseCase';
 import Context from '../../context';
 
 export class RedirectUrlsRoute {

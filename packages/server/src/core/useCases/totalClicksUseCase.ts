@@ -1,8 +1,8 @@
-import DailyClickCountStat, { DailyClickCount } from './dailyClickCountStat';
-import { UrlId } from './urlId';
-import { UrlStorage } from './urlStorage';
-import { ValidationError } from './validationError';
-import { ValidationMessages } from './validationMessages';
+import DailyClickCountStat, { DailyClickCount } from '../dailyClickCountStat';
+import { UrlId } from '../urlId';
+import { UrlStorage } from '../urlStorage';
+import { ValidationError } from '../validationError';
+import { ValidationMessages } from '../validationMessages';
 
 export class TotalClicksUseCase {
   constructor(private urlStorage: UrlStorage) {}

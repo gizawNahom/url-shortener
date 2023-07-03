@@ -1,9 +1,9 @@
-import { Url } from './url';
-import { UrlIdGenerator } from './urlIdGenerator';
-import { UrlStorage } from './urlStorage';
+import { Url } from '../url';
+import { UrlIdGenerator } from '../urlIdGenerator';
+import { UrlStorage } from '../urlStorage';
 import validUrl from 'valid-url';
-import { ValidationError } from './validationError';
-import { ValidationMessages } from './validationMessages';
+import { ValidationError } from '../validationError';
+import { ValidationMessages } from '../validationMessages';
 
 export class ShortenUseCase {
   constructor(private storage: UrlStorage, private generator: UrlIdGenerator) {}

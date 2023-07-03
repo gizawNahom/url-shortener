@@ -1,13 +1,13 @@
 import {
   ShortenUseCase,
   ShortenUseCaseResponse,
-} from '../../src/core/shortenUseCase';
-import { Url } from '../../src/core/url';
-import { UrlStorage } from '../../src/core/urlStorage';
-import { GeneratorSpy } from './generatorSpy';
-import { assertValidationErrorWithMessage } from './utilities';
-import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import DailyClickCountStat from '../../src/core/dailyClickCountStat';
+} from '../../../src/core/useCases/shortenUseCase';
+import { Url } from '../../../src/core/url';
+import { UrlStorage } from '../../../src/core/urlStorage';
+import { GeneratorSpy } from '../generatorSpy';
+import { assertValidationErrorWithMessage } from '../utilities';
+import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
+import DailyClickCountStat from '../../../src/core/dailyClickCountStat';
 
 const url = new Url('https://yahoo.com', 'fe23fe');
 const URL_REQUIRED = 'URL is required';

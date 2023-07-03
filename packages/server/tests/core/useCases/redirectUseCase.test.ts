@@ -1,12 +1,12 @@
-import { RedirectUseCase } from '../../src/core/redirectUseCase';
-import { Url } from '../../src/core/url';
-import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { assertValidationErrorWithMessage, getTodayString } from './utilities';
-import { UrlStorage } from '../../src/core/urlStorage';
+import { RedirectUseCase } from '../../../src/core/useCases/redirectUseCase';
+import { Url } from '../../../src/core/url';
+import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
+import { assertValidationErrorWithMessage, getTodayString } from '../utilities';
+import { UrlStorage } from '../../../src/core/urlStorage';
 import DailyClickCountStat, {
   DailyClickCount,
-} from '../../src/core/dailyClickCountStat';
-import { UrlId } from '../../src/core/urlId';
+} from '../../../src/core/dailyClickCountStat';
+import { UrlId } from '../../../src/core/urlId';
 
 const ID_INVALID = 'Id is invalid';
 const ID_REQUIRED = 'Id is required';

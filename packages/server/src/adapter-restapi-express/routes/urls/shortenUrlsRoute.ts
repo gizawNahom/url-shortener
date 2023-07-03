@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 import {
   ShortenUseCase,
   ShortenUseCaseResponse,
-} from '../../../core/shortenUseCase';
+} from '../../../core/useCases/shortenUseCase';
 import Context from '../../context';
 import { ValidationError } from '../../../core/validationError';
 import { ValidationMessages } from '../../../core/validationMessages';

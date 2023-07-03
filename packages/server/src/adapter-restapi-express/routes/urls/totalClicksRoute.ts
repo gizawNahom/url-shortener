@@ -2,7 +2,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 import {
   TotalClicksUseCase,
   TotalClicksUseCaseResponse,
-} from '../../../core/totalClicksUseCase';
+} from '../../../core/useCases/totalClicksUseCase';
 import Context from '../../context';
 
 export class TotalClicksRoute {

@@ -1,9 +1,9 @@
-import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Click } from '../../src/core/click';
-import { TotalClicksUseCase } from '../../src/core/totalClicksUseCase';
-import { Url } from '../../src/core/url';
-import { UrlId } from '../../src/core/urlId';
-import { assertValidationErrorWithMessage, getDateString } from './utilities';
+import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
+import { Click } from '../../../src/core/click';
+import { TotalClicksUseCase } from '../../../src/core/useCases/totalClicksUseCase';
+import { Url } from '../../../src/core/url';
+import { UrlId } from '../../../src/core/urlId';
+import { assertValidationErrorWithMessage, getDateString } from '../utilities';
 
 let storage;
 const validId1 = 'googleId1';
