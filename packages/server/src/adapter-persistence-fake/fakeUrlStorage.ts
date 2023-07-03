@@ -41,8 +41,7 @@ export class FakeUrlStorage implements UrlStorage {
 
   private generateDateKey(c: Click) {
     const d = c.getTimestamp();
-    const key = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
-    return key;
+    return d.toISOString();
   }
 
   private calculateStat(byDay: Map<string, Click[]>) {

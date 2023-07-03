@@ -9,12 +9,9 @@ export async function assertValidationErrorWithMessage(
 }
 
 export function getTodayString() {
-  return getDateString(new Date());
+  return new Date().toISOString();
 }
 
 export function getDateString(date: Date) {
-  const dateString = `${date.getDate()}/${
-    date.getMonth() + 1
-  }/${date.getFullYear()}`;
-  return dateString;
+  return date.toISOString();
 }

@@ -57,9 +57,7 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
       totalClicks: 1,
       dailyClickCounts: [
         {
-          day: `${clickDate.getDate()}/${
-            clickDate.getMonth() + 1
-          }/${clickDate.getFullYear()}`,
+          day: clickDate.toISOString(),
           totalClicks: 1,
         },
       ],
