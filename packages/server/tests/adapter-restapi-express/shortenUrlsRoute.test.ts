@@ -5,24 +5,23 @@ import Context from '../../src/adapter-restapi-express/context';
 import { GeneratorSpy } from '../core/generatorSpy';
 import { Url } from '../../src/core/domain/url';
 import { UrlStorage } from '../../src/core/ports/urlStorage';
-import { ExceptionStorageStub } from './ExceptionStorageStub';
 import {
   Messages,
   assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
+  buildShortUrl,
+  domain,
+  setDomain,
+  setExceptionStorageStub,
+  url,
 } from './utilities';
 import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
 
-const longUrl = 'https://google.com';
-const domain = 'sh.rt';
+const longUrl = url.getLongUrl();
 
 function stubUrlIdGenerator(gSpy: GeneratorSpy) {
   Context.urlIdGenerator = gSpy;
-}
-
-function setDomain(host: string) {
-  process.env.DOMAIN = host;
 }
 
 async function sendRequest(body) {
@@ -58,12 +57,12 @@ describe('POST /api/urls', () => {
     assertStatusCode(response, 201);
     assertBody(response, {
       longUrl,
-      shortUrl: `https://${domain}/${gSpy.generatedId}`,
+      shortUrl: buildShortUrl(gSpy.generatedId),
     });
   });
 
   test('responds 500 for unknown exception', async () => {
-    Context.urlStorage = new ExceptionStorageStub();
+    setExceptionStorageStub();
 
     const response = await sendRequest({ url: longUrl });
 
@@ -84,7 +83,7 @@ describe('POST /api/urls', () => {
     assertStatusCode(response, 200);
     assertBody(response, {
       longUrl: preexistingUrl.getLongUrl(),
-      shortUrl: `https://${domain}/${preexistingUrl.getShortenedId()}`,
+      shortUrl: buildShortUrl(preexistingUrl.getShortenedId()),
     });
   });
 
@@ -96,7 +95,7 @@ describe('POST /api/urls', () => {
 });
 
 class PreexistingStorageStub implements UrlStorage {
-  preexistingUrl = new Url(longUrl, 'f1234', 0);
+  preexistingUrl = url;
 
   saveClick(): Promise<void> {
     throw new Error('Method not implemented.');
