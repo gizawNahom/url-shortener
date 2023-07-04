@@ -3,7 +3,7 @@ export const totalClicksByDay = {
   dailyClickCounts: [
     {
       totalClicks: 5,
-      day: '9/1/2023',
+      day: new Date('9/1/2023').toISOString(),
     },
   ],
 };

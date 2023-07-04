@@ -28,58 +28,23 @@ export function calculateStepSize(totalClicks: number) {
 
 export function mapToAxes(dailyClickCounts: Array<DailyClickCount>) {
   return dailyClickCounts.map((dailyClickCount) => {
-    const dateParts = getDateParts(dailyClickCount.day);
-    const date = buildDate(dateParts);
-    return buildCoordinate(date, dailyClickCount);
-  });
-
-  function buildCoordinate(
-    date: Date,
-    dCC: DailyClickCount
-  ): { x: string; y: number } {
     return {
-      x: date.toISOString(),
-      y: dCC.totalClicks,
+      x: dailyClickCount.day,
+      y: dailyClickCount.totalClicks,
     };
-  }
+  });
 }
 
 export function subtractDays(dateString: string, days: number) {
-  const dateParts = getDateParts(dateString);
-  const date = getDate();
+  const date = new Date(dateString);
+  if (isDaysGreaterThan0()) subtractDaysFromDate();
   return date.toISOString();
 
-  function getDate() {
-    const date = buildDate(dateParts);
-    if (isDaysGreaterThan0()) subtractDaysFromDate();
-    return date;
-
-    function isDaysGreaterThan0() {
-      return days > 0;
-    }
-
-    function subtractDaysFromDate() {
-      date.setDate(date.getDate() - days);
-    }
-  }
-}
-
-function getDateParts(day: string) {
-  return day.split('/');
-}
-
-function buildDate(dateParts: string[]) {
-  return new Date(parseYear(), parseMonthIndex(), parseDay());
-
-  function parseYear(): number {
-    return parseInt(dateParts[2]);
+  function isDaysGreaterThan0() {
+    return days > 0;
   }
 
-  function parseMonthIndex(): number {
-    return parseInt(dateParts[1]) - 1;
-  }
-
-  function parseDay(): number | undefined {
-    return parseInt(dateParts[0]);
+  function subtractDaysFromDate() {
+    date.setDate(date.getDate() - days);
   }
 }
