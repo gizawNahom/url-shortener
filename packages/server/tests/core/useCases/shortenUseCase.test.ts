@@ -9,7 +9,7 @@ import { assertValidationErrorWithMessage } from '../utilities';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
 import DailyClickCountStat from '../../../src/core/domain/dailyClickCountStat';
 
-const url = new Url('https://yahoo.com', 'fe23fe');
+const url = new Url('https://yahoo.com', 'fe23fe', 0);
 const URL_REQUIRED = 'URL is required';
 const URL_INVALID = 'URL is not valid';
 
@@ -26,7 +26,7 @@ function createStorage() {
 
 async function assertUrlWasSaved(storage: FakeUrlStorage) {
   expect(await storage.findByLongUrl(url.getLongUrl())).toMatchObject(
-    new Url(url.getLongUrl(), generatorSpy.generatedId)
+    new Url(url.getLongUrl(), generatorSpy.generatedId, 0)
   );
 }
 

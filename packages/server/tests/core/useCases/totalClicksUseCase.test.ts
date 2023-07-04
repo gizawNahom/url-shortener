@@ -34,7 +34,7 @@ function saveTwoUrlsAndClickBothOnce() {
 }
 
 function saveUrl(id: string, longUrl?: string) {
-  storage.save(new Url(longUrl ?? 'https://google1.com', id));
+  storage.save(new Url(longUrl ?? 'https://google1.com', id, 0));
 }
 
 function saveClick(id: string, clickDate: Date) {

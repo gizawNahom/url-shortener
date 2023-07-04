@@ -47,7 +47,7 @@ export class ShortenUseCase {
   }
 
   private buildUrl(longUrl: string, shortenedId: string) {
-    const url = new Url(longUrl, shortenedId);
+    const url = new Url(longUrl, shortenedId, 0);
     return url;
   }
 

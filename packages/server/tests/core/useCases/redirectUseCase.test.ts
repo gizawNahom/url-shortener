@@ -10,7 +10,7 @@ import { UrlId } from '../../../src/core/domain/urlId';
 
 const ID_INVALID = 'Id is invalid';
 const ID_REQUIRED = 'Id is required';
-const url = new Url('https://google.com', 'googleId1');
+const url = new Url('https://google.com', 'googleId1', 0);
 
 let storageFake: UrlStorage;
 

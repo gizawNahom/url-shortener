@@ -14,8 +14,8 @@ let url1;
 let url2;
 
 beforeEach(() => {
-  url1 = new Url('https://google.com', 'fe233');
-  url2 = new Url('https://yahoo.com', 'fe244');
+  url1 = new Url('https://google.com', 'fe233', 0);
+  url2 = new Url('https://yahoo.com', 'fe244', 0);
 });
 
 test('"find" returns null if there are no saves', async () => {

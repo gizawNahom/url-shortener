@@ -1,5 +1,9 @@
 export class Url {
-  constructor(private longUrl: string, private shortenedId: string) {}
+  constructor(
+    private longUrl: string,
+    private shortenedId: string,
+    private totalClicks: number
+  ) {}
   getLongUrl() {
     return this.longUrl;
   }

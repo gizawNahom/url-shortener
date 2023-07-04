@@ -96,7 +96,7 @@ describe('POST /api/urls', () => {
 });
 
 class PreexistingStorageStub implements UrlStorage {
-  preexistingUrl = new Url(longUrl, 'f1234');
+  preexistingUrl = new Url(longUrl, 'f1234', 0);
 
   saveClick(): Promise<void> {
     throw new Error('Method not implemented.');

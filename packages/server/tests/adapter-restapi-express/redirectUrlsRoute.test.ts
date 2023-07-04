@@ -49,7 +49,7 @@ describe('GET /<id>', () => {
   });
 
   test('responds with a 301 redirect if id exists', async () => {
-    const url = new Url('https://google.com', validId);
+    const url = new Url('https://google.com', validId, 0);
     Context.urlStorage.save(url);
 
     const response = await sendRequest(url.getShortenedId());
