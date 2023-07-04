@@ -1,23 +1,21 @@
-import request from 'supertest';
-import app from '../../src/adapter-restapi-express/app';
 import {
-  Messages,
+  assert500WithGenericMessage,
   assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
+  saveUrl,
+  sendGetRequest,
+  setExceptionStorageStub,
+  validId,
 } from './utilities';
 import { ValidationMessages } from '../../src/core/validationMessages';
-import { ExceptionStorageStub } from './ExceptionStorageStub';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 import { Click } from '../../src/core/domain/click';
 import { UrlId } from '../../src/core/domain/urlId';
-import { Url } from '../../src/core/domain/url';
-
-const validId = 'googleId1';
 
 async function sendRequest(id: string) {
-  return await request(app).get('/api/urls/' + id + '/total-clicks-by-day');
+  return await sendGetRequest('/api/urls/' + id + '/total-clicks-by-day');
 }
 
 describe('GET api/urls/<id>/total-clicks-by-day', () => {
@@ -35,19 +33,16 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
   );
 
   test('returns 500 for unknown exception', async () => {
-    Context.urlStorage = new ExceptionStorageStub();
+    setExceptionStorageStub();
 
     const response = await sendRequest(validId);
 
-    assertStatusCode(response, 500);
-    assertBody(response, {
-      message: Messages.SERVER_ERROR,
-    });
+    assert500WithGenericMessage(response);
   });
 
   test('returns 200 for a saved valid id', async () => {
     const clickDate = new Date();
-    Context.urlStorage.save(new Url('https://google.com', validId, 0));
+    await saveUrl();
     Context.urlStorage.saveClick(new Click(new UrlId(validId), clickDate));
 
     const response = await sendRequest(validId);
