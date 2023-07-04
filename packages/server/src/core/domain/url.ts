@@ -11,4 +11,8 @@ export class Url {
   getShortenedId() {
     return this.shortenedId;
   }
+
+  getTotalClicks() {
+    return this.totalClicks;
+  }
 }

@@ -1,3 +1,9 @@
+import request from 'supertest';
+import app from '../../src/adapter-restapi-express/app';
+import { Url } from '../../src/core/domain/url';
+import Context from '../../src/adapter-restapi-express/context';
+import { ExceptionStorageStub } from './ExceptionStorageStub';
+
 export function assertBadRequestWithMessage(response, message: string) {
   assertStatusCode(response, 400);
   assertBody(response, { message: message });
@@ -11,6 +17,39 @@ export function assertBody(response, body: unknown) {
   expect(response.body).toEqual(body);
 }
 
+export function assert500WithGenericMessage(response) {
+  assertStatusCode(response, 500);
+  assertBody(response, {
+    message: Messages.SERVER_ERROR,
+  });
+}
+
+export async function sendGetRequest(path: string) {
+  return await request(app).get(path);
+}
+
 export const Messages = {
   SERVER_ERROR: 'Server Error',
 };
+
+export function setDomain(host: string) {
+  process.env.DOMAIN = host;
+}
+
+export async function saveUrl() {
+  await Context.urlStorage.save(url);
+}
+
+export function setExceptionStorageStub() {
+  Context.urlStorage = new ExceptionStorageStub();
+}
+
+export function buildShortUrl(id: string) {
+  return `https://${domain}/${id}`;
+}
+
+export const domain = 'sh.rt';
+
+export const validId = 'googleId1';
+
+export const url = new Url('https://google.com', validId, 0);
