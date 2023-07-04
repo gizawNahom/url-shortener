@@ -1,21 +1,19 @@
-import request from 'supertest';
-import app from '../../src/adapter-restapi-express/app';
 import { ValidationMessages } from '../../src/core/validationMessages';
 import {
-  Messages,
+  assert500WithGenericMessage,
   assertBadRequestWithMessage,
-  assertBody,
   assertStatusCode,
+  saveUrl,
+  sendGetRequest,
+  setExceptionStorageStub,
+  url,
+  validId,
 } from './utilities';
 import Context from '../../src/adapter-restapi-express/context';
-import { ExceptionStorageStub } from './ExceptionStorageStub';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Url } from '../../src/core/domain/url';
-
-const validId = 'googleId1';
 
 async function sendRequest(id: string) {
-  return await request(app).get('/' + id);
+  return await sendGetRequest('/' + id);
 }
 
 describe('GET /<id>', () => {
@@ -32,14 +30,11 @@ describe('GET /<id>', () => {
   });
 
   test('responds 500 for unknown exceptions', async () => {
-    Context.urlStorage = new ExceptionStorageStub();
+    setExceptionStorageStub();
 
     const response = await sendRequest(validId);
 
-    assertStatusCode(response, 500);
-    assertBody(response, {
-      message: Messages.SERVER_ERROR,
-    });
+    assert500WithGenericMessage(response);
   });
 
   test('responds 400 if id does not exist', async () => {
@@ -49,8 +44,7 @@ describe('GET /<id>', () => {
   });
 
   test('responds with a 301 redirect if id exists', async () => {
-    const url = new Url('https://google.com', validId, 0);
-    Context.urlStorage.save(url);
+    await saveUrl();
 
     const response = await sendRequest(url.getShortenedId());
 
