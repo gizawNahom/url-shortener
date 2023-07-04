@@ -1,15 +1,18 @@
 import { RedirectUseCase } from '../../../src/core/useCases/redirectUseCase';
 import { Url } from '../../../src/core/domain/url';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
-import { assertValidationErrorWithMessage, getTodayString } from '../utilities';
+import {
+  ID_INVALID,
+  ID_REQUIRED,
+  assertValidationErrorWithMessage,
+  getTodayString,
+} from '../utilities';
 import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import DailyClickCountStat, {
   DailyClickCount,
 } from '../../../src/core/domain/dailyClickCountStat';
 import { UrlId } from '../../../src/core/domain/urlId';
 
-const ID_INVALID = 'Id is invalid';
-const ID_REQUIRED = 'Id is required';
 const url = new Url('https://google.com', 'googleId1', 0);
 
 let storageFake: UrlStorage;
