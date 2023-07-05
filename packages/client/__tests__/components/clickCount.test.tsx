@@ -1,9 +1,14 @@
 import 'jest-canvas-mock';
 
 import { ClickCount } from '@/components/clickCount';
-import { render, screen, waitForElementToBeRemoved } from '__tests__/wrapper';
+import { render } from '__tests__/wrapper';
 import { totalClicksByDay } from 'mocks/values';
-import { queryElementByText } from '__tests__/testUtils';
+import {
+  assertLoadingTextIsDisplayedAndRemoved,
+  findElementByText,
+  getElementByText,
+  queryElementByText,
+} from '__tests__/testUtils';
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
@@ -14,20 +19,12 @@ function renderSUT() {
   render(<ClickCount id={validId} />);
 }
 
-function getElementByText(text: string | RegExp): HTMLElement {
-  return screen.getByText(text);
-}
-
 function assertTotalClicksCountIsDisplayed() {
   expect(getElementByText(`${totalClicksByDay.totalClicks}`)).toBeVisible();
 }
 
 function assertTotalClicksTextIsNotFound() {
   expect(queryElementByText(totalClicksText)).toBeNull();
-}
-
-async function assertLoadingTextIsDisplayedAndRemoved() {
-  await waitForElementToBeRemoved(() => getElementByText(/loading/i));
 }
 
 function assertTotalClicksTextIsDisplayed() {
@@ -37,7 +34,7 @@ function assertTotalClicksTextIsDisplayed() {
 test('displays total clicks', async () => {
   renderSUT();
 
-  expect(await screen.findByText(totalClicksText)).toBeVisible();
+  expect(await findElementByText(totalClicksText)).toBeVisible();
   assertTotalClicksCountIsDisplayed();
 });
 
