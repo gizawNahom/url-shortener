@@ -1,7 +1,11 @@
 import userEvent from '@testing-library/user-event';
 import { ShortenedUrlRow } from '@/components/shortenedUrlRow';
 import { act, render, screen } from '../wrapper';
-import { copyText, queryElementByText } from '__tests__/testUtils';
+import {
+  copyText,
+  getElementByText,
+  queryElementByText,
+} from '__tests__/testUtils';
 
 const copiedText = /^copied/i;
 const id = 'googleId1';
@@ -22,7 +26,7 @@ function renderSUT() {
 }
 
 async function clickCopyButton() {
-  await userEvent.click(screen.getByText(copyText));
+  await userEvent.click(getElementByText(copyText));
 }
 
 function assertCorrectLinkIsVisible() {
