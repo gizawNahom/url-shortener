@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '../wrapper';
 import userEvent from '@testing-library/user-event';
 import {
   copyText,
+  getElementByText,
   getUrlInput,
   queryElementByRole,
   queryElementByText,
@@ -46,7 +47,7 @@ async function typeUrlAndClickShorten(url: string) {
 }
 
 async function clickShortenButton() {
-  await userEvent.click(screen.getByText(shortenButtonText));
+  await userEvent.click(getElementByText(shortenButtonText));
 }
 
 async function typeUrlIntoInput(validUrl: string) {
@@ -55,7 +56,7 @@ async function typeUrlIntoInput(validUrl: string) {
 
 async function clickCopyButton() {
   userEvent.setup();
-  await userEvent.click(screen.getByText(copyText));
+  await userEvent.click(getElementByText(copyText));
 }
 
 function removeProtocol(url: string) {
