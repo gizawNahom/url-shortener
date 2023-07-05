@@ -1,4 +1,19 @@
+import { server } from 'mocks/server';
 import { screen, waitForElementToBeRemoved } from './wrapper';
+
+export function setUpMSW() {
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterEach(() => {
+    server.resetHandlers();
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+}
 
 export function queryElementByRole(role: string) {
   return screen.queryByRole(role);

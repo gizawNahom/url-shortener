@@ -10,6 +10,7 @@ import {
   findElementByText,
   getElementByText,
   queryElementByText,
+  setUpMSW,
 } from '__tests__/testUtils';
 
 global.ResizeObserver = require('resize-observer-polyfill');
@@ -37,6 +38,8 @@ function assertUrlsAndClickCountChartAreDisplayed() {
   expect(getElementByText(url.longUrl)).toBeVisible();
   expect(screen.getByTestId('clickCount')).toBeVisible();
 }
+
+setUpMSW();
 
 test('displays urls', async () => {
   goToPage();

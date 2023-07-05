@@ -8,6 +8,7 @@ import {
   findElementByText,
   getElementByText,
   queryElementByText,
+  setUpMSW,
 } from '__tests__/testUtils';
 
 global.ResizeObserver = require('resize-observer-polyfill');
@@ -30,6 +31,8 @@ function assertTotalClicksTextIsNotFound() {
 function assertTotalClicksTextIsDisplayed() {
   expect(getElementByText(totalClicksText)).toBeVisible();
 }
+
+setUpMSW();
 
 test('displays total clicks', async () => {
   renderSUT();
