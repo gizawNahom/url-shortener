@@ -16,6 +16,10 @@ export function getElementByText(text: string | RegExp): HTMLElement {
   return screen.getByText(text);
 }
 
+export async function findElementByText(text: string): Promise<HTMLElement> {
+  return await screen.findByText(text);
+}
+
 export async function assertLoadingTextIsDisplayedAndRemoved() {
   await waitForElementToBeRemoved(() => getElementByText(/loading/i));
 }

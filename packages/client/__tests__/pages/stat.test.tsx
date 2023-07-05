@@ -7,6 +7,7 @@ import { createDynamicRouteParser } from 'next-router-mock/dynamic-routes';
 import Stat from 'pages/stat/[id]';
 import {
   assertLoadingTextIsDisplayedAndRemoved,
+  findElementByText,
   getElementByText,
   queryElementByText,
 } from '__tests__/testUtils';
@@ -23,10 +24,6 @@ function goToPage() {
 
 function renderSUT() {
   render(<Stat />);
-}
-
-async function findElementByText(text: string): Promise<HTMLElement> {
-  return await screen.findByText(text);
 }
 
 function assertUrlsAndClickCountChartAreNotDisplayed() {
