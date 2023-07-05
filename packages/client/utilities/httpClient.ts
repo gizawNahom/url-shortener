@@ -49,6 +49,16 @@ export interface DailyClickCount {
   totalClicks: number;
 }
 
+export async function getUrl(id: string) {
+  const response = await axios.request({
+    baseURL: getBaseUrl(),
+    headers: { Accept: 'application/json' },
+    method: 'GET',
+    url: `/api/urls/${id}`,
+  });
+  return response.data;
+}
+
 function getBaseUrl() {
   return process.env.NEXT_PUBLIC_API_BASE_URL;
 }

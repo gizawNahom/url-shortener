@@ -63,7 +63,7 @@
       "response": {
         "body": {
           "longUrl": "https://google.com",
-          "shortUrl": "https://sh.t/go"
+          "shortUrl": "https://sh.rt/googleId1"
         },
         "headers": {
           "Content-Type": "application/json"
@@ -89,6 +89,60 @@
           }
         },
         "status": 201
+      }
+    },
+    {
+      "description": "a request for a url",
+      "providerStates": [
+        {
+          "name": "a url is saved and clicked once"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/api/urls/googleId1"
+      },
+      "response": {
+        "body": {
+          "longUrl": "https://google.com",
+          "shortUrl": "https://sh.rt/googleId1",
+          "totalClicks": 1
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.longUrl": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.shortUrl": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.totalClicks": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
       }
     },
     {

@@ -1,8 +1,17 @@
 import path from 'path';
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';
-import { fetch, geTotalClicksByDay, shortenUrl } from '@/utilities/httpClient';
+import {
+  fetch,
+  geTotalClicksByDay,
+  getUrl,
+  shortenUrl,
+} from '@/utilities/httpClient';
 
 const { string, number } = MatchersV3;
+
+const validId = 'googleId1';
+const longUrl = 'https://google.com';
+const shortUrl = `https://sh.rt/${validId}`;
 
 const provider = new PactV3({
   dir: path.resolve(process.cwd(), 'pacts'),
@@ -10,9 +19,20 @@ const provider = new PactV3({
   provider: 'urlShortener-server',
 });
 
+function setBaseUrl(url: string) {
+  process.env.NEXT_PUBLIC_API_BASE_URL = url;
+}
+
+function executeTest(
+  callBack: (mockServer: MatchersV3.V3MockServer) => Promise<void>
+) {
+  return provider.executeTest(callBack);
+}
+
 test('Get api/ returns HTTP 200 with a greeting', () => {
-  const greeting = 'hello world';
   const path = '/api';
+  const greeting = 'hello world';
+
   provider
     .uponReceiving('a request for a greeting')
     .withRequest({
@@ -26,17 +46,17 @@ test('Get api/ returns HTTP 200 with a greeting', () => {
       body: { greeting: string(greeting) },
     });
 
-  return provider.executeTest(async (mockServer) => {
-    process.env.NEXT_PUBLIC_API_BASE_URL = mockServer.url;
+  return executeTest(async (mockServer) => {
+    setBaseUrl(mockServer.url);
+
     const greeting = await fetch(path);
+
     expect(greeting).toBe(greeting);
   });
 });
 
 test('POST /api/urls returns 201 with a shortened url', () => {
   const path = '/api/urls';
-  const longUrl = 'https://google.com';
-  const shortUrl = 'https://sh.t/go';
 
   provider
     .uponReceiving('a request to shorten a url')
@@ -55,8 +75,8 @@ test('POST /api/urls returns 201 with a shortened url', () => {
       },
     });
 
-  return provider.executeTest(async (mockServer) => {
-    process.env.NEXT_PUBLIC_API_BASE_URL = mockServer.url;
+  return executeTest(async (mockServer) => {
+    setBaseUrl(mockServer.url);
 
     const result = await shortenUrl(longUrl);
 
@@ -68,11 +88,10 @@ test('POST /api/urls returns 201 with a shortened url', () => {
 });
 
 test('GET /api/urls/<id>/total-clicks-by-day', () => {
-  const validId = 'googleId1';
   const path = `/api/urls/${validId}/total-clicks-by-day`;
-
   const totalClicks = 1;
   const clickDate = '1/1/1999';
+
   provider
     .given('a url is saved and clicked once')
     .uponReceiving('a request for total clicks by day')
@@ -95,12 +114,51 @@ test('GET /api/urls/<id>/total-clicks-by-day', () => {
       },
     });
 
-  return provider.executeTest(async (mockServer) => {
-    process.env.NEXT_PUBLIC_API_BASE_URL = mockServer.url;
+  return executeTest(async (mockServer) => {
+    setBaseUrl(mockServer.url);
+
     const response = await geTotalClicksByDay(validId);
+
     expect(response).toEqual({
       totalClicks: totalClicks,
       dailyClickCounts: [{ day: clickDate, totalClicks: totalClicks }],
     });
   });
+});
+
+test('GET /api/urls/<id>', () => {
+  const path = `/api/urls/${validId}`;
+  const totalClicks = 1;
+
+  provider
+    .given('a url is saved and clicked once')
+    .uponReceiving('a request for a url')
+    .withRequest({
+      method: 'GET',
+      path,
+      headers: { Accept: 'application/json' },
+    })
+    .willRespondWith({
+      status: 200,
+      contentType: 'application/json',
+      body: {
+        longUrl: string(longUrl),
+        shortUrl: string(shortUrl),
+        totalClicks: number(totalClicks),
+      },
+    });
+
+  return executeTest(
+    async (mockServer: MatchersV3.V3MockServer): Promise<void> => {
+      setBaseUrl(mockServer.url);
+
+      const response = await getUrl(validId);
+
+      expect(response).toEqual({
+        totalClicks,
+        longUrl,
+        shortUrl,
+      });
+    }
+  );
 });
