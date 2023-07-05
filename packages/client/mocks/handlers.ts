@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { totalClicksByDay } from './values';
+import { totalClicksByDay, url } from './values';
 
 export const handlers = [
   rest.get('/api', (_req, res, ctx) => {
@@ -21,5 +21,8 @@ export const handlers = [
   }),
   rest.get('/api/urls/googleId1/total-clicks-by-day', async (req, res, ctx) => {
     return res(ctx.json(totalClicksByDay));
+  }),
+  rest.get('/api/urls/googleId1', async (req, res, ctx) => {
+    return res(ctx.json(url));
   }),
 ];

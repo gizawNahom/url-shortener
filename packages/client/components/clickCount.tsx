@@ -29,7 +29,10 @@ export function ClickCount({ id }: { id: string }) {
   }, [id]);
 
   return (
-    <div className="bg-slate-50 rounded-lg p-5 w-full h-auto">
+    <div
+      className="bg-slate-50 rounded-lg p-5 w-full h-auto"
+      data-testid="clickCount"
+    >
       {clickStat ? displayChart() : displayLoading()}
     </div>
   );
@@ -58,7 +61,8 @@ export function ClickCount({ id }: { id: string }) {
     };
   }
 
-  function buildOptions() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function buildOptions(): any {
     return {
       plugins: buildPluginsSettings(),
       scales: buildScalesSettings(),

@@ -49,7 +49,7 @@ export interface DailyClickCount {
   totalClicks: number;
 }
 
-export async function getUrl(id: string) {
+export async function getUrl(id: string): Promise<Url> {
   const response = await axios.request({
     baseURL: getBaseUrl(),
     headers: { Accept: 'application/json' },
@@ -57,6 +57,12 @@ export async function getUrl(id: string) {
     url: `/api/urls/${id}`,
   });
   return response.data;
+}
+
+export interface Url {
+  longUrl: string;
+  shortUrl: string;
+  totalClicks: number;
 }
 
 function getBaseUrl() {
