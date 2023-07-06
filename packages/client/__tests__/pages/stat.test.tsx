@@ -1,7 +1,7 @@
 import 'jest-canvas-mock';
 
 import { render, screen, waitFor } from '__tests__/wrapper';
-import { invalidId, url } from 'mocks/values';
+import { invalidId, url, validId } from 'mocks/values';
 import Stat from 'pages/stat/[id]';
 import {
   assertLoadingTextIsDisplayedAndRemoved,
@@ -19,7 +19,6 @@ jest.mock('next/router', () => ({
 }));
 
 const push = jest.fn();
-const validId = 'googleId1';
 
 function mockRouter(invalidId: string) {
   const router = useRouter as jest.Mock;

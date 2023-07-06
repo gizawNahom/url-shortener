@@ -7,6 +7,7 @@ import {
   queryElementByRole,
   queryElementByText,
 } from '__tests__/testUtils';
+import { longUrl, shortenedUrl } from 'mocks/values';
 import Index from 'pages';
 
 const mockShortenUrl = jest.fn();
@@ -17,9 +18,9 @@ jest.mock('@/utilities/httpClient', () => {
 });
 
 const shortenButtonText = /^shorten/i;
-const validUrl = 'https://google.com/test/path/1';
+const validUrl = longUrl;
 const invalidUrl = 'invalid url';
-const response = { longUrl: validUrl, shortUrl: 'https://sh.rt/go' };
+const response = shortenedUrl;
 
 function setRequestResponse() {
   mockShortenUrl.mockResolvedValue(response);

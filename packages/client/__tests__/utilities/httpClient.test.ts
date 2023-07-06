@@ -6,13 +6,9 @@ import {
   getUrl,
   shortenUrl,
 } from '@/utilities/httpClient';
-import { invalidId } from 'mocks/values';
+import { invalidId, longUrl, shortUrl, validId } from 'mocks/values';
 
 const { string, number } = MatchersV3;
-
-const validId = 'googleId1';
-const longUrl = 'https://google.com';
-const shortUrl = `https://sh.rt/${validId}`;
 
 const provider = new PactV3({
   dir: path.resolve(process.cwd(), 'pacts'),

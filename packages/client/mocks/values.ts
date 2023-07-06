@@ -1,4 +1,4 @@
-import { Url } from '@/utilities/httpClient';
+import { ShortenedUrl, Url } from '@/utilities/httpClient';
 
 export const totalClicksByDay = {
   totalClicks: 5,
@@ -10,10 +10,19 @@ export const totalClicksByDay = {
   ],
 };
 
+export const invalidId = 'invalid-id';
+export const validId = 'googleId1';
+
+export const longUrl = 'https://google.com';
+export const shortUrl = `https://sh.rt/${validId}`;
+
 export const url: Url = {
   totalClicks: 0,
-  longUrl: 'https://google.com',
-  shortUrl: 'https://sh.rt/googleId1',
+  longUrl,
+  shortUrl,
 };
 
-export const invalidId = 'invalid-id';
+export const shortenedUrl: ShortenedUrl = {
+  longUrl: longUrl,
+  shortUrl: shortUrl,
+};

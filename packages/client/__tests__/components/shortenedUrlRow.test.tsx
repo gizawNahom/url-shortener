@@ -6,13 +6,9 @@ import {
   getElementByText,
   queryElementByText,
 } from '__tests__/testUtils';
+import { shortenedUrl, validId } from 'mocks/values';
 
 const copiedText = /^copied/i;
-const id = 'googleId1';
-const url = {
-  longUrl: 'https://google.com',
-  shortUrl: `https://sh.rt/${id}`,
-};
 const statLinkTitle = 'Charts Icon';
 
 Object.assign(navigator, {
@@ -22,7 +18,7 @@ Object.assign(navigator, {
 });
 
 function renderSUT() {
-  render(<ShortenedUrlRow shortenedUrl={url} />);
+  render(<ShortenedUrlRow shortenedUrl={shortenedUrl} />);
 }
 
 async function clickCopyButton() {
@@ -30,9 +26,9 @@ async function clickCopyButton() {
 }
 
 function assertCorrectLinkIsVisible() {
-  const linkName = url.shortUrl.slice(8);
+  const linkName = shortenedUrl.shortUrl.slice(8);
   const link = getLink(linkName);
-  expect(link).toHaveAttribute('href', url.shortUrl);
+  expect(link).toHaveAttribute('href', shortenedUrl.shortUrl);
   expect(link).toHaveAttribute('target', '_blank');
 }
 
@@ -85,5 +81,5 @@ test('displays charts icon link', () => {
 
   const link = getLink(statLinkTitle);
   expect(link).toBeVisible();
-  expect(link).toHaveAttribute('href', `/stat/${id}`);
+  expect(link).toHaveAttribute('href', `/stat/${validId}`);
 });

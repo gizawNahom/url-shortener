@@ -2,7 +2,7 @@ import 'jest-canvas-mock';
 
 import { ClickCount } from '@/components/clickCount';
 import { render } from '__tests__/wrapper';
-import { totalClicksByDay } from 'mocks/values';
+import { totalClicksByDay, validId } from 'mocks/values';
 import {
   assertLoadingTextIsDisplayedAndRemoved,
   findElementByText,
@@ -13,7 +13,6 @@ import {
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
-const validId = 'googleId1';
 const totalClicksText = 'Total Clicks';
 
 function renderSUT() {
