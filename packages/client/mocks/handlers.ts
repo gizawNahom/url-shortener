@@ -1,9 +1,11 @@
 import { rest } from 'msw';
 import {
+  idWith0Clicks,
   invalidId,
   shortenedUrl,
   totalClicksByDay,
   url,
+  urlWith0Clicks,
   validId,
 } from './values';
 
@@ -26,6 +28,9 @@ export const handlers = [
   ),
   rest.get(`/api/urls/${validId}`, async (req, res, ctx) => {
     return res(ctx.json(url));
+  }),
+  rest.get(`/api/urls/${idWith0Clicks}`, async (req, res, ctx) => {
+    return res(ctx.json(urlWith0Clicks));
   }),
   rest.get(`/api/urls/${invalidId}`, async (req, res, ctx) => {
     return res(ctx.status(400), ctx.json({ message: 'Id is invalid' }));

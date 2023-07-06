@@ -32,9 +32,17 @@ export default function Stat() {
       <div>
         <p>{url?.shortUrl}</p>
         <p>{url?.longUrl}</p>
-        <ClickCount id={router.query.id as string} />
+        {hasNoClicks() ? (
+          <p>There are no clicks yet</p>
+        ) : (
+          <ClickCount id={router.query.id as string} />
+        )}
       </div>
     );
+  }
+
+  function hasNoClicks() {
+    return url?.totalClicks === 0;
   }
 
   function displayLoading() {

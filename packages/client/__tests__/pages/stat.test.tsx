@@ -1,7 +1,7 @@
 import 'jest-canvas-mock';
 
 import { render, screen, waitFor } from '__tests__/wrapper';
-import { invalidId, url, validId } from 'mocks/values';
+import { idWith0Clicks, invalidId, url, validId } from 'mocks/values';
 import Stat from 'pages/stat/[id]';
 import {
   assertLoadingTextIsDisplayedAndRemoved,
@@ -37,6 +37,10 @@ function renderSUT() {
 function assertUrlsAndClickCountChartAreNotDisplayed() {
   expect(queryElementByText(url.shortUrl)).toBeNull();
   expect(queryElementByText(url.longUrl)).toBeNull();
+  assertClickCountChartIsNotDisplayed();
+}
+
+function assertClickCountChartIsNotDisplayed() {
   expect(screen.queryByTestId('clickCount')).toBeNull();
 }
 
@@ -74,4 +78,13 @@ test('redirects to home page if exception is thrown', async () => {
 
   await waitFor(() => expect(push).toHaveBeenCalledWith('/'));
   expect(push).toHaveBeenCalledTimes(1);
+});
+
+test('displays appropriate text if total clicks is zero', async () => {
+  mockRouter(idWith0Clicks);
+
+  renderSUT();
+
+  expect(await findElementByText('There are no clicks yet')).toBeVisible();
+  assertClickCountChartIsNotDisplayed();
 });
