@@ -6,6 +6,7 @@ import {
   getUrlInput,
   queryElementByRole,
   queryElementByText,
+  removeHTTPS,
 } from '__tests__/testUtils';
 import { longUrl, shortenedUrl } from 'mocks/values';
 import Index from 'pages';
@@ -60,10 +61,6 @@ async function clickCopyButton() {
   await userEvent.click(getElementByText(copyText));
 }
 
-function removeProtocol(url: string) {
-  return url.slice(8);
-}
-
 function assertHeadingWithText(text: string) {
   const heading = queryElementByRole('heading');
   expect(heading).toBeVisible();
@@ -88,7 +85,7 @@ function assertAListItemIsInsideAList() {
 
 function assertListItemContainsUrlWithoutProtocol(url: string) {
   const listItem = queryElementByRole('listitem');
-  const urlWithNoProtocol = removeProtocol(url);
+  const urlWithNoProtocol = removeHTTPS(url);
   expect(listItem).toHaveTextContent(urlWithNoProtocol);
   expect(listItem).not.toHaveTextContent(url);
 }

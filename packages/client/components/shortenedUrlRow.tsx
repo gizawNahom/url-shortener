@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ShortenedUrl } from '@/utilities/httpClient';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { removeProtocol } from '@/utilities/removeProtocol';
 
 const Button = dynamic(() => import('@/components/button'), { ssr: false });
 
@@ -41,11 +42,6 @@ export function ShortenedUrlRow({
         {removeProtocol(shortenedUrl?.shortUrl)}
       </a>
     );
-  }
-
-  function removeProtocol(url: string | undefined): string {
-    const u = new URL(url || '');
-    return u.hostname + u.pathname;
   }
 
   function displayChartsIcon() {

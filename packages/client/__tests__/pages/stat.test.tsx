@@ -8,6 +8,7 @@ import {
   findElementByText,
   getElementByText,
   queryElementByText,
+  removeHTTPS,
   setUpMSW,
 } from '__tests__/testUtils';
 import { useRouter } from 'next/router';
@@ -19,6 +20,7 @@ jest.mock('next/router', () => ({
 }));
 
 const push = jest.fn();
+const shortUrlWithOutProtocol = removeHTTPS(url.shortUrl);
 
 function mockRouter(invalidId: string) {
   const router = useRouter as jest.Mock;
@@ -35,7 +37,7 @@ function renderSUT() {
 }
 
 function assertUrlsAndClickCountChartAreNotDisplayed() {
-  expect(queryElementByText(url.shortUrl)).toBeNull();
+  expect(queryElementByText(shortUrlWithOutProtocol)).toBeNull();
   expect(queryElementByText(url.longUrl)).toBeNull();
   assertClickCountChartIsNotDisplayed();
 }
@@ -45,7 +47,7 @@ function assertClickCountChartIsNotDisplayed() {
 }
 
 function assertUrlsAndClickCountChartAreDisplayed() {
-  expect(getElementByText(url.shortUrl)).toBeVisible();
+  expect(getElementByText(shortUrlWithOutProtocol)).toBeVisible();
   expect(getElementByText(url.longUrl)).toBeVisible();
   expect(screen.getByTestId('clickCount')).toBeVisible();
 }
@@ -57,7 +59,7 @@ test('displays urls', async () => {
 
   renderSUT();
 
-  expect(await findElementByText(url.shortUrl)).toBeVisible();
+  expect(await findElementByText(shortUrlWithOutProtocol)).toBeVisible();
   expect(getElementByText(url.longUrl)).toBeVisible();
 });
 

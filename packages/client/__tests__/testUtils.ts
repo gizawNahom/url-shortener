@@ -35,6 +35,10 @@ export async function findElementByText(text: string): Promise<HTMLElement> {
   return await screen.findByText(text);
 }
 
+export function removeHTTPS(url: string) {
+  return url.slice(8);
+}
+
 export async function assertLoadingTextIsDisplayedAndRemoved() {
   await waitForElementToBeRemoved(() => getElementByText(/loading/i));
 }

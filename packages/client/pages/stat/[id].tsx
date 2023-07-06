@@ -1,6 +1,7 @@
 import { ClickCount } from '@/components/clickCount';
 import { Loading } from '@/components/loading';
 import { Url, getUrl } from '@/utilities/httpClient';
+import { removeProtocol } from '@/utilities/removeProtocol';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -30,7 +31,7 @@ export default function Stat() {
   function displayPage() {
     return (
       <div>
-        <p>{url?.shortUrl}</p>
+        <p>{removeProtocol(url?.shortUrl as string)}</p>
         <p>{url?.longUrl}</p>
         {hasNoClicks() ? (
           <p>There are no clicks yet</p>
