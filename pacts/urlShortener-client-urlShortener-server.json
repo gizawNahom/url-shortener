@@ -35,6 +35,37 @@
       }
     },
     {
+      "description": "a request for a url with an invalid id",
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/api/urls/invalid-id"
+      },
+      "response": {
+        "body": {
+          "message": "Id is invalid"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.message": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 400
+      }
+    },
+    {
       "description": "a request to shorten a url",
       "request": {
         "body": {

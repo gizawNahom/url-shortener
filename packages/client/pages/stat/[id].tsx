@@ -11,9 +11,15 @@ export default function Stat() {
 
   useEffect(() => {
     (async () => {
-      if (id) setUrl(await getUrl(id));
+      if (id) {
+        try {
+          setUrl(await getUrl(id));
+        } catch (error) {
+          router.push('/');
+        }
+      }
     })();
-  }, [id]);
+  }, [id, router]);
 
   return (
     <div className="mx-auto h-screen w-1/2 my-8">

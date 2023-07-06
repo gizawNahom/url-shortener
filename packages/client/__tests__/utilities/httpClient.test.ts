@@ -6,6 +6,7 @@ import {
   getUrl,
   shortenUrl,
 } from '@/utilities/httpClient';
+import { invalidId } from 'mocks/values';
 
 const { string, number } = MatchersV3;
 
@@ -126,39 +127,68 @@ test('GET /api/urls/<id>/total-clicks-by-day', () => {
   });
 });
 
-test('GET /api/urls/<id>', () => {
-  const path = `/api/urls/${validId}`;
-  const totalClicks = 1;
+describe('GET /api/urls/<id>', () => {
+  const path = '/api/urls/';
+  test('returns 200 for a valid id', () => {
+    const totalClicks = 1;
 
-  provider
-    .given('a url is saved and clicked once')
-    .uponReceiving('a request for a url')
-    .withRequest({
-      method: 'GET',
-      path,
-      headers: { Accept: 'application/json' },
-    })
-    .willRespondWith({
-      status: 200,
-      contentType: 'application/json',
-      body: {
-        longUrl: string(longUrl),
-        shortUrl: string(shortUrl),
-        totalClicks: number(totalClicks),
-      },
-    });
-
-  return executeTest(
-    async (mockServer: MatchersV3.V3MockServer): Promise<void> => {
-      setBaseUrl(mockServer.url);
-
-      const response = await getUrl(validId);
-
-      expect(response).toEqual({
-        totalClicks,
-        longUrl,
-        shortUrl,
+    provider
+      .given('a url is saved and clicked once')
+      .uponReceiving('a request for a url')
+      .withRequest({
+        method: 'GET',
+        path: path + validId,
+        headers: { Accept: 'application/json' },
+      })
+      .willRespondWith({
+        status: 200,
+        contentType: 'application/json',
+        body: {
+          longUrl: string(longUrl),
+          shortUrl: string(shortUrl),
+          totalClicks: number(totalClicks),
+        },
       });
-    }
-  );
+
+    return executeTest(
+      async (mockServer: MatchersV3.V3MockServer): Promise<void> => {
+        setBaseUrl(mockServer.url);
+
+        const response = await getUrl(validId);
+
+        expect(response).toEqual({
+          totalClicks,
+          longUrl,
+          shortUrl,
+        });
+      }
+    );
+  });
+
+  test('returns 400 for an invalid id', () => {
+    provider
+      .uponReceiving('a request for a url with an invalid id')
+      .withRequest({
+        method: 'GET',
+        path: path + invalidId,
+        headers: { Accept: 'application/json' },
+      })
+      .willRespondWith({
+        status: 400,
+        contentType: 'application/json',
+        body: {
+          message: string('Id is invalid'),
+        },
+      });
+
+    return executeTest(
+      async (mockServer: MatchersV3.V3MockServer): Promise<void> => {
+        setBaseUrl(mockServer.url);
+
+        await expect(async () => {
+          await getUrl(invalidId);
+        }).rejects.toThrowError();
+      }
+    );
+  });
 });

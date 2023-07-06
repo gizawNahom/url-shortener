@@ -15,3 +15,5 @@ export const url: Url = {
   longUrl: 'https://google.com',
   shortUrl: 'https://sh.rt/googleId1',
 };
+
+export const invalidId = 'invalid-id';

@@ -1,9 +1,7 @@
 import 'jest-canvas-mock';
 
-import { render, screen } from '__tests__/wrapper';
-import { url } from 'mocks/values';
-import mockRouter from 'next-router-mock';
-import { createDynamicRouteParser } from 'next-router-mock/dynamic-routes';
+import { render, screen, waitFor } from '__tests__/wrapper';
+import { invalidId, url } from 'mocks/values';
 import Stat from 'pages/stat/[id]';
 import {
   assertLoadingTextIsDisplayedAndRemoved,
@@ -12,15 +10,25 @@ import {
   queryElementByText,
   setUpMSW,
 } from '__tests__/testUtils';
+import { useRouter } from 'next/router';
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
-jest.mock('next/router', () => require('next-router-mock'));
-mockRouter.useParser(createDynamicRouteParser(['/stat/[id]']));
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
+}));
 
-function goToPage() {
-  const validId = 'googleId1';
-  mockRouter.push(`/stat/${validId}`);
+const push = jest.fn();
+const validId = 'googleId1';
+
+function mockRouter(invalidId: string) {
+  const router = useRouter as jest.Mock;
+  router.mockImplementation(() => ({
+    push: push,
+    query: {
+      id: invalidId,
+    },
+  }));
 }
 
 function renderSUT() {
@@ -42,7 +50,7 @@ function assertUrlsAndClickCountChartAreDisplayed() {
 setUpMSW();
 
 test('displays urls', async () => {
-  goToPage();
+  mockRouter(validId);
 
   renderSUT();
 
@@ -51,11 +59,20 @@ test('displays urls', async () => {
 });
 
 test('displays loading while fetching', async () => {
-  goToPage();
+  mockRouter(validId);
 
   renderSUT();
 
   assertUrlsAndClickCountChartAreNotDisplayed();
   await assertLoadingTextIsDisplayedAndRemoved();
   assertUrlsAndClickCountChartAreDisplayed();
+});
+
+test('redirects to home page if exception is thrown', async () => {
+  mockRouter(invalidId);
+
+  renderSUT();
+
+  await waitFor(() => expect(push).toHaveBeenCalledWith('/'));
+  expect(push).toHaveBeenCalledTimes(1);
 });

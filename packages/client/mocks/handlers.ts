@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { totalClicksByDay, url } from './values';
+import { invalidId, totalClicksByDay, url } from './values';
 
 export const handlers = [
   rest.get('/api', (_req, res, ctx) => {
@@ -24,5 +24,8 @@ export const handlers = [
   }),
   rest.get('/api/urls/googleId1', async (req, res, ctx) => {
     return res(ctx.json(url));
+  }),
+  rest.get(`/api/urls/${invalidId}`, async (req, res, ctx) => {
+    return res(ctx.status(400), ctx.json({ message: 'Id is invalid' }));
   }),
 ];
