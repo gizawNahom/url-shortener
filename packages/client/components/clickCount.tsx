@@ -151,7 +151,7 @@ export function ClickCount({ id }: { id: string }) {
   function displayLoading() {
     return (
       <div className="h-96 flex justify-center items-center">
-        <Loading color="cyan-500" />
+        <Loading colored={true} />
       </div>
     );
   }
