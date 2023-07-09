@@ -24,11 +24,15 @@ export function queryElementByText(text: string | RegExp): HTMLElement | null {
 }
 
 export function getUrlInput(): HTMLElement {
-  return screen.getByRole('textbox');
+  return getElementByRole('textbox');
 }
 
 export function getElementByText(text: string | RegExp): HTMLElement {
   return screen.getByText(text);
+}
+
+export function getElementByRole(role: string, title?: string) {
+  return screen.getByRole(role, { name: title });
 }
 
 export async function findElementByText(text: string): Promise<HTMLElement> {

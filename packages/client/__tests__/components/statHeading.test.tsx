@@ -1,6 +1,7 @@
 import { StatHeading } from '@/components/statHeading';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '__tests__/wrapper';
+import { getElementByRole } from '__tests__/testUtils';
+import { render } from '__tests__/wrapper';
 import { url } from 'mocks/values';
 
 function renderSUT() {
@@ -9,10 +10,6 @@ function renderSUT() {
 
 function getCopyButton() {
   return getElementByRole('button', 'Copy');
-}
-
-function getElementByRole(role: string, title?: string) {
-  return screen.getByRole(role, { name: title });
 }
 
 test('displays visit url link that opens a new tab', () => {
@@ -27,8 +24,7 @@ test('displays visit url link that opens a new tab', () => {
 test('displays copy button', () => {
   renderSUT();
 
-  const copyButton = getCopyButton();
-  expect(copyButton).toBeVisible();
+  expect(getCopyButton()).toBeVisible();
 });
 
 test('clicking copy button copies short url', async () => {

@@ -3,6 +3,7 @@ import { ShortenedUrlRow } from '@/components/shortenedUrlRow';
 import { act, render, screen } from '../wrapper';
 import {
   copyText,
+  getElementByRole,
   getElementByText,
   queryElementByText,
 } from '__tests__/testUtils';
@@ -33,7 +34,7 @@ function assertCorrectLinkIsVisible() {
 }
 
 function getLink(name: string) {
-  return screen.getByRole('link', { name });
+  return getElementByRole('link', name);
 }
 
 async function assertClickingCopyButtonChangesText() {
