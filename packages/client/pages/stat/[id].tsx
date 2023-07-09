@@ -1,8 +1,7 @@
 import { ClickCount } from '@/components/clickCount';
-import LinkIcon from '@/components/linkIcon';
 import { Loading } from '@/components/loading';
+import { StatHeading } from '@/components/statHeading';
 import { Url, getUrl } from '@/utilities/httpClient';
-import { removeProtocol } from '@/utilities/removeProtocol';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -38,29 +37,7 @@ export default function Stat() {
     );
 
     function displayHeading() {
-      return (
-        <div>
-          <div className="flex flex-row gap-3">
-            {displayLinkIcon()}
-            {displayShortUrl()}
-          </div>
-          {displayLongUrl()}
-        </div>
-      );
-
-      function displayLinkIcon() {
-        return <LinkIcon color="cyan-500" />;
-      }
-
-      function displayShortUrl() {
-        return (
-          <p className="text-2xl">{removeProtocol(url?.shortUrl as string)}</p>
-        );
-      }
-
-      function displayLongUrl() {
-        return <p className="text-sm text-gray-500">{url?.longUrl}</p>;
-      }
+      return <StatHeading url={url as Url} />;
     }
 
     function displayContent() {
