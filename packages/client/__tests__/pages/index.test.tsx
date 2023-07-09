@@ -8,6 +8,7 @@ import {
   queryElementByRole,
   queryElementByText,
   removeHTTPS,
+  assertClipBoardContainsText,
 } from '__tests__/testUtils';
 import { longUrl, shortenedUrl } from 'mocks/values';
 import Index from 'pages';
@@ -97,8 +98,7 @@ function assertInvalidLinkTextIsNotDisplayed() {
 }
 
 async function assertClipBoardContainsShortUrl() {
-  const clipText = await navigator.clipboard.readText();
-  expect(clipText).toBe(response.shortUrl);
+  await assertClipBoardContainsText(response.shortUrl);
 }
 
 describe('Index', () => {

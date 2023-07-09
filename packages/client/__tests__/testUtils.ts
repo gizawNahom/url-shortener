@@ -53,4 +53,9 @@ export async function assertLoadingTextIsDisplayedAndRemoved() {
   await waitForElementToBeRemoved(() => getElementByText(/loading/i));
 }
 
+export async function assertClipBoardContainsText(text: string) {
+  const clipText = await navigator.clipboard.readText();
+  expect(clipText).toBe(text);
+}
+
 export const copyText = /^copy/i;

@@ -1,5 +1,9 @@
 import { StatHeading } from '@/components/statHeading';
-import { clickCopyButton, getElementByRole } from '__tests__/testUtils';
+import {
+  assertClipBoardContainsText,
+  clickCopyButton,
+  getElementByRole,
+} from '__tests__/testUtils';
 import { render } from '__tests__/wrapper';
 import { url } from 'mocks/values';
 
@@ -31,6 +35,5 @@ test('clicking copy button copies short url', async () => {
 
   await clickCopyButton(getCopyButton());
 
-  const clipText = await navigator.clipboard.readText();
-  expect(clipText).toBe(url.shortUrl);
+  await assertClipBoardContainsText(url.shortUrl);
 });
