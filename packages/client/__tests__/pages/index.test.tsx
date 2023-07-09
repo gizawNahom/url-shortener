@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '../wrapper';
 import userEvent from '@testing-library/user-event';
 import {
   copyText,
+  clickCopyButton,
   getElementByText,
   getUrlInput,
   queryElementByRole,
@@ -54,11 +55,6 @@ async function clickShortenButton() {
 
 async function typeUrlIntoInput(validUrl: string) {
   await userEvent.type(getUrlInput(), validUrl);
-}
-
-async function clickCopyButton() {
-  userEvent.setup();
-  await userEvent.click(getElementByText(copyText));
 }
 
 function assertHeadingWithText(text: string) {
@@ -187,7 +183,7 @@ describe('Index', () => {
     renderSUT();
     await typeValidUrlAndClickShorten();
 
-    await clickCopyButton();
+    await clickCopyButton(getElementByText(copyText));
 
     await assertClipBoardContainsShortUrl();
   });

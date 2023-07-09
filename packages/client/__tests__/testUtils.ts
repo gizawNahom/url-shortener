@@ -1,5 +1,6 @@
 import { server } from 'mocks/server';
 import { screen, waitForElementToBeRemoved } from './wrapper';
+import userEvent from '@testing-library/user-event';
 
 export function setUpMSW() {
   beforeAll(() => {
@@ -37,6 +38,11 @@ export function getElementByRole(role: string, title?: string) {
 
 export async function findElementByText(text: string): Promise<HTMLElement> {
   return await screen.findByText(text);
+}
+
+export async function clickCopyButton(button: HTMLElement) {
+  userEvent.setup();
+  await userEvent.click(button);
 }
 
 export function removeHTTPS(url: string) {

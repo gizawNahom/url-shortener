@@ -1,6 +1,5 @@
 import { StatHeading } from '@/components/statHeading';
-import userEvent from '@testing-library/user-event';
-import { getElementByRole } from '__tests__/testUtils';
+import { clickCopyButton, getElementByRole } from '__tests__/testUtils';
 import { render } from '__tests__/wrapper';
 import { url } from 'mocks/values';
 
@@ -30,8 +29,7 @@ test('displays copy button', () => {
 test('clicking copy button copies short url', async () => {
   renderSUT();
 
-  userEvent.setup();
-  await userEvent.click(getCopyButton());
+  await clickCopyButton(getCopyButton());
 
   const clipText = await navigator.clipboard.readText();
   expect(clipText).toBe(url.shortUrl);
