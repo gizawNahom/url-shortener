@@ -82,6 +82,7 @@ export default function Stat() {
       function displayPlaceholderChart() {
         return (
           <svg className="h-44 w-44 fill-slate-100" viewBox="0 0 100 100">
+            <title>Placeholder Chart</title>
             <rect
               className="fill-cyan-100"
               x="12"

@@ -82,11 +82,12 @@ test('redirects to home page if exception is thrown', async () => {
   expect(push).toHaveBeenCalledTimes(1);
 });
 
-test('displays appropriate text if total clicks is zero', async () => {
+test('displays appropriate text and placeholder chart if total clicks is zero', async () => {
   mockRouter(idWith0Clicks);
 
   renderSUT();
 
   expect(await findElementByText('There are no clicks yet')).toBeVisible();
+  expect(screen.getByTitle('Placeholder Chart')).toBeInTheDocument();
   assertClickCountChartIsNotDisplayed();
 });
