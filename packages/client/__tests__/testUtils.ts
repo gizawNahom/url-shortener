@@ -36,7 +36,9 @@ export function getElementByRole(role: string, title?: string) {
   return screen.getByRole(role, { name: title });
 }
 
-export async function findElementByText(text: string): Promise<HTMLElement> {
+export async function findElementByText(
+  text: string | RegExp
+): Promise<HTMLElement> {
   return await screen.findByText(text);
 }
 

@@ -2,84 +2,101 @@ import { removeProtocol } from '@/utilities/removeProtocol';
 import LinkIcon from './linkIcon';
 import Link from 'next/link';
 import { Url } from '@/utilities/httpClient';
+import dynamic from 'next/dynamic';
+
+const CopyButton = dynamic(() => import('@/components/copyButton'), {
+  ssr: false,
+});
 
 export function StatHeading({ url }: { url: Url }) {
   return (
     <div>
-      <div className="flex flex-row gap-3">
-        {displayLinkIcon()}
-        {displayShortUrl()}
-        <Link href={url.shortUrl} target="_blank">
-          <svg
-            width="20px"
-            height="20px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <title>Visit URL</title>
-            <path
-              d="M11 4H4V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V13"
-              stroke="#292929"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-            />
-            <path
-              d="M9 15L20 4"
-              stroke="#292929"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-            />
-            <path
-              d="M15 4H20V9"
-              stroke="#292929"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-            />
-          </svg>
-        </Link>
-        <button
-          onClick={async () => {
-            await navigator.clipboard.writeText(url.shortUrl);
-          }}
-        >
-          <svg
-            width="20px"
-            height="20px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <title>Copy</title>
-            <path
-              d="M15.24 2H11.3458C9.58159 1.99999 8.18418 1.99997 7.09054 2.1476C5.96501 2.29953 5.05402 2.61964 4.33559 3.34096C3.61717 4.06227 3.29833 4.97692 3.14701 6.10697C2.99997 7.205 2.99999 8.60802 3 10.3793V16.2169C3 17.725 3.91995 19.0174 5.22717 19.5592C5.15989 18.6498 5.15994 17.3737 5.16 16.312L5.16 11.3976L5.16 11.3024C5.15993 10.0207 5.15986 8.91644 5.27828 8.03211C5.40519 7.08438 5.69139 6.17592 6.4253 5.43906C7.15921 4.70219 8.06404 4.41485 9.00798 4.28743C9.88877 4.16854 10.9887 4.1686 12.2652 4.16867L12.36 4.16868H15.24L15.3348 4.16867C16.6113 4.1686 17.7088 4.16854 18.5896 4.28743C18.0627 2.94779 16.7616 2 15.24 2Z"
-              fill="#1C274C"
-            />
-            <path
-              d="M6.6001 11.3974C6.6001 8.67119 6.6001 7.3081 7.44363 6.46118C8.28716 5.61426 9.64481 5.61426 12.3601 5.61426H15.2401C17.9554 5.61426 19.313 5.61426 20.1566 6.46118C21.0001 7.3081 21.0001 8.6712 21.0001 11.3974V16.2167C21.0001 18.9429 21.0001 20.306 20.1566 21.1529C19.313 21.9998 17.9554 21.9998 15.2401 21.9998H12.3601C9.64481 21.9998 8.28716 21.9998 7.44363 21.1529C6.6001 20.306 6.6001 18.9429 6.6001 16.2167V11.3974Z"
-              fill="#1C274C"
-            />
-          </svg>
-        </button>
+      <div className="flex flex-row gap-5 mb-4">
+        <div className="flex flex-row gap-3 items-center grow">
+          {displayLinkIcon()}
+          {displayShortUrl()}
+        </div>
+        {displayVisitUrlLink()}
+        {displayCopyButton()}
       </div>
       {displayLongUrl()}
     </div>
   );
 
   function displayLinkIcon() {
-    return <LinkIcon color="cyan-500" />;
+    return <LinkIcon className="h-4 w-4 stroke-cyan-500" />;
   }
 
   function displayShortUrl() {
     return (
-      <p className="text-2xl">{removeProtocol(url?.shortUrl as string)}</p>
+      <p className=" text-2xl">{removeProtocol(url?.shortUrl as string)}</p>
     );
   }
 
+  function displayVisitUrlLink() {
+    return (
+      <Link
+        href={url.shortUrl}
+        target="_blank"
+        className="flex flex-row items-center"
+      >
+        {displayVisitUrlIcon()}
+      </Link>
+    );
+
+    function displayVisitUrlIcon() {
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className=" stroke-black/50 hover:stroke-cyan-500 duration-200 w-6 h-6"
+        >
+          <title>Visit URL</title>
+          <path
+            d="M11 4H4V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V13"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+          <path
+            d="M9 15L20 4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+          <path
+            d="M15 4H20V9"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+        </svg>
+      );
+    }
+  }
+
+  function displayCopyButton() {
+    return <CopyButton text={url.shortUrl}>{displayCopyIcon()}</CopyButton>;
+
+    function displayCopyIcon() {
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          className=" fill-black/50 hover:fill-cyan-500 duration-200 w-6 h-6"
+        >
+          <title>Copy</title>
+          <path d="M 13.379213,2 H 10.077029 C 8.5810232,1.99999 7.3960546,1.99997 6.4686753,2.1476 5.5142541,2.29953 4.7417574,2.61964 4.1325468,3.34096 3.5233447,4.06227 3.2529763,4.97692 3.1246608,6.10697 2.9999745,7.205 2.9999915,8.60802 3,10.3793 v 5.8376 c 0,1.5081 0.7800945,2.8005 1.8885843,3.3423 -0.057052,-0.9094 -0.057009,-2.1855 -0.056958,-3.2472 V 11.3976 11.3024 C 4.8315664,10.0207 4.8315071,8.91644 4.9319243,8.03211 5.0395408,7.08438 5.2822312,6.17592 5.9045685,5.43906 6.5269058,4.70219 7.2941789,4.41485 8.0946164,4.28743 8.8415042,4.16854 9.7742172,4.1686 10.856657,4.16867 l 0.08039,1e-5 h 2.442168 l 0.08039,-1e-5 c 1.08244,-7e-5 2.013093,-1.3e-4 2.759989,0.11876 C 15.772792,2.94779 14.669492,2 13.379213,2 Z" />
+          <path d="m 6.6001,11.3974 c 0,-2.72621 0,-4.0893 0.7029417,-4.93622 C 8.0059833,5.61426 9.1373583,5.61426 11.4001,5.61426 h 2.4 c 2.26275,0 3.394083,0 4.097083,0.84692 C 18.6001,7.3081 18.6001,8.6712 18.6001,11.3974 v 4.8193 c 0,2.7262 0,4.0893 -0.702917,4.9362 -0.703,0.8469 -1.834333,0.8469 -4.097083,0.8469 h -2.4 c -2.2627417,0 -3.3941167,0 -4.0970583,-0.8469 C 6.6001,20.306 6.6001,18.9429 6.6001,16.2167 Z" />
+        </svg>
+      );
+    }
+  }
+
   function displayLongUrl() {
-    return <p className="text-sm text-gray-500">{url?.longUrl}</p>;
+    return (
+      <p className=" text-base text-black/50 font-medium">{url?.longUrl}</p>
+    );
   }
 }

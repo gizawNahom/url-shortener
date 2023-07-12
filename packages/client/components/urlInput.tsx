@@ -31,7 +31,7 @@ export function UrlInput({
           error ? 'border-red-400' : 'border-transparent'
         }`}
       >
-        <LinkIcon />
+        <LinkIcon className="h-4 w-4 my-auto" />
         <input
           type="text"
           name="url"
