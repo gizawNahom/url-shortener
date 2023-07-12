@@ -1,12 +1,17 @@
 import { ShortenedUrlRow } from '@/components/shortenedUrlRow';
 import { render, screen } from '../wrapper';
-import { getElementByRole } from '__tests__/testUtils';
+import {
+  copyText,
+  findElementByText,
+  getElementByRole,
+} from '__tests__/testUtils';
 import { shortenedUrl, validId } from 'mocks/values';
 
 const statLinkTitle = 'Charts Icon';
 
-function renderSUT() {
+async function renderSUT() {
   render(<ShortenedUrlRow shortenedUrl={shortenedUrl} />);
+  await findElementByText(copyText);
 }
 
 function assertCorrectLinkIsVisible() {
