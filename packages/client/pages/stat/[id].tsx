@@ -23,21 +23,25 @@ export default function Stat() {
   }, [id, router]);
 
   return (
-    <div className="mx-auto w-1/2 mt-24">
+    <div className="mx-auto w-1/2 mt-24 h-[calc(100vh-96px)]">
       {url ? displayPage() : displayLoading()}
     </div>
   );
 
   function displayPage() {
     return (
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 h-full">
         {displayHeading()}
         {displayContent()}
       </div>
     );
 
     function displayHeading() {
-      return <StatHeading url={url as Url} />;
+      return (
+        <div className="mb-3">
+          <StatHeading url={url as Url} />
+        </div>
+      );
     }
 
     function displayContent() {
@@ -49,7 +53,7 @@ export default function Stat() {
 
       function displayPlaceHolder() {
         return (
-          <div className="flex flex-col justify-center items-center h-96 gap-12">
+          <div className="flex flex-col justify-around items-center gap-12 grow">
             {displayPlaceholderChart()}
             <p className="text-2xl">There are no clicks yet</p>
           </div>
