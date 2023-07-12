@@ -1,7 +1,7 @@
 import { RequestHandler, NextFunction, Request, Response } from 'express';
-import { GetUrlUseCase } from 'packages/server/src/core/useCases/getUrlUseCase';
+import { GetUrlUseCase } from '../../../core/useCases/getUrlUseCase';
 import Context from '../../context';
-import { Url } from 'packages/server/src/core/domain/url';
+import { Url } from '../../../core/domain/url';
 
 export class GetUrlsRoute {
   static getHandlers(): Array<RequestHandler> {
