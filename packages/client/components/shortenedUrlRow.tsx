@@ -46,6 +46,7 @@ export function ShortenedUrlRow({
     return (
       <Link
         href={`/stat${getSlugPath()}`}
+        target="_blank"
         className="px-2 py-2 hover:bg-slate-100 rounded-md hover:transition-all fill-black/40 hover:fill-cyan-500"
       >
         <svg

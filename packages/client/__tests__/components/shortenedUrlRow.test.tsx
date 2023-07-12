@@ -32,10 +32,11 @@ test('displays charts icon', () => {
   expect(screen.getByTitle(statLinkTitle)).toBeInTheDocument();
 });
 
-test('displays charts icon link', () => {
+test('displays charts icon link that opens a new tab', () => {
   renderSUT();
 
   const link = getLink(statLinkTitle);
   expect(link).toBeVisible();
   expect(link).toHaveAttribute('href', `/stat/${validId}`);
+  expect(link).toHaveAttribute('target', `_blank`);
 });
