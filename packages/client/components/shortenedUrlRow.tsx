@@ -1,19 +1,17 @@
-import { useState } from 'react';
 import { ShortenedUrl } from '@/utilities/httpClient';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { removeProtocol } from '@/utilities/removeProtocol';
 
-const Button = dynamic(() => import('@/components/button'), { ssr: false });
+const CopyButton = dynamic(() => import('@/components/copyButton'), {
+  ssr: false,
+});
 
 export function ShortenedUrlRow({
   shortenedUrl,
 }: {
   shortenedUrl: ShortenedUrl;
 }) {
-  const COPY = 'Copy';
-  const [copyButtonText, setCopyButtonText] = useState(COPY);
-
   return (
     <div role="list" className="pt-4">
       <div
@@ -73,27 +71,12 @@ export function ShortenedUrlRow({
 
   function displayCopyButton() {
     return (
-      <Button
-        onClick={onCopyButtonClick}
+      <CopyButton
+        text={shortenedUrl.shortUrl}
         className="text-cyan-500 px-2 py-1 hover:bg-slate-100 rounded-md hover:transition-all"
-        rippleColor="light"
       >
-        {copyButtonText}
-      </Button>
+        Copy
+      </CopyButton>
     );
-  }
-
-  function onCopyButtonClick() {
-    copyShortUrlToClipBoard();
-    setCopyButtonText('Copied');
-    setCopyButtonTextAfter5Secs();
-
-    function copyShortUrlToClipBoard() {
-      navigator.clipboard.writeText(shortenedUrl?.shortUrl ?? '');
-    }
-
-    function setCopyButtonTextAfter5Secs() {
-      setTimeout(() => setCopyButtonText(COPY), 5000);
-    }
   }
 }

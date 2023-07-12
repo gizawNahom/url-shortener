@@ -3,9 +3,11 @@ import { Tooltip } from 'tw-elements';
 
 export default function CopyButton({
   text,
+  className,
   children,
 }: {
-  text?: string;
+  text: string;
+  className?: string;
   children: ReactNode;
 }) {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -24,6 +26,7 @@ export default function CopyButton({
       data-te-placement="top"
       data-te-trigger="manual"
       data-te-title="Copied"
+      className={className}
     >
       {children}
     </button>
