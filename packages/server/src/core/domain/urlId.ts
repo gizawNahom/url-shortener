@@ -4,12 +4,12 @@ import { ValidationMessages } from '../validationMessages';
 export class UrlId {
   constructor(private id: string) {
     if (!id) throw this.buildValidationError(ValidationMessages.ID_REQUIRED);
-    if (this.isInValidId(id))
+    if (!this.isNineCharacterAlphaNumeric(id))
       throw this.buildValidationError(ValidationMessages.ID_INVALID);
   }
 
-  private isInValidId(id: string) {
-    return id.length !== 9 || id.includes('_') || id.includes('-');
+  private isNineCharacterAlphaNumeric(id: string) {
+    return /^[a-zA-Z0-9]{9}$/.test(id);
   }
 
   private buildValidationError(message: string) {
