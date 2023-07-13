@@ -4,9 +4,8 @@ import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import { GetUrlUseCase } from '../../../src/core/useCases/getUrlUseCase';
 import {
   ID_DOES_NOT_EXIST,
-  ID_INVALID,
-  ID_REQUIRED,
   assertValidationErrorWithMessage,
+  describeInvalidId,
 } from '../utilities';
 
 const validId = 'googleId1';
@@ -15,18 +14,12 @@ function createUseCase(urlStorage?: UrlStorage) {
   return new GetUrlUseCase(urlStorage ?? new FakeUrlStorage());
 }
 
-describe.each([
-  ['', ID_REQUIRED],
-  ['longIdWith12', ID_INVALID],
-  [undefined, ID_REQUIRED],
-])('Invalid id', (id, errorMessage) => {
+describeInvalidId((id: string | undefined, errorMessage: string) => {
   test(`throws with "${errorMessage}" if id is "${id}"`, () => {
     const uC = createUseCase();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const id1: any = id;
     assertValidationErrorWithMessage(async () => {
-      await uC.getUrl(id1);
+      await uC.getUrl(id as string);
     }, errorMessage);
   });
 });

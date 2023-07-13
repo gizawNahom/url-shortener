@@ -3,17 +3,18 @@ import { Click } from '../../../src/core/domain/click';
 import { TotalClicksUseCase } from '../../../src/core/useCases/totalClicksUseCase';
 import { Url } from '../../../src/core/domain/url';
 import { UrlId } from '../../../src/core/domain/urlId';
-import { assertValidationErrorWithMessage, getDateString } from '../utilities';
+import {
+  ID_DOES_NOT_EXIST,
+  assertValidationErrorWithMessage,
+  describeInvalidId,
+  getDateString,
+} from '../utilities';
 
 let storage;
 const validId1 = 'googleId1';
 const validId2 = 'googleId2';
 const clickDate1 = new Date();
 const clickDate2 = new Date(1999, 1, 1);
-
-const ID_REQUIRED = 'Id is required';
-const ID_INVALID = 'Id is invalid';
-const ID_DOES_NOT_EXIST = 'Id does not exist';
 
 function saveUrlAndClickItOnce() {
   saveUrl(validId1);
@@ -67,26 +68,16 @@ beforeEach(() => {
   storage = new FakeUrlStorage();
 });
 
-test('throws if id is empty', async () => {
-  const uC = createTotalClicksUseCase();
-
-  await assertValidationErrorWithMessage(
-    () => getTotalClicksByDay(uC, ''),
-    ID_REQUIRED
-  );
-});
-
-test.each(['invalid id', '-_3456789'])(
-  'throws if id is invalid',
-  async (invalidId) => {
+describeInvalidId((id, errorMessage) => {
+  test(`throws with "${errorMessage}" if id is "${id}"`, async () => {
     const uC = createTotalClicksUseCase();
 
     await assertValidationErrorWithMessage(
-      () => getTotalClicksByDay(uC, invalidId),
-      ID_INVALID
+      () => getTotalClicksByDay(uC, id as string),
+      errorMessage
     );
-  }
-);
+  });
+});
 
 test('returns correct response for zero clicks', async () => {
   saveUrl(validId1);

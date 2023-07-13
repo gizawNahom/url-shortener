@@ -2,9 +2,8 @@ import { RedirectUseCase } from '../../../src/core/useCases/redirectUseCase';
 import { Url } from '../../../src/core/domain/url';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
 import {
-  ID_INVALID,
-  ID_REQUIRED,
   assertValidationErrorWithMessage,
+  describeInvalidId,
   getTodayString,
 } from '../utilities';
 import { UrlStorage } from '../../../src/core/ports/urlStorage';
@@ -29,33 +28,15 @@ async function assertCorrectClickCountStat() {
   ).toEqual(new DailyClickCountStat(1, [new DailyClickCount(dateString, 1)]));
 }
 
-test('throws if id is empty', async () => {
-  const rUC = createUseCase();
+describeInvalidId((id, errorMessage) => {
+  test(`throws with "${errorMessage}" if id is "${id}"`, () => {
+    const rUC = createUseCase();
 
-  assertValidationErrorWithMessage(
-    async () => await rUC.execute(''),
-    ID_REQUIRED
-  );
-});
-
-test('throws if id is longer than 9 characters', async () => {
-  const rUC = createUseCase();
-
-  assertValidationErrorWithMessage(
-    async () => await rUC.execute('longIdWith12'),
-    ID_INVALID
-  );
-});
-
-test('throws if id is undefined', async () => {
-  const rUC = createUseCase();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let id: any;
-
-  assertValidationErrorWithMessage(
-    async () => await rUC.execute(id),
-    ID_REQUIRED
-  );
+    assertValidationErrorWithMessage(
+      async () => await rUC.execute(id as string),
+      errorMessage
+    );
+  });
 });
 
 test('throws if id does not exist', async () => {
@@ -64,33 +45,6 @@ test('throws if id does not exist', async () => {
   assertValidationErrorWithMessage(
     async () => await rUC.execute('fe3e56789'),
     'Id does not exist'
-  );
-});
-
-test('throws if id is less than 9 characters', async () => {
-  const rUC = createUseCase();
-
-  assertValidationErrorWithMessage(
-    async () => await rUC.execute('fe34'),
-    ID_INVALID
-  );
-});
-
-test('throws if id contains "_"', async () => {
-  const rUC = createUseCase();
-
-  assertValidationErrorWithMessage(
-    async () => await rUC.execute('fe345_789'),
-    ID_INVALID
-  );
-});
-
-test('throws if id contains "-"', async () => {
-  const rUC = createUseCase();
-
-  assertValidationErrorWithMessage(
-    async () => await rUC.execute('fe345-789'),
-    ID_INVALID
   );
 });
 

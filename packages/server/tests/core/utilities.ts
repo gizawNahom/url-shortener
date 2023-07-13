@@ -19,3 +19,25 @@ export function getTodayString() {
 export function getDateString(date: Date) {
   return date.toISOString();
 }
+
+export function describeInvalidId(
+  testInvalidId: (id: string | undefined, errorMessage: string) => void
+) {
+  describe.each(getInvalidIdTests())('Invalid id', (id, errorMessage) => {
+    testInvalidId(id, errorMessage);
+  });
+
+  function getInvalidIdTests(): readonly (
+    | [string, string]
+    | [undefined, string]
+  )[] {
+    return [
+      ['', ID_REQUIRED],
+      [undefined, ID_REQUIRED],
+      ['longIdWith12', ID_INVALID],
+      ['shortId', ID_INVALID],
+      ['google*d2', ID_INVALID],
+      ['f+./_- 89', ID_INVALID],
+    ];
+  }
+}
