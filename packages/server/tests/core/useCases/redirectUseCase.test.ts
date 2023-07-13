@@ -2,6 +2,7 @@ import { RedirectUseCase } from '../../../src/core/useCases/redirectUseCase';
 import { Url } from '../../../src/core/domain/url';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
 import {
+  ID_DOES_NOT_EXIST,
   assertValidationErrorWithMessage,
   describeInvalidId,
   getTodayString,
@@ -44,7 +45,7 @@ test('throws if id does not exist', async () => {
 
   assertValidationErrorWithMessage(
     async () => await rUC.execute('fe3e56789'),
-    'Id does not exist'
+    ID_DOES_NOT_EXIST
   );
 });
 
