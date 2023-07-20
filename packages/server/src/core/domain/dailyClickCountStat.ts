@@ -15,4 +15,12 @@ export default class DailyClickCountStat {
 
 export class DailyClickCount {
   constructor(private day: string, private totalClicks: number) {}
+
+  getDay() {
+    return this.day;
+  }
+
+  getTotalClicks() {
+    return this.totalClicks;
+  }
 }
