@@ -8,9 +8,6 @@ import {
   getTodayString,
 } from '../utilities';
 import { UrlStorage } from '../../../src/core/ports/urlStorage';
-import DailyClickCountStat, {
-  DailyClickCount,
-} from '../../../src/core/domain/dailyClickCountStat';
 import { UrlId } from '../../../src/core/domain/urlId';
 
 const url = new Url('https://google.com', 'googleId1', 0);
@@ -23,10 +20,16 @@ function createUseCase() {
 }
 
 async function assertCorrectClickCountStat() {
-  const dateString = getTodayString();
-  expect(
-    await storageFake.getTotalClicksByDay(new UrlId(url.getShortenedId()))
-  ).toEqual(new DailyClickCountStat(1, [new DailyClickCount(dateString, 1)]));
+  const todayWithOutMilliSeconds = getTodayString().slice(0, -4);
+  const stat = await storageFake.getTotalClicksByDay(
+    new UrlId(url.getShortenedId())
+  );
+
+  const dailyClickCounts = stat.getDailyClickCounts();
+  expect(stat.getTotalClicks()).toBe(1);
+  expect(dailyClickCounts.length).toBe(1);
+  expect(dailyClickCounts[0].getTotalClicks()).toBe(1);
+  expect(dailyClickCounts[0].getDay()).toContain(todayWithOutMilliSeconds);
 }
 
 describeInvalidId((id, errorMessage) => {
