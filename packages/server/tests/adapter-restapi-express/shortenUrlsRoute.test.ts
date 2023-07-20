@@ -11,8 +11,6 @@ import {
   assertBody,
   assertStatusCode,
   buildShortUrl,
-  domain,
-  setDomain,
   setExceptionStorageStub,
   url,
 } from './utilities';
@@ -51,7 +49,6 @@ describe('POST /api/urls', () => {
     const gSpy = new GeneratorSpy();
     stubUrlIdGenerator(gSpy);
 
-    setDomain(domain);
     const response = await sendRequest({ url: longUrl });
 
     assertStatusCode(response, 201);
@@ -77,7 +74,6 @@ describe('POST /api/urls', () => {
     const preexistingUrl = stub.preexistingUrl;
     Context.urlStorage = stub;
 
-    setDomain(domain);
     const response = await sendRequest({ url: preexistingUrl.getLongUrl() });
 
     assertStatusCode(response, 200);

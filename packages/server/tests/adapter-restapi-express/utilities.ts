@@ -32,10 +32,6 @@ export const Messages = {
   SERVER_ERROR: 'Server Error',
 };
 
-export function setDomain(host: string) {
-  process.env.DOMAIN = host;
-}
-
 export async function saveUrl() {
   await Context.urlStorage.save(url);
 }
@@ -45,10 +41,8 @@ export function setExceptionStorageStub() {
 }
 
 export function buildShortUrl(id: string) {
-  return `https://${domain}/${id}`;
+  return `https://${process.env.domain}/${id}`;
 }
-
-export const domain = 'sh.rt';
 
 export const validId = 'googleId1';
 

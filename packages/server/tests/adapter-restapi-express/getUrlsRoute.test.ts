@@ -5,10 +5,8 @@ import {
   assertBody,
   assertStatusCode,
   buildShortUrl,
-  domain,
   saveUrl,
   sendGetRequest,
-  setDomain,
   setExceptionStorageStub,
   url,
   validId,
@@ -46,7 +44,6 @@ test('responds 500 for unknown exception', async () => {
 
 test('responds 200 for a saved url', async () => {
   await saveUrl();
-  setDomain(domain);
 
   const response = await sendRequest(validId);
 
