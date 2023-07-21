@@ -41,7 +41,7 @@ export function setExceptionStorageStub() {
 }
 
 export function buildShortUrl(id: string) {
-  return `https://${process.env.domain}/${id}`;
+  return `https://${process.env.DOMAIN}/${id}`;
 }
 
 export const validId = 'googleId1';
