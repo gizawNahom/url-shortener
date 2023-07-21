@@ -95,13 +95,13 @@ describe('MongoDB integration', () => {
     test('returns url for saved url', async () => {
       const storage = createStorage();
 
-      expect(await storage.findByLongUrl(validId)).toEqual(null);
+      expect(await storage.findByLongUrl(url.getLongUrl())).toEqual(url);
     });
 
     test('returns null for unsaved url', async () => {
       const storage = createStorage();
 
-      expect(await storage.findByLongUrl('googleId3')).toEqual(null);
+      expect(await storage.findByLongUrl('https://unsaved.com')).toEqual(null);
     });
   });
 
