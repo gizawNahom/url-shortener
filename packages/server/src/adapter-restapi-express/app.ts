@@ -5,7 +5,7 @@ import Routes from './routes';
 const app = express();
 
 const corsOptions: cors.CorsOptions = {
-  origin: process.env.CLIENT_DOMAIN,
+  origin: process.env.CLIENT_ORIGIN,
 };
 app.use(cors(corsOptions));
 app.use(express.json());
