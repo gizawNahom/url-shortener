@@ -23,7 +23,8 @@ export class MongoUrlStorage implements UrlStorage {
 
   async findByLongUrl(longUrl: string): Promise<Url> {
     const doc = await this.queryByLongUrl(longUrl);
-    return this.buildUrl(doc);
+    if (doc) return this.buildUrl(doc);
+    return null;
   }
 
   private async queryByLongUrl(longUrl: string) {
@@ -32,7 +33,8 @@ export class MongoUrlStorage implements UrlStorage {
 
   async findById(id: string): Promise<Url> {
     const doc = await this.queryById(id);
-    return this.buildUrl(doc);
+    if (doc) return this.buildUrl(doc);
+    return null;
   }
 
   private async queryById(id: string) {

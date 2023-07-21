@@ -91,10 +91,32 @@ describe('MongoDB integration', () => {
     expect(await storage.findByLongUrl(url.getLongUrl())).toEqual(url);
   });
 
-  test('finds by id', async () => {
-    const storage = createStorage();
+  describe('findByLongUrl', () => {
+    test('returns url for saved url', async () => {
+      const storage = createStorage();
 
-    expect(await storage.findById(validId)).toEqual(url);
+      expect(await storage.findByLongUrl(validId)).toEqual(null);
+    });
+
+    test('returns null for unsaved url', async () => {
+      const storage = createStorage();
+
+      expect(await storage.findByLongUrl('googleId3')).toEqual(null);
+    });
+  });
+
+  describe('findById', () => {
+    test('returns url for saved url', async () => {
+      const storage = createStorage();
+
+      expect(await storage.findById(validId)).toEqual(url);
+    });
+
+    test('returns null for unsaved url', async () => {
+      const storage = createStorage();
+
+      expect(await storage.findById('googleId3')).toEqual(null);
+    });
   });
 
   test('gets total clicks by day', async () => {
