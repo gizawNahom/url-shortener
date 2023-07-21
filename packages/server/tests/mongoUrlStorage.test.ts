@@ -12,11 +12,11 @@ let db: Db;
 const CLICKS_COLLECTION = 'clicks';
 const URLS_COLLECTION = 'urls';
 
-const validId = 'googleId2';
-const url = new Url('https://google2.com', validId, 0);
+const savedValidId = 'googleId2';
+const url = new Url('https://google2.com', savedValidId, 0);
 const clickDay = '2021-05-18';
 const click = new Click(
-  new UrlId(validId),
+  new UrlId(savedValidId),
   new Date(`${clickDay}T04:14:00.000Z`)
 );
 
@@ -109,7 +109,7 @@ describe('MongoDB integration', () => {
     test('returns url for saved url', async () => {
       const storage = createStorage();
 
-      expect(await storage.findById(validId)).toEqual(url);
+      expect(await storage.findById(savedValidId)).toEqual(url);
     });
 
     test('returns null for unsaved url', async () => {
@@ -122,7 +122,7 @@ describe('MongoDB integration', () => {
   test('gets total clicks by day', async () => {
     const storage = createStorage();
 
-    expect(await storage.getTotalClicksByDay(new UrlId(validId))).toEqual(
+    expect(await storage.getTotalClicksByDay(new UrlId(savedValidId))).toEqual(
       new DailyClickCountStat(1, [new DailyClickCount(clickDay, 1)])
     );
   });
@@ -132,16 +132,16 @@ describe('MongoDB integration', () => {
     const storage = createStorage();
 
     await storage.saveClick(
-      new Click(new UrlId(validId), new Date(`${day}T02:42:15.000Z`))
+      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:15.000Z`))
     );
     await storage.saveClick(
-      new Click(new UrlId(validId), new Date(`${day}T02:42:16.000Z`))
+      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:16.000Z`))
     );
     await storage.saveClick(
-      new Click(new UrlId(validId), new Date(`${day}T05:01:16.000Z`))
+      new Click(new UrlId(savedValidId), new Date(`${day}T05:01:16.000Z`))
     );
 
-    expect(await storage.getTotalClicksByDay(new UrlId(validId))).toEqual(
+    expect(await storage.getTotalClicksByDay(new UrlId(savedValidId))).toEqual(
       new DailyClickCountStat(4, [
         new DailyClickCount(day, 3),
         new DailyClickCount(clickDay, 1),
