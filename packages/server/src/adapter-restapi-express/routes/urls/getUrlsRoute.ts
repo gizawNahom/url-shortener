@@ -34,7 +34,7 @@ export class GetUrlsRoute {
   private sendUrl(res: Response, url: Url) {
     res.json({
       longUrl: url.getLongUrl(),
-      shortUrl: `https://${process.env.DOMAIN}/${url.getShortenedId()}`,
+      shortUrl: `https://${process.env.SERVER_DOMAIN}/${url.getShortenedId()}`,
       totalClicks: url.getTotalClicks(),
     });
   }

@@ -77,6 +77,6 @@ export class ShortenUrlsRoute {
   }
 
   private buildShortUrl(shortenedId: string) {
-    return `https://${process.env.DOMAIN}/${shortenedId}`;
+    return `https://${process.env.SERVER_DOMAIN}/${shortenedId}`;
   }
 }
