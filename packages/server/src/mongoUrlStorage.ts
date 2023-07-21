@@ -63,25 +63,17 @@ export class MongoUrlStorage implements UrlStorage {
     return await this.db
       .collection(this.CLICKS_COLLECTION)
       .aggregate([
-        filterClicksByUrlId(),
-        groupClicksByDayAndCountThem(),
+        sumTotalClicksByDay(),
         projectFields(),
         sortChronologically(),
       ])
       .toArray();
 
-    function filterClicksByUrlId() {
-      return {
-        $match: {
-          urlId: id.getId(),
-        },
-      };
-    }
-
-    function groupClicksByDayAndCountThem() {
+    function sumTotalClicksByDay() {
       return {
         $group: {
           _id: {
+            urlId: id.getId(),
             year: { $year: '$timestamp' },
             month: { $month: '$timestamp' },
             day: { $dayOfMonth: '$timestamp' },
