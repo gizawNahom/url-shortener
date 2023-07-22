@@ -33,6 +33,6 @@ workflows:
   build_and_test:
     jobs:
       - lint_and_unit_test
-      - mongodb_integration_test
+      - mongodb_integration_test:
           requires:
             - lint_and_unit_test
