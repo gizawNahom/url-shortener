@@ -21,7 +21,7 @@ jobs:
   mongodb_integration_test:
     docker:
       - image: cimg/node:18.0.0
-      - image: circleci/mongo:4.2.0
+      - image: mongo:6.0
     steps:
       - checkout
       - node/install-packages
