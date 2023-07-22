@@ -23,7 +23,10 @@ export class MongoUrlStorage implements UrlStorage {
 
   async findByLongUrl(longUrl: string): Promise<Url> {
     const doc = await this.queryByLongUrl(longUrl);
-    if (doc) return this.buildUrl(doc);
+    if (doc) {
+      const totalClicks = await this.countRegisteredClicks(doc.shortenedId);
+      return this.buildUrl(doc, totalClicks);
+    }
     return null;
   }
 
@@ -33,7 +36,10 @@ export class MongoUrlStorage implements UrlStorage {
 
   async findById(id: string): Promise<Url> {
     const doc = await this.queryById(id);
-    if (doc) return this.buildUrl(doc);
+    if (doc) {
+      const totalClicks = await this.countRegisteredClicks(doc.shortenedId);
+      return this.buildUrl(doc, totalClicks);
+    }
     return null;
   }
 
@@ -43,20 +49,20 @@ export class MongoUrlStorage implements UrlStorage {
       .findOne({ shortenedId: id });
   }
 
-  private buildUrl(doc): Url {
-    return new Url(doc.longUrl, doc.shortenedId, doc.totalClicks);
+  private buildUrl(doc, totalClicks: number): Url | PromiseLike<Url> {
+    return new Url(doc.longUrl, doc.shortenedId, totalClicks);
   }
 
   async getTotalClicksByDay(id: UrlId): Promise<DailyClickCountStat> {
-    const totalClicks = await this.countRegisteredClicks(id);
+    const totalClicks = await this.countRegisteredClicks(id.getId());
     const totalClicksByDay = await this.aggregateClicksByDay(id);
     return this.buildDailyClickCountStat(totalClicks, totalClicksByDay);
   }
 
-  private countRegisteredClicks(id: UrlId) {
+  private countRegisteredClicks(id: string) {
     return this.db
       .collection(this.CLICKS_COLLECTION)
-      .countDocuments({ urlId: id.getId() });
+      .countDocuments({ urlId: id });
   }
 
   private async aggregateClicksByDay(id: UrlId) {

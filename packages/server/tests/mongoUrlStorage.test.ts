@@ -13,7 +13,7 @@ const CLICKS_COLLECTION = 'clicks';
 const URLS_COLLECTION = 'urls';
 
 const savedValidId = 'googleId2';
-const url = new Url('https://google2.com', savedValidId, 0);
+const savedUrl = new Url('https://google2.com', savedValidId, 1);
 const clickDay = '2021-05-18';
 const click = new Click(
   new UrlId(savedValidId),
@@ -56,9 +56,8 @@ async function seedUrlsData() {
   const urls = db.collection(URLS_COLLECTION);
   await urls.insertMany([
     {
-      longUrl: url.getLongUrl(),
-      shortenedId: url.getShortenedId(),
-      totalClicks: url.getTotalClicks(),
+      longUrl: savedUrl.getLongUrl(),
+      shortenedId: savedUrl.getShortenedId(),
     },
   ]);
 }
@@ -95,7 +94,9 @@ describe('MongoDB integration', () => {
     test('returns url for saved url', async () => {
       const storage = createStorage();
 
-      expect(await storage.findByLongUrl(url.getLongUrl())).toEqual(url);
+      expect(await storage.findByLongUrl(savedUrl.getLongUrl())).toEqual(
+        savedUrl
+      );
     });
 
     test('returns null for unsaved url', async () => {
@@ -109,7 +110,7 @@ describe('MongoDB integration', () => {
     test('returns url for saved url', async () => {
       const storage = createStorage();
 
-      expect(await storage.findById(savedValidId)).toEqual(url);
+      expect(await storage.findById(savedValidId)).toEqual(savedUrl);
     });
 
     test('returns null for unsaved url', async () => {
@@ -147,5 +148,8 @@ describe('MongoDB integration', () => {
         new DailyClickCount(clickDay, 1),
       ])
     );
+    const url = new Url(savedUrl.getLongUrl(), savedUrl.getShortenedId(), 4);
+    expect(await storage.findById(url.getShortenedId())).toEqual(url);
+    expect(await storage.findByLongUrl(url.getLongUrl())).toEqual(url);
   });
 });
