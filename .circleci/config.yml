@@ -45,16 +45,18 @@ jobs:
       - image: cimg/node:18.0.0
       - image: mongo:6.0
     environment:
-      MONGODB_URI: mongodb://localhost:27017
-      MONGODB_DATABASE_NAME: url-shortener
-      SERVER_DOMAIN: sh.rt
-      CLIENT_ORIGIN: https://client-origin-for-cors.com
+      PORT: 80
     steps:
       - checkout
       - node/install-packages
       - run:
           name: Start server
           command: npx nx run server:serve:production
+          environment:
+            MONGODB_URI: mongodb://localhost:27017
+            MONGODB_DATABASE_NAME: url-shortener
+            SERVER_DOMAIN: sh.rt
+            CLIENT_ORIGIN: https://client-origin-for-cors.com
           background: true
       - run:
           name: Wait for server to start
