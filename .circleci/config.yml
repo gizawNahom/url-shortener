@@ -29,10 +29,24 @@ jobs:
           name: Run test
           command: npx nx test server --testFile=tests/mongoUrlStorage.test.ts
 
+  contract_test:
+    executor:
+      name: node/default
+      tag: '18.0.0'
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Run contract test
+          command: npx nx test server --testFile=tests/providerContract.test.ts
+
 workflows:
   build_and_test:
     jobs:
       - lint_and_unit_test
       - mongodb_integration_test:
+          requires:
+            - lint_and_unit_test
+      - contract_test:
           requires:
             - lint_and_unit_test
