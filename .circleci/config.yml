@@ -54,7 +54,7 @@ jobs:
       - node/install-packages
       - run:
           name: Start server
-          command: npx nx run server:serve
+          command: npx nx run server:serve:production
           background: true
       - run:
           name: Wait for server to start
