@@ -40,7 +40,7 @@ jobs:
           name: Run contract test
           command: npx nx test server --testFile=tests/providerContract.test.ts
 
-  server_e2e:
+  server_e2e_test:
     docker:
       - image: cimg/node:18.0.0
       - image: mongo:6.0
@@ -73,6 +73,6 @@ workflows:
       - contract_test:
           requires:
             - lint_and_unit_test
-      - server_e2e:
+      - server_e2e_test:
           requires:
             - lint_and_unit_test
