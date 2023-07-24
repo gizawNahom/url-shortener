@@ -18,9 +18,17 @@ class Main {
 
     function checkRequiredEnvironmentVariables() {
       if (!process.env.SERVER_DOMAIN)
-        throw new Error('SERVER_DOMAIN env variable is required');
+        throw buildError('SERVER_DOMAIN env variable is required');
       if (!process.env.CLIENT_ORIGIN)
-        throw new Error('CLIENT_ORIGIN env variable is required');
+        throw buildError('CLIENT_ORIGIN env variable is required');
+      if (!process.env.MONGODB_URI)
+        throw buildError('MONGODB_URI env variable is required');
+      if (!process.env.MONGODB_DATABASE_NAME)
+        throw buildError('MONGODB_DATABASE_NAME env variable is required');
+
+      function buildError(message: string) {
+        return new Error(message);
+      }
     }
 
     function startServer() {
