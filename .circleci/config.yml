@@ -40,6 +40,29 @@ jobs:
           name: Run contract test
           command: npx nx test server --testFile=tests/providerContract.test.ts
 
+  server_e2e:
+    docker:
+      - image: cimg/node:18.0.0
+      - image: mongo:6.0
+    environment:
+      MONGODB_URI: mongodb://localhost:27017
+      MONGODB_DATABASE_NAME: url-shortener
+      SERVER_DOMAIN: sh.rt
+      CLIENT_ORIGIN: https://client-origin-for-cors.com
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Start server
+          command: npx nx run server:serve
+          background: true
+      - run:
+          name: Wait for server to start
+          command: sleep 10
+      - run:
+          name: Run e2e test
+          command: npx nx run server-e2e:e2e
+
 workflows:
   build_and_test:
     jobs:
@@ -48,5 +71,8 @@ workflows:
           requires:
             - lint_and_unit_test
       - contract_test:
+          requires:
+            - lint_and_unit_test
+      - server_e2e:
           requires:
             - lint_and_unit_test
