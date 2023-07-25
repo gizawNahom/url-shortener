@@ -1,11 +1,11 @@
 import { Db, MongoClient } from 'mongodb';
-import { Url } from '../src/core/domain/url';
-import { MongoUrlStorage } from '../src/mongoUrlStorage';
-import { UrlId } from '../src/core/domain/urlId';
+import { Url } from '../../src/core/domain/url';
+import { MongoUrlStorage } from '../../src/adapter-persistence-mongo/mongoUrlStorage';
+import { UrlId } from '../../src/core/domain/urlId';
 import DailyClickCountStat, {
   DailyClickCount,
-} from '../src/core/domain/dailyClickCountStat';
-import { Click } from '../src/core/domain/click';
+} from '../../src/core/domain/dailyClickCountStat';
+import { Click } from '../../src/core/domain/click';
 
 let db: Db;
 

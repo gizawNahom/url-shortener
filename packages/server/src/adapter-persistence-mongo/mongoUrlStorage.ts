@@ -1,11 +1,11 @@
 import { Db } from 'mongodb';
-import { Click } from './core/domain/click';
+import { Click } from '../core/domain/click';
 import DailyClickCountStat, {
   DailyClickCount,
-} from './core/domain/dailyClickCountStat';
-import { Url } from './core/domain/url';
-import { UrlId } from './core/domain/urlId';
-import { UrlStorage } from './core/ports/urlStorage';
+} from '../core/domain/dailyClickCountStat';
+import { Url } from '../core/domain/url';
+import { UrlId } from '../core/domain/urlId';
+import { UrlStorage } from '../core/ports/urlStorage';
 
 export class MongoUrlStorage implements UrlStorage {
   private readonly URLS_COLLECTION = 'urls';
