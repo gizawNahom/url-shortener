@@ -11,3 +11,22 @@ export class Click {
     return this.timestamp;
   }
 }
+export class Click1 {
+  constructor(
+    private id: UrlId,
+    private timestamp: Date,
+    private deviceType: string
+  ) {}
+
+  getId() {
+    return this.id.getId();
+  }
+
+  getTimestamp() {
+    return this.timestamp;
+  }
+
+  getDeviceType() {
+    return this.deviceType;
+  }
+}

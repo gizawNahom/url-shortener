@@ -1,7 +1,8 @@
-import { Click } from '../core/domain/click';
+import { Click, Click1 } from '../core/domain/click';
 import DailyClickCountStat, {
   DailyClickCount,
 } from '../core/domain/dailyClickCountStat';
+import { DeviceTypePercentage } from '../core/domain/deviceTypePercentage';
 import { Url } from '../core/domain/url';
 import { UrlId } from '../core/domain/urlId';
 import { UrlStorage } from '../core/ports/urlStorage';
@@ -9,11 +10,45 @@ import { UrlStorage } from '../core/ports/urlStorage';
 export class FakeUrlStorage implements UrlStorage {
   private urls: Array<Url> = [];
   private clicks: Map<string, Array<Click>> = new Map();
+  private clicks1: Map<string, Array<Click1>> = new Map();
 
   async saveClick(click: Click): Promise<void> {
     const cId = click.getId();
     if (this.clicks.has(cId)) this.clicks.get(cId).push(click);
     else this.clicks.set(cId, [click]);
+  }
+
+  async getTopDeviceTypes(id: UrlId): Promise<DeviceTypePercentage[]> {
+    const uId = id.getId();
+    if (isNotSaved(this.clicks1)) return [];
+    return aggregateTopDevices(this.clicks1);
+
+    function isNotSaved(clicks: Map<string, Array<Click1>>) {
+      return !clicks.has(uId);
+    }
+
+    function aggregateTopDevices(clicks: Map<string, Array<Click1>>) {
+      const deviceWithCount = new Map<string, number>();
+      const urlClicks = clicks.get(uId);
+      urlClicks.forEach((e) => {
+        const dType = e.getDeviceType();
+        if (deviceWithCount.has(dType)) {
+          deviceWithCount.set(dType, deviceWithCount.get(dType) + 1);
+        } else {
+          deviceWithCount.set(dType, 1);
+        }
+      });
+      return [...deviceWithCount.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map((e) => new DeviceTypePercentage(e[0], e[1] / urlClicks.length));
+    }
+  }
+
+  async saveClick1(click: Click1): Promise<void> {
+    const cId = click.getId();
+    if (this.clicks1.has(cId)) this.clicks1.get(cId).push(click);
+    else this.clicks1.set(cId, [click]);
   }
 
   async getTotalClicksByDay(id: UrlId): Promise<DailyClickCountStat> {

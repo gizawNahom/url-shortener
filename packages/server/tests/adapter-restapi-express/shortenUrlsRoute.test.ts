@@ -15,6 +15,8 @@ import {
   url,
 } from './utilities';
 import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
+import { DeviceTypePercentage } from '../../src/core/domain/deviceTypePercentage';
+import { UrlId } from '../../src/core/domain/urlId';
 
 const longUrl = url.getLongUrl();
 
@@ -93,9 +95,14 @@ describe('POST /api/urls', () => {
 class PreexistingStorageStub implements UrlStorage {
   preexistingUrl = url;
 
+  getTopDeviceTypes(): Promise<DeviceTypePercentage[]> {
+    throw new Error('Method not implemented.');
+  }
+
   saveClick(): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
   getTotalClicksByDay(): Promise<DailyClickCountStat> {
     throw new Error('Method not implemented.');
   }

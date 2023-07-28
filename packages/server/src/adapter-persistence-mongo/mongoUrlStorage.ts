@@ -6,12 +6,17 @@ import DailyClickCountStat, {
 import { Url } from '../core/domain/url';
 import { UrlId } from '../core/domain/urlId';
 import { UrlStorage } from '../core/ports/urlStorage';
+import { DeviceTypePercentage } from '../core/domain/deviceTypePercentage';
 
 export class MongoUrlStorage implements UrlStorage {
   private readonly URLS_COLLECTION = 'urls';
   private readonly CLICKS_COLLECTION = 'clicks';
 
   constructor(private db: Db) {}
+
+  getTopDeviceTypes(): Promise<DeviceTypePercentage[]> {
+    throw new Error('Method not implemented.');
+  }
 
   async save(shortenedUrl: Url): Promise<void> {
     await this.db.collection(this.URLS_COLLECTION).insertOne({
