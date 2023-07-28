@@ -1,5 +1,5 @@
 import { Db, MongoClient } from 'mongodb';
-import { MongoUrlStorage } from '../mongoUrlStorage';
+import { MongoUrlStorage } from '../adapter-persistence-mongo/mongoUrlStorage';
 import Context from './context';
 
 export async function setupMongo() {
