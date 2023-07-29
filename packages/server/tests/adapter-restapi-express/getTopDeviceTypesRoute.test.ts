@@ -46,14 +46,15 @@ test('returns 400 for an unsaved valid id', async () => {
 });
 
 test('returns 200 for a saved valid id', async () => {
+  const deviceType = 'desktop';
   const clickDate = new Date();
   await saveUrl();
   Context.urlStorage.saveClick(
-    new Click(new UrlId(validId), clickDate, 'DESKTOP')
+    new Click(new UrlId(validId), clickDate, deviceType)
   );
 
   const response = await sendRequest(validId);
 
   assertStatusCode(response, 200);
-  assertBody(response, { devices: [{ type: 'DESKTOP', percentage: 1 }] });
+  assertBody(response, { devices: [{ type: deviceType, percentage: 1 }] });
 });

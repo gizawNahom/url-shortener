@@ -5,12 +5,12 @@ import {
   ID_DOES_NOT_EXIST,
   assertValidationErrorWithMessage,
   describeInvalidId,
+  deviceType,
   getTodayString,
 } from '../utilities';
 import { UrlId } from '../../../src/core/domain/urlId';
 
 const url = new Url('https://google.com', 'googleId1', 0);
-const deviceType = 'DESKTOP';
 
 let storageFake: FakeUrlStorage;
 
