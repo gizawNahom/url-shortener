@@ -17,7 +17,8 @@ const savedUrl = new Url('https://google2.com', savedValidId, 1);
 const clickDay = '2021-05-18';
 const click = new Click(
   new UrlId(savedValidId),
-  new Date(`${clickDay}T04:14:00.000Z`)
+  new Date(`${clickDay}T04:14:00.000Z`),
+  ''
 );
 
 function getDB(connection: MongoClient): Db {
@@ -133,13 +134,13 @@ describe('MongoDB integration', () => {
     const storage = createStorage();
 
     await storage.saveClick(
-      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:15.000Z`))
+      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:15.000Z`), '')
     );
     await storage.saveClick(
-      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:16.000Z`))
+      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:16.000Z`), '')
     );
     await storage.saveClick(
-      new Click(new UrlId(savedValidId), new Date(`${day}T05:01:16.000Z`))
+      new Click(new UrlId(savedValidId), new Date(`${day}T05:01:16.000Z`), '')
     );
 
     expect(await storage.getTotalClicksByDay(new UrlId(savedValidId))).toEqual(

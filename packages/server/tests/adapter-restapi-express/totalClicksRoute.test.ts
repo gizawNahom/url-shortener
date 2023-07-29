@@ -43,7 +43,7 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
   test('returns 200 for a saved valid id', async () => {
     const clickDate = new Date();
     await saveUrl();
-    Context.urlStorage.saveClick(new Click(new UrlId(validId), clickDate));
+    Context.urlStorage.saveClick(new Click(new UrlId(validId), clickDate, ''));
 
     const response = await sendRequest(validId);
 

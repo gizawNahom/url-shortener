@@ -29,7 +29,7 @@ describe('Pact verification', () => {
           const url = new Url('https://google.com', 'googleId1', 0);
           await Context.urlStorage.save(url);
           const uId = new UrlId(url.getShortenedId());
-          await Context.urlStorage.saveClick(new Click(uId, new Date()));
+          await Context.urlStorage.saveClick(new Click(uId, new Date(), ''));
         },
       },
       beforeEach: async () => {

@@ -1,5 +1,5 @@
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Click1 } from '../../../src/core/domain/click';
+import { Click } from '../../../src/core/domain/click';
 import { DeviceTypePercentage } from '../../../src/core/domain/deviceTypePercentage';
 import { Url } from '../../../src/core/domain/url';
 import { UrlId } from '../../../src/core/domain/urlId';
@@ -69,7 +69,7 @@ test('returns correct response for a url with zero clicks', async () => {
 
 test('returns correct response for a single click', async () => {
   await saveUrl();
-  await storage.saveClick1(new Click1(new UrlId(validId), new Date(), DESKTOP));
+  await storage.saveClick(new Click(new UrlId(validId), new Date(), DESKTOP));
   const uC = createUseCase();
 
   const response = await getTopDeviceTypes(uC, validId);
@@ -81,11 +81,9 @@ test('returns correct response for a single click', async () => {
 
 test('returns correct response for two clicks from two device types', async () => {
   await saveUrl();
-  await storage.saveClick1(new Click1(new UrlId(validId), new Date(), DESKTOP));
-  await storage.saveClick1(new Click1(new UrlId(validId), new Date(), DESKTOP));
-  await storage.saveClick1(
-    new Click1(new UrlId(validId), new Date(), 'MOBILE')
-  );
+  await storage.saveClick(new Click(new UrlId(validId), new Date(), DESKTOP));
+  await storage.saveClick(new Click(new UrlId(validId), new Date(), DESKTOP));
+  await storage.saveClick(new Click(new UrlId(validId), new Date(), 'MOBILE'));
   const uC = createUseCase();
 
   const response = await getTopDeviceTypes(uC, validId);

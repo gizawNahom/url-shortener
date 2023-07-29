@@ -1,4 +1,4 @@
-import { Click, Click1 } from '../core/domain/click';
+import { Click } from '../core/domain/click';
 import DailyClickCountStat, {
   DailyClickCount,
 } from '../core/domain/dailyClickCountStat';
@@ -10,7 +10,6 @@ import { UrlStorage } from '../core/ports/urlStorage';
 export class FakeUrlStorage implements UrlStorage {
   private urls: Array<Url> = [];
   private clicks: Map<string, Array<Click>> = new Map();
-  private clicks1: Map<string, Array<Click1>> = new Map();
 
   async saveClick(click: Click): Promise<void> {
     const cId = click.getId();
@@ -20,14 +19,14 @@ export class FakeUrlStorage implements UrlStorage {
 
   async getTopDeviceTypes(id: UrlId): Promise<DeviceTypePercentage[]> {
     const uId = id.getId();
-    if (isNotSaved(this.clicks1)) return [];
-    return aggregateTopDevices(this.clicks1);
+    if (isNotSaved(this.clicks)) return [];
+    return aggregateTopDevices(this.clicks);
 
-    function isNotSaved(clicks: Map<string, Array<Click1>>) {
+    function isNotSaved(clicks: Map<string, Array<Click>>) {
       return !clicks.has(uId);
     }
 
-    function aggregateTopDevices(clicks: Map<string, Array<Click1>>) {
+    function aggregateTopDevices(clicks: Map<string, Array<Click>>) {
       const deviceWithCount = new Map<string, number>();
       const urlClicks = clicks.get(uId);
       urlClicks.forEach((e) => {
@@ -43,12 +42,6 @@ export class FakeUrlStorage implements UrlStorage {
         .slice(0, 3)
         .map((e) => new DeviceTypePercentage(e[0], e[1] / urlClicks.length));
     }
-  }
-
-  async saveClick1(click: Click1): Promise<void> {
-    const cId = click.getId();
-    if (this.clicks1.has(cId)) this.clicks1.get(cId).push(click);
-    else this.clicks1.set(cId, [click]);
   }
 
   async getTotalClicksByDay(id: UrlId): Promise<DailyClickCountStat> {

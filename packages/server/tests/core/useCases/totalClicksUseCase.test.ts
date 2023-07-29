@@ -9,8 +9,9 @@ import {
   describeInvalidId,
   getDateString,
 } from '../utilities';
+import { UrlStorage } from '../../../src/core/ports/urlStorage';
 
-let storage;
+let storage: UrlStorage;
 const validId1 = 'googleId1';
 const validId2 = 'googleId2';
 const clickDate1 = new Date();
@@ -39,7 +40,7 @@ function saveUrl(id: string, longUrl?: string) {
 }
 
 function saveClick(id: string, clickDate: Date) {
-  storage.saveClick(new Click(new UrlId(id), clickDate));
+  storage.saveClick(new Click(new UrlId(id), clickDate, ''));
 }
 
 function createTotalClicksUseCase() {

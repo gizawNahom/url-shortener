@@ -114,10 +114,6 @@ class StorageSpy implements UrlStorage {
   saveWasCalled = false;
   preexistingUrl = url;
 
-  saveClick1(): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-
   getTopDeviceTypes(): Promise<DeviceTypePercentage[]> {
     throw new Error('Method not implemented.');
   }

@@ -13,7 +13,7 @@ export class RedirectUseCase {
     const url = await this.findUrlById(uId);
     if (this.isNotFound(url))
       throw this.buildValidationError(ValidationMessages.ID_DOES_NOT_EXIST);
-    await this.storage.saveClick(new Click(uId, new Date()));
+    await this.storage.saveClick(new Click(uId, new Date(), ''));
     return url.getLongUrl();
   }
 
