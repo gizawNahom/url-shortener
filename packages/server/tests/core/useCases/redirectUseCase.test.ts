@@ -5,7 +5,7 @@ import {
   ID_DOES_NOT_EXIST,
   assertValidationErrorWithMessage,
   describeInvalidId,
-  deviceType,
+  tabletDeviceType,
   getTodayString,
 } from '../utilities';
 import { UrlId } from '../../../src/core/domain/urlId';
@@ -21,7 +21,7 @@ function createUseCase() {
 }
 
 function executeUseCase(rUC: RedirectUseCase, id: string) {
-  return rUC.execute(id, deviceType);
+  return rUC.execute(id, tabletDeviceType);
 }
 
 async function assertCorrectClickCountStat() {
@@ -74,5 +74,9 @@ test('registers click', async () => {
   await executeUseCase(rUC, url.getShortenedId());
 
   await assertCorrectClickCountStat();
-  await assertSavedDeviceType(storageFake, url.getShortenedId(), deviceType);
+  await assertSavedDeviceType(
+    storageFake,
+    url.getShortenedId(),
+    tabletDeviceType
+  );
 });

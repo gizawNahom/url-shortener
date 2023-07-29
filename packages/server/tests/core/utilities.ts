@@ -3,7 +3,7 @@ import { ValidationError } from '../../src/core/validationError';
 export const ID_REQUIRED = 'Id is required';
 export const ID_INVALID = 'Id is invalid';
 export const ID_DOES_NOT_EXIST = 'Id does not exist';
-export const deviceType = 'desktop';
+export const tabletDeviceType = 'tablet';
 
 export async function assertValidationErrorWithMessage(
   task: () => unknown,

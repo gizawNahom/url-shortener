@@ -11,7 +11,7 @@ import {
   ID_DOES_NOT_EXIST,
   assertValidationErrorWithMessage,
   describeInvalidId,
-  deviceType,
+  tabletDeviceType,
 } from '../utilities';
 
 let storage: FakeUrlStorage;
@@ -70,24 +70,24 @@ test('returns correct response for a url with zero clicks', async () => {
 test('returns correct response for a single click', async () => {
   await saveUrl();
   await storage.saveClick(
-    new Click(new UrlId(validId), new Date(), deviceType)
+    new Click(new UrlId(validId), new Date(), tabletDeviceType)
   );
   const uC = createUseCase();
 
   const response = await getTopDeviceTypes(uC, validId);
 
   expect(response).toEqual({
-    devices: [new DeviceTypePercentage(deviceType, 1)],
+    devices: [new DeviceTypePercentage(tabletDeviceType, 1)],
   });
 });
 
 test('returns correct response for two clicks from two device types', async () => {
   await saveUrl();
   await storage.saveClick(
-    new Click(new UrlId(validId), new Date(), deviceType)
+    new Click(new UrlId(validId), new Date(), tabletDeviceType)
   );
   await storage.saveClick(
-    new Click(new UrlId(validId), new Date(), deviceType)
+    new Click(new UrlId(validId), new Date(), tabletDeviceType)
   );
   await storage.saveClick(new Click(new UrlId(validId), new Date(), 'MOBILE'));
   const uC = createUseCase();
@@ -96,7 +96,7 @@ test('returns correct response for two clicks from two device types', async () =
 
   expect(response).toEqual({
     devices: [
-      new DeviceTypePercentage(deviceType, 2 / 3),
+      new DeviceTypePercentage(tabletDeviceType, 2 / 3),
       new DeviceTypePercentage('MOBILE', 1 / 3),
     ],
   });
