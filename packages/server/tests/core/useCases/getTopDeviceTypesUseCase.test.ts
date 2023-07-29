@@ -82,6 +82,7 @@ test('returns correct response for a single click', async () => {
 });
 
 test('returns correct response for two clicks from two device types', async () => {
+  const mobileDeviceType = 'mobile';
   await saveUrl();
   await storage.saveClick(
     new Click(new UrlId(validId), new Date(), tabletDeviceType)
@@ -89,7 +90,9 @@ test('returns correct response for two clicks from two device types', async () =
   await storage.saveClick(
     new Click(new UrlId(validId), new Date(), tabletDeviceType)
   );
-  await storage.saveClick(new Click(new UrlId(validId), new Date(), 'MOBILE'));
+  await storage.saveClick(
+    new Click(new UrlId(validId), new Date(), mobileDeviceType)
+  );
   const uC = createUseCase();
 
   const response = await getTopDeviceTypes(uC, validId);
@@ -97,7 +100,7 @@ test('returns correct response for two clicks from two device types', async () =
   expect(response).toEqual({
     devices: [
       new DeviceTypePercentage(tabletDeviceType, 2 / 3),
-      new DeviceTypePercentage('MOBILE', 1 / 3),
+      new DeviceTypePercentage(mobileDeviceType, 1 / 3),
     ],
   });
 });
