@@ -27,7 +27,7 @@ export class RedirectUrlsRoute {
   }
 
   private async getRedirectUrl(uC: RedirectUseCase, req): Promise<string> {
-    return await uC.execute(req.params.id);
+    return await uC.execute(req.params.id, '');
   }
 
   private redirect(res: Response, redirectUrl: string) {

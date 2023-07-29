@@ -7,16 +7,20 @@ import {
   describeInvalidId,
   getTodayString,
 } from '../utilities';
-import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import { UrlId } from '../../../src/core/domain/urlId';
 
 const url = new Url('https://google.com', 'googleId1', 0);
+const deviceType = 'DESKTOP';
 
-let storageFake: UrlStorage;
+let storageFake: FakeUrlStorage;
 
 function createUseCase() {
   storageFake = new FakeUrlStorage();
   return new RedirectUseCase(storageFake);
+}
+
+function executeUseCase(rUC: RedirectUseCase, id: string) {
+  return rUC.execute(id, deviceType);
 }
 
 async function assertCorrectClickCountStat() {
@@ -37,17 +41,18 @@ describeInvalidId((id, errorMessage) => {
     const rUC = createUseCase();
 
     assertValidationErrorWithMessage(
-      async () => await rUC.execute(id as string),
+      async () => await executeUseCase(rUC, id as string),
       errorMessage
     );
   });
 });
 
 test('throws if id does not exist', async () => {
+  const unsavedId = 'fe3e56789';
   const rUC = createUseCase();
 
   assertValidationErrorWithMessage(
-    async () => await rUC.execute('fe3e56789'),
+    async () => await executeUseCase(rUC, unsavedId),
     ID_DOES_NOT_EXIST
   );
 });
@@ -56,7 +61,7 @@ test('returns redirect url', async () => {
   const rUC = createUseCase();
   storageFake.save(url);
 
-  const longUrl = await rUC.execute(url.getShortenedId());
+  const longUrl = await executeUseCase(rUC, url.getShortenedId());
 
   expect(longUrl).toBe(url.getLongUrl());
 });
@@ -65,7 +70,12 @@ test('registers click', async () => {
   const rUC = createUseCase();
   storageFake.save(url);
 
-  await rUC.execute(url.getShortenedId());
+  await executeUseCase(rUC, url.getShortenedId());
 
   await assertCorrectClickCountStat();
+  const deviceTypes = await storageFake.getTopDeviceTypes(
+    new UrlId(url.getShortenedId())
+  );
+  expect(deviceTypes.length).toBe(1);
+  expect(deviceTypes[0].getType()).toBe(deviceType);
 });

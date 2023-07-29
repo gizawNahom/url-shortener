@@ -8,12 +8,12 @@ import { Click } from '../domain/click';
 export class RedirectUseCase {
   constructor(private storage: UrlStorage) {}
 
-  async execute(id: string): Promise<string> {
+  async execute(id: string, deviceType: string): Promise<string> {
     const uId = this.buildUrlId(id);
     const url = await this.findUrlById(uId);
     if (this.isNotFound(url))
       throw this.buildValidationError(ValidationMessages.ID_DOES_NOT_EXIST);
-    await this.storage.saveClick(new Click(uId, new Date(), ''));
+    await this.saveClick(uId, deviceType);
     return url.getLongUrl();
   }
 
@@ -31,5 +31,9 @@ export class RedirectUseCase {
 
   private buildValidationError(message: string) {
     return new ValidationError(message);
+  }
+
+  private async saveClick(uId: UrlId, deviceType: string) {
+    await this.storage.saveClick(new Click(uId, new Date(), deviceType));
   }
 }
