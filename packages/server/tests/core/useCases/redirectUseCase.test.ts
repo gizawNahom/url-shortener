@@ -9,6 +9,7 @@ import {
   getTodayString,
 } from '../utilities';
 import { UrlId } from '../../../src/core/domain/urlId';
+import { assertSavedDeviceType } from '../../utilities';
 
 const url = new Url('https://google.com', 'googleId1', 0);
 
@@ -73,9 +74,5 @@ test('registers click', async () => {
   await executeUseCase(rUC, url.getShortenedId());
 
   await assertCorrectClickCountStat();
-  const deviceTypes = await storageFake.getTopDeviceTypes(
-    new UrlId(url.getShortenedId())
-  );
-  expect(deviceTypes.length).toBe(1);
-  expect(deviceTypes[0].getType()).toBe(deviceType);
+  await assertSavedDeviceType(storageFake, url.getShortenedId(), deviceType);
 });

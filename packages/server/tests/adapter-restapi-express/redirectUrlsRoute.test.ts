@@ -13,6 +13,8 @@ import {
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 import { UrlId } from '../../src/core/domain/urlId';
+import { UrlStorage } from '../../src/core/ports/urlStorage';
+import { assertSavedDeviceType } from '../utilities';
 
 function sendRequest(id: string) {
   return sendGetRequest('/' + id);
@@ -60,11 +62,11 @@ describe('GET /<id>', () => {
 
     assertStatusCode(response, 301);
     expect(response.headers.location).toBe(url.getLongUrl());
-    const deviceTypes = await Context.urlStorage.getTopDeviceTypes(
-      new UrlId(url.getShortenedId())
+    await assertSavedDeviceType(
+      Context.urlStorage,
+      url.getShortenedId(),
+      deviceType
     );
-    expect(deviceTypes.length).toBe(1);
-    expect(deviceTypes[0].getType()).toBe(deviceType);
   });
 
   afterEach(() => {
