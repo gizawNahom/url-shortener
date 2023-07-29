@@ -20,8 +20,12 @@ function createUseCase() {
   return new RedirectUseCase(storageFake);
 }
 
-function executeUseCase(rUC: RedirectUseCase, id: string) {
-  return rUC.execute(id, tabletDeviceType);
+function executeUseCase(rUC: RedirectUseCase, id: string, deviceType?: string) {
+  return rUC.execute(id, deviceType);
+}
+
+function executeUseCaseWithTablet(rUC: RedirectUseCase, id: string) {
+  return executeUseCase(rUC, id, tabletDeviceType);
 }
 
 async function assertCorrectClickCountStat() {
@@ -42,7 +46,7 @@ describeInvalidId((id, errorMessage) => {
     const rUC = createUseCase();
 
     assertValidationErrorWithMessage(
-      async () => await executeUseCase(rUC, id as string),
+      async () => await executeUseCaseWithTablet(rUC, id as string),
       errorMessage
     );
   });
@@ -53,7 +57,7 @@ test('throws if id does not exist', async () => {
   const rUC = createUseCase();
 
   assertValidationErrorWithMessage(
-    async () => await executeUseCase(rUC, unsavedId),
+    async () => await executeUseCaseWithTablet(rUC, unsavedId),
     ID_DOES_NOT_EXIST
   );
 });
@@ -62,7 +66,7 @@ test('returns redirect url', async () => {
   const rUC = createUseCase();
   storageFake.save(url);
 
-  const longUrl = await executeUseCase(rUC, url.getShortenedId());
+  const longUrl = await executeUseCaseWithTablet(rUC, url.getShortenedId());
 
   expect(longUrl).toBe(url.getLongUrl());
 });
@@ -71,7 +75,7 @@ test('registers click', async () => {
   const rUC = createUseCase();
   storageFake.save(url);
 
-  await executeUseCase(rUC, url.getShortenedId());
+  await executeUseCaseWithTablet(rUC, url.getShortenedId());
 
   await assertCorrectClickCountStat();
   await assertSavedDeviceType(
@@ -79,4 +83,14 @@ test('registers click', async () => {
     url.getShortenedId(),
     tabletDeviceType
   );
+});
+
+test('saves "desktop" for unknown device types', async () => {
+  const rUC = createUseCase();
+  storageFake.save(url);
+
+  await executeUseCase(rUC, url.getShortenedId(), undefined);
+
+  await assertCorrectClickCountStat();
+  await assertSavedDeviceType(storageFake, url.getShortenedId(), 'desktop');
 });

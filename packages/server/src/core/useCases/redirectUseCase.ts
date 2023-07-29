@@ -8,7 +8,7 @@ import { Click } from '../domain/click';
 export class RedirectUseCase {
   constructor(private storage: UrlStorage) {}
 
-  async execute(id: string, deviceType: string): Promise<string> {
+  async execute(id: string, deviceType?: string): Promise<string> {
     const uId = this.buildUrlId(id);
     const url = await this.findUrlById(uId);
     if (this.isNotFound(url))
@@ -34,6 +34,8 @@ export class RedirectUseCase {
   }
 
   private async saveClick(uId: UrlId, deviceType: string) {
-    await this.storage.saveClick(new Click(uId, new Date(), deviceType));
+    await this.storage.saveClick(
+      new Click(uId, new Date(), deviceType ?? 'desktop')
+    );
   }
 }
