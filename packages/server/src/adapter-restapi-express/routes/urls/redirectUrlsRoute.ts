@@ -1,4 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
+import UAParser from 'ua-parser-js';
 import { RedirectUseCase } from '../../../core/useCases/redirectUseCase';
 import Context from '../../context';
 
@@ -27,7 +28,13 @@ export class RedirectUrlsRoute {
   }
 
   private async getRedirectUrl(uC: RedirectUseCase, req): Promise<string> {
-    return await uC.execute(req.params.id, '');
+    const deviceType = parseDeviceType();
+    return await uC.execute(req.params.id, deviceType);
+
+    function parseDeviceType() {
+      const parser = new UAParser(req.headers['user-agent']);
+      return parser.getDevice().type;
+    }
   }
 
   private redirect(res: Response, redirectUrl: string) {

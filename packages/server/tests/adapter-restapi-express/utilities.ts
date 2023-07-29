@@ -25,8 +25,8 @@ export function assert500WithGenericMessage(response) {
   });
 }
 
-export async function sendGetRequest(path: string) {
-  return await request(app).get(path);
+export function sendGetRequest(path: string) {
+  return request(app).get(path);
 }
 
 export const Messages = {

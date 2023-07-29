@@ -12,9 +12,10 @@ import {
 } from './utilities';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
+import { UrlId } from '../../src/core/domain/urlId';
 
-async function sendRequest(id: string) {
-  return await sendGetRequest('/' + id);
+function sendRequest(id: string) {
+  return sendGetRequest('/' + id);
 }
 
 describe('GET /<id>', () => {
@@ -47,12 +48,23 @@ describe('GET /<id>', () => {
   });
 
   test('responds with a 301 redirect if id exists', async () => {
+    const deviceType = 'tablet';
     await saveUrl();
 
-    const response = await sendRequest(url.getShortenedId());
+    const tabletUserAgent =
+      'Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1';
+    const response = await sendRequest(url.getShortenedId()).set(
+      'User-Agent',
+      tabletUserAgent
+    );
 
     assertStatusCode(response, 301);
     expect(response.headers.location).toBe(url.getLongUrl());
+    const deviceTypes = await Context.urlStorage.getTopDeviceTypes(
+      new UrlId(url.getShortenedId())
+    );
+    expect(deviceTypes.length).toBe(1);
+    expect(deviceTypes[0].getType()).toBe(deviceType);
   });
 
   afterEach(() => {
