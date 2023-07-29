@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { Click } from '../core/domain/click';
+import { Click, Click1 } from '../core/domain/click';
 import DailyClickCountStat, {
   DailyClickCount,
 } from '../core/domain/dailyClickCountStat';
@@ -13,6 +13,9 @@ export class MongoUrlStorage implements UrlStorage {
   private readonly CLICKS_COLLECTION = 'clicks';
 
   constructor(private db: Db) {}
+  saveClick1(click: Click1): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   getTopDeviceTypes(): Promise<DeviceTypePercentage[]> {
     throw new Error('Method not implemented.');

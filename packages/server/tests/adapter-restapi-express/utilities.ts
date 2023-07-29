@@ -3,6 +3,7 @@ import app from '../../src/adapter-restapi-express/app';
 import { Url } from '../../src/core/domain/url';
 import Context from '../../src/adapter-restapi-express/context';
 import { ExceptionStorageStub } from './ExceptionStorageStub';
+import { ID_INVALID } from '../core/utilities';
 
 export function assertBadRequestWithMessage(response, message: string) {
   assertStatusCode(response, 400);
@@ -47,3 +48,22 @@ export function buildShortUrl(id: string) {
 export const validId = 'googleId1';
 
 export const url = new Url('https://google.com', validId, 0);
+
+export function describeInvalidId(
+  testInvalidId: (id: string | undefined, errorMessage: string) => void
+) {
+  describe.each(getInvalidIdTests())('Invalid id', (id, errorMessage) => {
+    testInvalidId(id, errorMessage);
+  });
+
+  function getInvalidIdTests(): readonly (
+    | [string, string]
+    | [undefined, string]
+  )[] {
+    return [
+      ['longIdWith12', ID_INVALID],
+      ['shortId', ID_INVALID],
+      ['google*d2', ID_INVALID],
+    ];
+  }
+}
