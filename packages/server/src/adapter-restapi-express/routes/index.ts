@@ -4,8 +4,6 @@ import { RedirectUrlsRoute } from './urls/redirectUrlsRoute';
 import { ErrorHandler } from './errorHandler';
 import { TotalClicksRoute } from './urls/totalClicksRoute';
 import { GetUrlsRoute } from './urls/getUrlsRoute';
-import { GetTopDeviceTypesUseCase } from '../../core/useCases/getTopDeviceTypesUseCase';
-import Context from '../context';
 import { GetTopDeviceTypesRoute } from './urls/getTopDeviceTypesRoute';
 
 const router = express.Router();
