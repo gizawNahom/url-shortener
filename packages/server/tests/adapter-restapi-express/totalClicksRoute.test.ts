@@ -3,6 +3,7 @@ import {
   assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
+  describeInvalidId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
@@ -23,14 +24,13 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
     Context.urlStorage = new FakeUrlStorage();
   });
 
-  test.each(['_-3456789', '1234t7'])(
-    'returns 400 for invalid id',
-    async (invalidId) => {
-      const response = await sendRequest(invalidId);
+  describeInvalidId((id, errorMessage) => {
+    test(`returns 400 for id: ${id}`, async () => {
+      const response = await sendRequest(id as string);
 
-      assertBadRequestWithMessage(response, ValidationMessages.ID_INVALID);
-    }
-  );
+      assertBadRequestWithMessage(response, errorMessage);
+    });
+  });
 
   test('returns 500 for unknown exception', async () => {
     setExceptionStorageStub();

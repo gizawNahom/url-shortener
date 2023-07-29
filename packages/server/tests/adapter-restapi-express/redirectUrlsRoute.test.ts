@@ -3,6 +3,7 @@ import {
   assert500WithGenericMessage,
   assertBadRequestWithMessage,
   assertStatusCode,
+  describeInvalidId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
@@ -23,10 +24,12 @@ describe('GET /<id>', () => {
     assertBadRequestWithMessage(response, ValidationMessages.ID_REQUIRED);
   });
 
-  test('responds 400 for invalid id', async () => {
-    const response = await sendRequest('f');
+  describeInvalidId((id, errorMessage) => {
+    test(`returns 400 for id: ${id}`, async () => {
+      const response = await sendRequest(id as string);
 
-    assertBadRequestWithMessage(response, ValidationMessages.ID_INVALID);
+      assertBadRequestWithMessage(response, errorMessage);
+    });
   });
 
   test('responds 500 for unknown exceptions', async () => {

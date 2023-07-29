@@ -5,6 +5,7 @@ import {
   assertBody,
   assertStatusCode,
   buildShortUrl,
+  describeInvalidId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
@@ -22,16 +23,24 @@ afterEach(() => {
   Context.urlStorage = new FakeUrlStorage();
 });
 
-describe.each([
-  ['', ValidationMessages.ID_REQUIRED],
-  ['invalid id', ValidationMessages.ID_INVALID],
-  [validId, ValidationMessages.ID_DOES_NOT_EXIST],
-])('Invalid id', (id, errorMessage) => {
-  test(`responds 400 with message "${errorMessage}" for id "${id}"`, async () => {
-    const response = await sendRequest(id);
+describeInvalidId((id, errorMessage) => {
+  test(`returns 400 for id: ${id}`, async () => {
+    const response = await sendRequest(id as string);
 
     assertBadRequestWithMessage(response, errorMessage);
   });
+});
+
+test('responds 400 for empty id', async () => {
+  const response = await sendRequest('');
+
+  assertBadRequestWithMessage(response, ValidationMessages.ID_REQUIRED);
+});
+
+test('responds 400 if id does not exist', async () => {
+  const response = await sendRequest(validId);
+
+  assertBadRequestWithMessage(response, ValidationMessages.ID_DOES_NOT_EXIST);
 });
 
 test('responds 500 for unknown exception', async () => {
