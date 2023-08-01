@@ -3,8 +3,6 @@ import DailyClickCountStat, {
 } from '../domain/dailyClickCountStat';
 import { UrlId } from '../domain/urlId';
 import { UrlStorage } from '../ports/urlStorage';
-import { ValidationError } from '../validationError';
-import { ValidationMessages } from '../validationMessages';
 import { checkIfUrlIsRegistered } from './domainServices';
 
 export class TotalClicksUseCase {
@@ -19,14 +17,6 @@ export class TotalClicksUseCase {
 
   private buildUrlId(id: string) {
     return new UrlId(id);
-  }
-
-  private findUrl(uId: UrlId) {
-    return this.urlStorage.findById(uId.getId());
-  }
-
-  private throwIdDoesNotExistError() {
-    throw new ValidationError(ValidationMessages.ID_DOES_NOT_EXIST);
   }
 
   private async getDailyClickCountStat(uId: UrlId) {
