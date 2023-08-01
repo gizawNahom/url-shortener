@@ -5,24 +5,20 @@ import { UrlId } from '../domain/urlId';
 import { UrlStorage } from '../ports/urlStorage';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';
+import { checkIfUrlIsRegistered } from './domainServices';
 
 export class TotalClicksUseCase {
   constructor(private urlStorage: UrlStorage) {}
 
   async getTotalClicksByDay(id: string): Promise<TotalClicksUseCaseResponse> {
     const uId = this.buildUrlId(id);
-    await this.checkIfUrlWasSaved(uId);
+    await checkIfUrlIsRegistered(this.urlStorage, uId);
     const stat = await this.getDailyClickCountStat(uId);
     return this.buildResponse(stat);
   }
 
   private buildUrlId(id: string) {
     return new UrlId(id);
-  }
-
-  private async checkIfUrlWasSaved(uId: UrlId) {
-    const url = await this.findUrl(uId);
-    if (!url) this.throwIdDoesNotExistError();
   }
 
   private findUrl(uId: UrlId) {
