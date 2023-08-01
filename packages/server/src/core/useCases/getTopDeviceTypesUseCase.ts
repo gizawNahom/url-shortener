@@ -7,10 +7,14 @@ export class GetTopDeviceTypesUseCase {
   constructor(private urlStorage: UrlStorage) {}
 
   async getTopDevices(id: string): Promise<GetTopDevicesUseCaseResponse> {
-    const uId = new UrlId(id);
+    const uId = this.buildUrlId(id);
     await checkIfUrlIsRegistered(this.urlStorage, uId);
     const devices = await this.getTopDeviceTypes(uId);
     return this.buildResponse(devices);
+  }
+
+  private buildUrlId(id: string) {
+    return new UrlId(id);
   }
 
   private getTopDeviceTypes(uId: UrlId) {

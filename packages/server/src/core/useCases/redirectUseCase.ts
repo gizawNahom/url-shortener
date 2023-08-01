@@ -11,8 +11,7 @@ export class RedirectUseCase {
   async execute(id: string, deviceType?: string): Promise<string> {
     const uId = this.buildUrlId(id);
     const url = await this.findUrlById(uId);
-    if (this.isNotFound(url))
-      throw this.buildValidationError(ValidationMessages.ID_DOES_NOT_EXIST);
+    if (this.isNotFound(url)) this.throwDoesNotExistError();
     await this.saveClick(uId, deviceType);
     return url.getLongUrl();
   }
@@ -29,8 +28,8 @@ export class RedirectUseCase {
     return !url;
   }
 
-  private buildValidationError(message: string) {
-    return new ValidationError(message);
+  private throwDoesNotExistError() {
+    throw new ValidationError(ValidationMessages.ID_DOES_NOT_EXIST);
   }
 
   private async saveClick(uId: UrlId, deviceType: string) {

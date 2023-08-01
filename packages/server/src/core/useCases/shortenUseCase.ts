@@ -12,19 +12,32 @@ export class ShortenUseCase {
     this.validateLongUrl(longUrl);
     const preUrl = await this.findPreexistingUrl(longUrl);
     if (preUrl) return this.buildResponseForPreexisting(preUrl);
-    const newUrl = await this.createNewUrl(longUrl);
-    return this.buildResponse(newUrl);
+    return this.buildResponse(await this.createNewUrl(longUrl));
   }
 
   private validateLongUrl(longUrl: string) {
-    if (!longUrl)
-      throw this.createValidationError(ValidationMessages.URL_REQUIRED);
-    else if (!validUrl.isWebUri(longUrl))
-      throw this.createValidationError(ValidationMessages.URL_INVALID);
-  }
+    if (isFalsy(longUrl)) throwRequiredError();
+    else if (!isWebUri(longUrl)) throwInvalidError();
 
-  private createValidationError(message: string): ValidationError {
-    return new ValidationError(message);
+    function isFalsy(longUrl: string) {
+      return !longUrl;
+    }
+
+    function throwRequiredError() {
+      throw buildValidationError(ValidationMessages.URL_REQUIRED);
+    }
+
+    function isWebUri(longUrl) {
+      return validUrl.isWebUri(longUrl);
+    }
+
+    function throwInvalidError() {
+      throw buildValidationError(ValidationMessages.URL_INVALID);
+    }
+
+    function buildValidationError(message: string): ValidationError {
+      return new ValidationError(message);
+    }
   }
 
   private async findPreexistingUrl(longUrl: string) {
