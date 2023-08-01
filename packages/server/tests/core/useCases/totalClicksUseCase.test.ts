@@ -1,8 +1,6 @@
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Click } from '../../../src/core/domain/click';
 import { TotalClicksUseCase } from '../../../src/core/useCases/totalClicksUseCase';
 import { Url } from '../../../src/core/domain/url';
-import { UrlId } from '../../../src/core/domain/urlId';
 import {
   ID_DOES_NOT_EXIST,
   assertValidationErrorWithMessage,
@@ -10,6 +8,8 @@ import {
   getDateString,
 } from '../utilities';
 import { UrlStorage } from '../../../src/core/ports/urlStorage';
+import Context from '../../../src/adapter-restapi-express/context';
+import { saveClick as sC } from '../../utilities';
 
 let storage: UrlStorage;
 const validId1 = 'googleId1';
@@ -40,7 +40,7 @@ function saveUrl(id: string, longUrl?: string) {
 }
 
 function saveClick(id: string, clickDate: Date) {
-  storage.saveClick(new Click(new UrlId(id), clickDate, ''));
+  sC({ id, clickDate });
 }
 
 function createTotalClicksUseCase() {
@@ -67,6 +67,7 @@ function assertObjectEquality(obj1, obj2) {
 
 beforeEach(() => {
   storage = new FakeUrlStorage();
+  Context.urlStorage = storage;
 });
 
 describeInvalidId((id, errorMessage) => {

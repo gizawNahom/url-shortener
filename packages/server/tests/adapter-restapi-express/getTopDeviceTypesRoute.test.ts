@@ -1,8 +1,7 @@
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 import Context from '../../src/adapter-restapi-express/context';
-import { Click } from '../../src/core/domain/click';
-import { UrlId } from '../../src/core/domain/urlId';
 import { ValidationMessages } from '../../src/core/validationMessages';
+import { saveClick } from '../utilities';
 import {
   assert500WithGenericMessage,
   assertBadRequestWithMessage,
@@ -47,11 +46,8 @@ test('returns 400 for an unsaved valid id', async () => {
 
 test('returns 200 for a saved valid id', async () => {
   const deviceType = 'desktop';
-  const clickDate = new Date();
   await saveUrl();
-  Context.urlStorage.saveClick(
-    new Click(new UrlId(validId), clickDate, deviceType)
-  );
+  saveClick({ id: validId, deviceType });
 
   const response = await sendRequest(validId);
 

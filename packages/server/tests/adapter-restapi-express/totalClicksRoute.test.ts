@@ -12,8 +12,7 @@ import {
 import { ValidationMessages } from '../../src/core/validationMessages';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { Click } from '../../src/core/domain/click';
-import { UrlId } from '../../src/core/domain/urlId';
+import { saveClick } from '../utilities';
 
 async function sendRequest(id: string) {
   return await sendGetRequest('/api/urls/' + id + '/total-clicks-by-day');
@@ -43,7 +42,7 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
   test('returns 200 for a saved valid id', async () => {
     const clickDate = new Date();
     await saveUrl();
-    Context.urlStorage.saveClick(new Click(new UrlId(validId), clickDate, ''));
+    await saveClick({ id: validId, clickDate });
 
     const response = await sendRequest(validId);
 

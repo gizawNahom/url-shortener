@@ -6,6 +6,8 @@ import DailyClickCountStat, {
   DailyClickCount,
 } from '../../src/core/domain/dailyClickCountStat';
 import { Click } from '../../src/core/domain/click';
+import { saveClick } from '../utilities';
+import Context from '../../src/adapter-restapi-express/context';
 
 let db: Db;
 
@@ -64,7 +66,8 @@ async function seedUrlsData() {
 }
 
 function createStorage() {
-  return new MongoUrlStorage(db);
+  Context.urlStorage = new MongoUrlStorage(db);
+  return Context.urlStorage;
 }
 
 describe('MongoDB integration', () => {
@@ -130,18 +133,22 @@ describe('MongoDB integration', () => {
   });
 
   test('saves click', async () => {
+    const id = savedValidId;
     const day = '2020-02-10';
     const storage = createStorage();
 
-    await storage.saveClick(
-      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:15.000Z`), '')
-    );
-    await storage.saveClick(
-      new Click(new UrlId(savedValidId), new Date(`${day}T02:42:16.000Z`), '')
-    );
-    await storage.saveClick(
-      new Click(new UrlId(savedValidId), new Date(`${day}T05:01:16.000Z`), '')
-    );
+    await saveClick({
+      id,
+      clickDate: new Date(`${day}T02:42:15.000Z`),
+    });
+    await saveClick({
+      id,
+      clickDate: new Date(`${day}T02:42:16.000Z`),
+    });
+    await saveClick({
+      id,
+      clickDate: new Date(`${day}T05:01:16.000Z`),
+    });
 
     expect(await storage.getTotalClicksByDay(new UrlId(savedValidId))).toEqual(
       new DailyClickCountStat(4, [

@@ -3,9 +3,8 @@ import app from '../src/adapter-restapi-express/app';
 import path from 'path';
 import Context from '../src/adapter-restapi-express/context';
 import { Url } from '../src/core/domain/url';
-import { Click } from '../src/core/domain/click';
-import { UrlId } from '../src/core/domain/urlId';
 import { FakeUrlStorage } from '../src/adapter-persistence-fake/fakeUrlStorage';
+import { saveClick } from './utilities';
 
 const port = 8081;
 const baseUrl = `http://localhost:${port}`;
@@ -28,8 +27,7 @@ describe('Pact verification', () => {
         'a url is saved and clicked once': async () => {
           const url = new Url('https://google.com', 'googleId1', 0);
           await Context.urlStorage.save(url);
-          const uId = new UrlId(url.getShortenedId());
-          await Context.urlStorage.saveClick(new Click(uId, new Date(), ''));
+          await saveClick({ id: url.getShortenedId() });
         },
       },
       beforeEach: async () => {
