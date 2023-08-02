@@ -11,26 +11,19 @@ export async function fetch(path: string): Promise<string> {
 }
 
 export async function shortenUrl(longUrl: string): Promise<ShortenedUrl> {
-  const reqBody = {
-    url: longUrl,
-  };
-  const reqConf = {
-    headers: { Accept: 'application/json' },
-    baseURL: getBaseUrl(),
-  };
-
-  const response = await axios.post('/api/urls', reqBody, reqConf);
+  const response = await sendRequest({
+    method: 'POST',
+    path: '/api/urls',
+    data: {
+      url: longUrl,
+    },
+  });
 
   return response.data;
 }
 
-export async function geTotalClicksByDay(validId: string): Promise<ClickStat> {
-  const response = await axios.request({
-    baseURL: getBaseUrl(),
-    headers: { Accept: 'application/json' },
-    method: 'GET',
-    url: `/api/urls/${validId}/total-clicks-by-day`,
-  });
+export async function geTotalClicksByDay(id: string): Promise<ClickStat> {
+  const response = await sendGetRequest(`/api/urls/${id}/total-clicks-by-day`);
   return response.data;
 }
 
@@ -50,12 +43,7 @@ export interface DailyClickCount {
 }
 
 export async function getUrl(id: string): Promise<Url> {
-  const response = await axios.request({
-    baseURL: getBaseUrl(),
-    headers: { Accept: 'application/json' },
-    method: 'GET',
-    url: `/api/urls/${id}`,
-  });
+  const response = await sendGetRequest(`/api/urls/${id}`);
   return response.data;
 }
 
@@ -68,18 +56,35 @@ export interface Url {
 export async function getTopDevices(
   id: string
 ): Promise<DeviceTypePercentage[]> {
-  const response = await axios.request({
-    baseURL: getBaseUrl(),
-    headers: { Accept: 'application/json' },
-    method: 'GET',
-    url: `/api/urls/${id}/top-device-types`,
-  });
+  const response = await sendGetRequest(`/api/urls/${id}/top-device-types`);
   return response.data.devices;
 }
 
 export interface DeviceTypePercentage {
   type: string;
   percentage: number;
+}
+
+async function sendGetRequest(path: string) {
+  return sendRequest({ method: 'GET', path });
+}
+
+async function sendRequest({
+  method,
+  path,
+  data,
+}: {
+  method: 'GET' | 'POST';
+  path: string;
+  data?: object;
+}) {
+  return await axios.request({
+    baseURL: getBaseUrl(),
+    headers: { Accept: 'application/json' },
+    method,
+    url: path,
+    data,
+  });
 }
 
 function getBaseUrl() {
