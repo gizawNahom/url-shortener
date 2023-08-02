@@ -3,6 +3,7 @@ import {
   idWith0Clicks,
   invalidId,
   shortenedUrl,
+  topDeviceTypes,
   totalClicksByDay,
   url,
   urlWith0Clicks,
@@ -34,5 +35,8 @@ export const handlers = [
   }),
   rest.get(`/api/urls/${invalidId}`, async (req, res, ctx) => {
     return res(ctx.status(400), ctx.json({ message: 'Id is invalid' }));
+  }),
+  rest.get(`/api/urls/${validId}/top-device-types`, async (req, res, ctx) => {
+    return res(ctx.json({ devices: topDeviceTypes }));
   }),
 ];

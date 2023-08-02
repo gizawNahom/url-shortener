@@ -1,4 +1,8 @@
-import { ShortenedUrl, Url } from '@/utilities/httpClient';
+import {
+  DeviceTypePercentage,
+  ShortenedUrl,
+  Url,
+} from '@/utilities/httpClient';
 
 export const totalClicksByDay = {
   totalClicks: 5,
@@ -32,3 +36,18 @@ export const shortenedUrl: ShortenedUrl = {
   longUrl: longUrl,
   shortUrl: shortUrl,
 };
+
+export const topDeviceTypes: DeviceTypePercentage[] = [
+  {
+    type: 'Desktop',
+    percentage: 0.5,
+  },
+  {
+    type: 'Mobile',
+    percentage: 0.3,
+  },
+  {
+    type: 'Tablet',
+    percentage: 0.1,
+  },
+];
