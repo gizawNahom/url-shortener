@@ -1,20 +1,22 @@
 import { DeviceTypePercentage, getTopDevices } from '@/utilities/httpClient';
-import { useEffect, useState } from 'react';
-import { Loading } from './loading';
+import { useState } from 'react';
+import { StatView } from './statView';
 
 export function TopDeviceTypes({ id }: { id: string }) {
   const [topDeviceTypes, setTopDeviceTypes] =
     useState<DeviceTypePercentage[]>();
 
-  useEffect(() => {
-    (async () => {
-      if (id) setTopDeviceTypes(await getTopDevices(id));
-    })();
-  }, [id]);
-
   return (
-    <div>{topDeviceTypes ? displayTopDeviceTypes() : displayLoading()}</div>
+    <StatView className="" onFetchData={fetchTopDeviceTypes()}>
+      {displayTopDeviceTypes()}
+    </StatView>
   );
+
+  function fetchTopDeviceTypes(): () => Promise<unknown> {
+    return async () => {
+      if (id) setTopDeviceTypes(await getTopDevices(id));
+    };
+  }
 
   function displayTopDeviceTypes() {
     return (
@@ -29,14 +31,6 @@ export function TopDeviceTypes({ id }: { id: string }) {
             );
           })}
         </div>
-      </div>
-    );
-  }
-
-  function displayLoading() {
-    return (
-      <div className="flex justify-center items-center">
-        <Loading colored={true} />
       </div>
     );
   }

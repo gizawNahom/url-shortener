@@ -1,5 +1,5 @@
 import { ClickStat, geTotalClicksByDay } from '@/utilities/httpClient';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chartjs-adapter-date-fns';
 import {
@@ -10,32 +10,33 @@ import {
   Legend,
   TimeSeriesScale,
 } from 'chart.js';
-import { Loading } from './loading';
 import {
   mapToAxes,
   calculateStepSize,
   subtractDays,
 } from '@/utilities/chartUtilities';
+import { StatView } from './statView';
 
 ChartJS.register(LinearScale, BarElement, Tooltip, Legend, TimeSeriesScale);
 
 export function ClickCount({ id }: { id: string }) {
   const [clickStat, setClickStat] = useState<ClickStat>();
 
-  useEffect(() => {
-    (async () => {
-      if (id) setClickStat(await geTotalClicksByDay(id));
-    })();
-  }, [id]);
-
   return (
-    <div
+    <StatView
       className="bg-slate-50 rounded-lg p-5 w-full h-auto"
       data-testid="clickCount"
+      onFetchData={fetchTotalClicksByDay()}
     >
-      {clickStat ? displayChart() : displayLoading()}
-    </div>
+      {clickStat && displayChart()}
+    </StatView>
   );
+
+  function fetchTotalClicksByDay(): () => Promise<unknown> {
+    return async () => {
+      if (id) setClickStat(await geTotalClicksByDay(id));
+    };
+  }
 
   function displayChart() {
     return (
@@ -146,13 +147,5 @@ export function ClickCount({ id }: { id: string }) {
         };
       }
     }
-  }
-
-  function displayLoading() {
-    return (
-      <div className="h-96 flex justify-center items-center">
-        <Loading colored={true} />
-      </div>
-    );
   }
 }
