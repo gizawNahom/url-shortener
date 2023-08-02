@@ -8,6 +8,7 @@ import DailyClickCountStat, {
 import { Click } from '../../src/core/domain/click';
 import { saveClick } from '../utilities';
 import Context from '../../src/adapter-restapi-express/context';
+import { DeviceTypePercentage } from '../../src/core/domain/deviceTypePercentage';
 
 let db: Db;
 
@@ -22,6 +23,7 @@ const click = new Click(
   new Date(`${clickDay}T04:14:00.000Z`),
   ''
 );
+const tabletDeviceType = 'tablet';
 
 function getDB(connection: MongoClient): Db {
   return connection.db(process.env.MONGODB_DATABASE_NAME);
@@ -50,6 +52,7 @@ async function seedClicksData() {
       {
         urlId: click.getId(),
         timestamp: click.getTimestamp(),
+        deviceType: tabletDeviceType,
       },
     ]);
   }
@@ -70,18 +73,30 @@ function createStorage() {
   return Context.urlStorage;
 }
 
+async function saveClickTimes(n: number, deviceType: string) {
+  for (let i = 0; i < n; i++) {
+    await saveClick({ id: savedValidId, deviceType });
+  }
+}
+
 describe('MongoDB integration', () => {
   let connection: MongoClient;
 
   beforeAll(async () => {
     connection = await createConnection();
+  });
+
+  beforeEach(async () => {
     db = getDB(connection);
     await seedClicksData();
     await seedUrlsData();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await db.dropDatabase();
+  });
+
+  afterAll(async () => {
     await connection.close();
   });
 
@@ -159,5 +174,32 @@ describe('MongoDB integration', () => {
     const url = new Url(savedUrl.getLongUrl(), savedUrl.getShortenedId(), 4);
     expect(await storage.findById(url.getShortenedId())).toEqual(url);
     expect(await storage.findByLongUrl(url.getLongUrl())).toEqual(url);
+  });
+
+  test('gets top devices for a single type of device', async () => {
+    const storage = createStorage();
+    await saveClickTimes(3, tabletDeviceType);
+
+    const response = await storage.getTopDeviceTypes(new UrlId(savedValidId));
+
+    expect(response).toEqual([new DeviceTypePercentage(tabletDeviceType, 1)]);
+  });
+
+  test('gets top 3 devices sorted by percentage', async () => {
+    const mobileDeviceType = 'mobile';
+    const desktopDeviceType = 'desktop';
+    const storage = createStorage();
+    await saveClickTimes(3, tabletDeviceType);
+    await saveClickTimes(3, mobileDeviceType);
+    await saveClickTimes(2, desktopDeviceType);
+    await saveClickTimes(1, 'tv');
+
+    const response = await storage.getTopDeviceTypes(new UrlId(savedValidId));
+
+    expect(response).toEqual([
+      new DeviceTypePercentage(tabletDeviceType, 4 / 10),
+      new DeviceTypePercentage(mobileDeviceType, 3 / 10),
+      new DeviceTypePercentage(desktopDeviceType, 2 / 10),
+    ]);
   });
 });

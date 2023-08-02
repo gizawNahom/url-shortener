@@ -14,8 +14,58 @@ export class MongoUrlStorage implements UrlStorage {
 
   constructor(private db: Db) {}
 
-  getTopDeviceTypes(): Promise<DeviceTypePercentage[]> {
-    throw new Error('Method not implemented.');
+  async getTopDeviceTypes(id: UrlId): Promise<DeviceTypePercentage[]> {
+    return this.mapToDeviceTypePercentage(await this.queryTopDeviceTypes(id));
+  }
+
+  private async queryTopDeviceTypes(id: UrlId) {
+    return await this.db
+      .collection(this.CLICKS_COLLECTION)
+      .aggregate([
+        {
+          $group: {
+            _id: {
+              urlId: id.getId(),
+              deviceType: '$deviceType',
+            },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$count' },
+            devices: {
+              $push: { deviceType: '$_id.deviceType', count: '$count' },
+            },
+          },
+        },
+        {
+          $unwind: '$devices',
+        },
+        {
+          $project: {
+            _id: 0,
+            type: '$devices.deviceType',
+            percentage: {
+              $divide: ['$devices.count', '$total'],
+            },
+          },
+        },
+        {
+          $sort: { percentage: -1 },
+        },
+        {
+          $limit: 3,
+        },
+      ])
+      .toArray();
+  }
+
+  private mapToDeviceTypePercentage(topDeviceTypes): DeviceTypePercentage[] {
+    return topDeviceTypes.map(
+      (e) => new DeviceTypePercentage(e.type, e.percentage)
+    );
   }
 
   async save(shortenedUrl: Url): Promise<void> {
@@ -142,6 +192,7 @@ export class MongoUrlStorage implements UrlStorage {
     await this.db.collection(this.CLICKS_COLLECTION).insertOne({
       urlId: click.getId(),
       timestamp: click.getTimestamp(),
+      deviceType: click.getDeviceType(),
     });
   }
 }
