@@ -8,7 +8,7 @@ export async function assertSavedDeviceType(
   id: string,
   deviceType: string
 ) {
-  const deviceTypes = await urlStorage.getTopDeviceTypes(new UrlId(id));
+  const deviceTypes = await urlStorage.getTop3DeviceTypes(new UrlId(id));
   expect(deviceTypes.length).toBe(1);
   expect(deviceTypes[0].getType()).toBe(deviceType);
 }

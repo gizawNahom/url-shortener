@@ -17,7 +17,7 @@ export class FakeUrlStorage implements UrlStorage {
     else this.clicks.set(cId, [click]);
   }
 
-  async getTopDeviceTypes(id: UrlId): Promise<DeviceTypePercentage[]> {
+  async getTop3DeviceTypes(id: UrlId): Promise<DeviceTypePercentage[]> {
     const uId = id.getId();
     if (isNotSaved(this.clicks)) return [];
     return aggregateTopDevices(this.clicks);

@@ -18,7 +18,7 @@ export class GetTopDeviceTypesUseCase {
   }
 
   private getTopDeviceTypes(uId: UrlId) {
-    return this.urlStorage.getTopDeviceTypes(uId);
+    return this.urlStorage.getTop3DeviceTypes(uId);
   }
 
   private buildResponse(

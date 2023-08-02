@@ -9,6 +9,7 @@ import { assertValidationErrorWithMessage } from '../utilities';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
 import DailyClickCountStat from '../../../src/core/domain/dailyClickCountStat';
 import { DeviceTypePercentage } from '../../../src/core/domain/deviceTypePercentage';
+import { UrlId } from '../../../src/core/domain/urlId';
 
 const url = new Url('https://yahoo.com', 'fe23fe', 0);
 const URL_REQUIRED = 'URL is required';
@@ -114,7 +115,7 @@ class StorageSpy implements UrlStorage {
   saveWasCalled = false;
   preexistingUrl = url;
 
-  getTopDeviceTypes(): Promise<DeviceTypePercentage[]> {
+  getTop3DeviceTypes(): Promise<DeviceTypePercentage[]> {
     throw new Error('Method not implemented.');
   }
 

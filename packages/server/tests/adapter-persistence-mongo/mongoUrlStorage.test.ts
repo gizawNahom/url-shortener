@@ -180,7 +180,7 @@ describe('MongoDB integration', () => {
     const storage = createStorage();
     await saveClickTimes(3, tabletDeviceType);
 
-    const response = await storage.getTopDeviceTypes(new UrlId(savedValidId));
+    const response = await storage.getTop3DeviceTypes(new UrlId(savedValidId));
 
     expect(response).toEqual([new DeviceTypePercentage(tabletDeviceType, 1)]);
   });
@@ -194,7 +194,7 @@ describe('MongoDB integration', () => {
     await saveClickTimes(2, desktopDeviceType);
     await saveClickTimes(1, 'tv');
 
-    const response = await storage.getTopDeviceTypes(new UrlId(savedValidId));
+    const response = await storage.getTop3DeviceTypes(new UrlId(savedValidId));
 
     expect(response).toEqual([
       new DeviceTypePercentage(tabletDeviceType, 4 / 10),

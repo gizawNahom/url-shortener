@@ -14,7 +14,7 @@ export class MongoUrlStorage implements UrlStorage {
 
   constructor(private db: Db) {}
 
-  async getTopDeviceTypes(id: UrlId): Promise<DeviceTypePercentage[]> {
+  async getTop3DeviceTypes(id: UrlId): Promise<DeviceTypePercentage[]> {
     return this.mapToDeviceTypePercentage(await this.queryTopDeviceTypes(id));
   }
 

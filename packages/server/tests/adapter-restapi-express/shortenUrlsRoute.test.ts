@@ -94,7 +94,7 @@ describe('POST /api/urls', () => {
 class PreexistingStorageStub implements UrlStorage {
   preexistingUrl = url;
 
-  getTopDeviceTypes(): Promise<DeviceTypePercentage[]> {
+  getTop3DeviceTypes(): Promise<DeviceTypePercentage[]> {
     throw new Error('Method not implemented.');
   }
 

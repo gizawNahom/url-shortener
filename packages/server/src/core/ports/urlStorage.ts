@@ -10,5 +10,5 @@ export interface UrlStorage {
   findById(id: string): Promise<Url | null>;
   getTotalClicksByDay(id: UrlId): Promise<DailyClickCountStat>;
   saveClick(click: Click): Promise<void>;
-  getTopDeviceTypes(id: UrlId): Promise<Array<DeviceTypePercentage>>;
+  getTop3DeviceTypes(id: UrlId): Promise<Array<DeviceTypePercentage>>;
 }
