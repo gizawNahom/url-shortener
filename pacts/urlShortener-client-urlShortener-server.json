@@ -177,6 +177,55 @@
       }
     },
     {
+      "description": "a request for the top devices that clicked the url",
+      "providerStates": [
+        {
+          "name": "a url is saved and clicked once"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/api/urls/googleId1/top-device-types"
+      },
+      "response": {
+        "body": {
+          "devices": [
+            {
+              "percentage": 1,
+              "type": "tablet"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.devices[0].percentage": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            },
+            "$.devices[0].type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
       "description": "a request for total clicks by day",
       "providerStates": [
         {

@@ -65,6 +65,23 @@ export interface Url {
   totalClicks: number;
 }
 
+export async function getTopDevices(
+  id: string
+): Promise<DeviceTypePercentage[]> {
+  const response = await axios.request({
+    baseURL: getBaseUrl(),
+    headers: { Accept: 'application/json' },
+    method: 'GET',
+    url: `/api/urls/${id}/top-device-types`,
+  });
+  return response.data.devices;
+}
+
+export interface DeviceTypePercentage {
+  type: string;
+  percentage: number;
+}
+
 function getBaseUrl() {
   return process.env.NEXT_PUBLIC_API_BASE_URL;
 }

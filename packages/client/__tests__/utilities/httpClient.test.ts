@@ -3,6 +3,7 @@ import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 import {
   fetch,
   geTotalClicksByDay,
+  getTopDevices,
   getUrl,
   shortenUrl,
 } from '@/utilities/httpClient';
@@ -186,5 +187,40 @@ describe('GET /api/urls/<id>', () => {
         }).rejects.toThrowError();
       }
     );
+  });
+});
+
+test('GET /api/urls/:id/top-device-types', async () => {
+  const path = `/api/urls/${validId}/top-device-types`;
+  const deviceType = 'tablet';
+  const percentage = 1;
+
+  provider
+    .given('a url is saved and clicked once')
+    .uponReceiving('a request for the top devices that clicked the url')
+    .withRequest({
+      method: 'GET',
+      path,
+      headers: { Accept: 'application/json' },
+    })
+    .willRespondWith({
+      status: 200,
+      contentType: 'application/json',
+      body: {
+        devices: [
+          {
+            type: string(deviceType),
+            percentage: number(percentage),
+          },
+        ],
+      },
+    });
+
+  return executeTest(async (mockServer) => {
+    setBaseUrl(mockServer.url);
+
+    const response = await getTopDevices(validId);
+
+    expect(response).toEqual([{ type: deviceType, percentage }]);
   });
 });
