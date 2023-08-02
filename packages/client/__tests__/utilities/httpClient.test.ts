@@ -27,6 +27,10 @@ function executeTest(
   return provider.executeTest(callBack);
 }
 
+function assertObjectEquality(obj1: unknown, obj2: unknown) {
+  expect(obj1).toStrictEqual(obj2);
+}
+
 test('Get api/ returns HTTP 200 with a greeting', () => {
   const path = '/api';
   const greeting = 'hello world';
@@ -78,7 +82,7 @@ test('POST /api/urls returns 201 with a shortened url', () => {
 
     const result = await shortenUrl(longUrl);
 
-    expect(result).toStrictEqual({
+    assertObjectEquality(result, {
       longUrl,
       shortUrl,
     });
@@ -117,7 +121,7 @@ test('GET /api/urls/<id>/total-clicks-by-day', () => {
 
     const response = await geTotalClicksByDay(validId);
 
-    expect(response).toEqual({
+    assertObjectEquality(response, {
       totalClicks: totalClicks,
       dailyClickCounts: [{ day: clickDate, totalClicks: totalClicks }],
     });
@@ -153,7 +157,7 @@ describe('GET /api/urls/<id>', () => {
 
         const response = await getUrl(validId);
 
-        expect(response).toEqual({
+        assertObjectEquality(response, {
           totalClicks,
           longUrl,
           shortUrl,
@@ -221,6 +225,6 @@ test('GET /api/urls/:id/top-device-types', async () => {
 
     const response = await getTopDevices(validId);
 
-    expect(response).toEqual([{ type: deviceType, percentage }]);
+    assertObjectEquality(response, [{ type: deviceType, percentage }]);
   });
 });
