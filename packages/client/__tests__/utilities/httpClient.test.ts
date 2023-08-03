@@ -3,7 +3,7 @@ import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 import {
   fetch,
   geTotalClicksByDay,
-  getTopDevices,
+  getTopDeviceTypes,
   getUrl,
   shortenUrl,
 } from '@/utilities/httpClient';
@@ -223,7 +223,7 @@ test('GET /api/urls/:id/top-device-types', async () => {
   return executeTest(async (mockServer) => {
     setBaseUrl(mockServer.url);
 
-    const response = await getTopDevices(validId);
+    const response = await getTopDeviceTypes(validId);
 
     assertObjectEquality(response, [{ type: deviceType, percentage }]);
   });

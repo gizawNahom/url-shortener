@@ -1,4 +1,7 @@
-import { DeviceTypePercentage, getTopDevices } from '@/utilities/httpClient';
+import {
+  DeviceTypePercentage,
+  getTopDeviceTypes,
+} from '@/utilities/httpClient';
 import { useState } from 'react';
 import { StatView } from './statView';
 
@@ -14,7 +17,7 @@ export function TopDeviceTypes({ id }: { id: string }) {
 
   function fetchTopDeviceTypes(): () => Promise<unknown> {
     return async () => {
-      if (id) setTopDeviceTypes(await getTopDevices(id));
+      if (id) setTopDeviceTypes(await getTopDeviceTypes(id));
     };
   }
 

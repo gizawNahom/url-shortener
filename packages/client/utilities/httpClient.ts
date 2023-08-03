@@ -53,7 +53,7 @@ export interface Url {
   totalClicks: number;
 }
 
-export async function getTopDevices(
+export async function getTopDeviceTypes(
   id: string
 ): Promise<DeviceTypePercentage[]> {
   const response = await sendGetRequest(`/api/urls/${id}/top-device-types`);
