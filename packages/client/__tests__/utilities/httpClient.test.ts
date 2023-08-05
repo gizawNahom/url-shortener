@@ -8,6 +8,12 @@ import {
   shortenUrl,
 } from '@/utilities/httpClient';
 import { invalidId, longUrl, shortUrl, validId } from 'mocks/values';
+import {
+  getClickCountPath,
+  getTopDeviceTypesPath,
+  getUrlsBasePath,
+  getUrlsPath,
+} from '__tests__/testUtils';
 
 const { string, number } = MatchersV3;
 
@@ -58,7 +64,7 @@ test('Get api/ returns HTTP 200 with a greeting', () => {
 });
 
 test('POST /api/urls returns 201 with a shortened url', () => {
-  const path = '/api/urls';
+  const path = getUrlsBasePath();
 
   provider
     .uponReceiving('a request to shorten a url')
@@ -90,7 +96,7 @@ test('POST /api/urls returns 201 with a shortened url', () => {
 });
 
 test('GET /api/urls/<id>/total-clicks-by-day', () => {
-  const path = `/api/urls/${validId}/total-clicks-by-day`;
+  const path = getClickCountPath(validId);
   const totalClicks = 1;
   const clickDate = '1/1/1999';
 
@@ -129,7 +135,6 @@ test('GET /api/urls/<id>/total-clicks-by-day', () => {
 });
 
 describe('GET /api/urls/<id>', () => {
-  const path = '/api/urls/';
   test('returns 200 for a valid id', () => {
     const totalClicks = 1;
 
@@ -138,7 +143,7 @@ describe('GET /api/urls/<id>', () => {
       .uponReceiving('a request for a url')
       .withRequest({
         method: 'GET',
-        path: path + validId,
+        path: getUrlsPath(validId),
         headers: { Accept: 'application/json' },
       })
       .willRespondWith({
@@ -171,7 +176,7 @@ describe('GET /api/urls/<id>', () => {
       .uponReceiving('a request for a url with an invalid id')
       .withRequest({
         method: 'GET',
-        path: path + invalidId,
+        path: getUrlsPath(invalidId),
         headers: { Accept: 'application/json' },
       })
       .willRespondWith({
@@ -195,7 +200,7 @@ describe('GET /api/urls/<id>', () => {
 });
 
 test('GET /api/urls/:id/top-device-types', async () => {
-  const path = `/api/urls/${validId}/top-device-types`;
+  const path = getTopDeviceTypesPath(validId);
   const deviceType = 'tablet';
   const percentage = 1;
 
