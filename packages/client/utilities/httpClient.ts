@@ -10,10 +10,12 @@ export async function fetch(path: string): Promise<string> {
   return response.data.greeting;
 }
 
+const URLS_BASE_PATH = '/api/urls';
+
 export async function shortenUrl(longUrl: string): Promise<ShortenedUrl> {
   const response = await sendRequest({
     method: 'POST',
-    path: '/api/urls',
+    path: URLS_BASE_PATH,
     data: {
       url: longUrl,
     },
@@ -23,7 +25,9 @@ export async function shortenUrl(longUrl: string): Promise<ShortenedUrl> {
 }
 
 export async function geTotalClicksByDay(id: string): Promise<ClickStat> {
-  const response = await sendGetRequest(`/api/urls/${id}/total-clicks-by-day`);
+  const response = await sendGetRequest(
+    `${URLS_BASE_PATH}/${id}/total-clicks-by-day`
+  );
   return response.data;
 }
 
@@ -43,7 +47,7 @@ export interface DailyClickCount {
 }
 
 export async function getUrl(id: string): Promise<Url> {
-  const response = await sendGetRequest(`/api/urls/${id}`);
+  const response = await sendGetRequest(`${URLS_BASE_PATH}/${id}`);
   return response.data;
 }
 
@@ -56,7 +60,9 @@ export interface Url {
 export async function getTopDeviceTypes(
   id: string
 ): Promise<DeviceTypePercentage[]> {
-  const response = await sendGetRequest(`/api/urls/${id}/top-device-types`);
+  const response = await sendGetRequest(
+    `${URLS_BASE_PATH}/${id}/top-device-types`
+  );
   return response.data.devices;
 }
 
