@@ -13,7 +13,7 @@ import {
   getTopDeviceTypesPath,
   getUrlsBasePath,
   getUrlsPath,
-} from '__tests__/testUtils';
+} from 'mocks/utils';
 
 const { string, number } = MatchersV3;
 

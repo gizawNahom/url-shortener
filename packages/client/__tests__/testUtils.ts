@@ -60,20 +60,4 @@ export async function assertClipBoardContainsText(text: string) {
   expect(clipText).toBe(text);
 }
 
-export function getUrlsBasePath() {
-  return '/api/urls';
-}
-
-export function getTopDeviceTypesPath(id: string) {
-  return `${getUrlsBasePath()}/${id}/top-device-types`;
-}
-
-export function getClickCountPath(id: string) {
-  return `${getUrlsBasePath()}/${id}/total-clicks-by-day`;
-}
-
-export function getUrlsPath(id: string) {
-  return `${getUrlsBasePath()}/${id}`;
-}
-
 export const copyText = /^copy/i;

@@ -14,7 +14,7 @@ import {
   getTopDeviceTypesPath,
   getUrlsBasePath,
   getUrlsPath,
-} from '__tests__/testUtils';
+} from './utils';
 
 export const handlers = [
   rest.get('/api', (_req, res, ctx) => {
