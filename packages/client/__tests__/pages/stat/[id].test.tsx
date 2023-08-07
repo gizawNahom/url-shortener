@@ -10,8 +10,10 @@ import {
   queryElementByText,
   removeHTTPS,
   setUpMSW,
+  topDevicesText,
 } from '__tests__/testUtils';
 import { useRouter } from 'next/router';
+import userEvent from '@testing-library/user-event';
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
@@ -21,6 +23,7 @@ jest.mock('next/router', () => ({
 
 const push = jest.fn();
 const shortUrlWithOutProtocol = removeHTTPS(url.shortUrl);
+const showMoreStatsText = /show more stats/i;
 
 function mockRouter(invalidId: string) {
   const router = useRouter as jest.Mock;
@@ -90,4 +93,26 @@ test('displays appropriate text and placeholder chart if total clicks is zero', 
   expect(await findElementByText('There are no clicks yet')).toBeVisible();
   expect(screen.getByTitle('Placeholder Chart')).toBeInTheDocument();
   assertClickCountChartIsNotDisplayed();
+});
+
+test('hides top device stat and displays "show more stats" button at the start', async () => {
+  mockRouter(validId);
+  renderSUT();
+
+  await waitFor(() => {
+    getElementByText(showMoreStatsText);
+  });
+  expect(queryElementByText(topDevicesText)).toBeNull();
+});
+
+test('shows top device stat and hides "show more stats" button after clicking button', async () => {
+  mockRouter(validId);
+  renderSUT();
+
+  await userEvent.click(await findElementByText(showMoreStatsText));
+
+  await waitFor(() => {
+    getElementByText(topDevicesText);
+  });
+  expect(queryElementByText(showMoreStatsText)).toBeNull();
 });

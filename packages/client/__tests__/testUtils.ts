@@ -61,3 +61,4 @@ export async function assertClipBoardContainsText(text: string) {
 }
 
 export const copyText = /^copy/i;
+export const topDevicesText = /Top devices/i;

@@ -6,6 +6,7 @@ import {
   getElementByText,
   queryElementByText,
   setUpMSW,
+  topDevicesText,
 } from '__tests__/testUtils';
 import { render, screen } from '__tests__/wrapper';
 import {
@@ -13,8 +14,6 @@ import {
   topDeviceTypes,
   validId,
 } from 'mocks/values';
-
-const topDevicesText = /Top devices/i;
 
 function renderSUT() {
   render(<TopDeviceTypes id={validId} />);

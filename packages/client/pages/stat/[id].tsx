@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 export default function Stat() {
   const [url, setUrl] = useState<Url>();
+  const [showMoreStat, setShowStat] = useState(false);
   const router = useRouter();
   const id = getId();
 
@@ -112,9 +113,19 @@ export default function Stat() {
             <div className="col-span-4">
               <ClickCount id={router.query.id as string} />
             </div>
-            <div className="col-span-2">
-              <TopDeviceTypes id={id} />
-            </div>
+            {showMoreStat ? (
+              <div className="col-span-2">
+                <TopDeviceTypes id={id} />
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setShowStat(true);
+                }}
+              >
+                Show more stats
+              </button>
+            )}
           </div>
         );
       }
