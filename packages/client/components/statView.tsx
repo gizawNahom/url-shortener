@@ -18,7 +18,8 @@ export function StatView({
       await onFetchData();
       setIsLoading(false);
     })();
-  }, [onFetchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className={className} data-testid={testId}>
       {isLoading ? displayLoading() : children}
