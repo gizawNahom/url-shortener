@@ -39,3 +39,19 @@ test('saves correct click stat', async () => {
       .includes(res.body.dailyClickCounts[0].day)
   ).toBe(true);
 });
+
+test('shows top device types', async () => {
+  const res = await request.get(
+    `/api/urls${shortUrl.pathname}/top-device-types`
+  );
+
+  expect(res.statusCode).toBe(200);
+  expect(res.body).toStrictEqual({
+    devices: [
+      {
+        type: 'desktop',
+        percentage: 1,
+      },
+    ],
+  });
+});
