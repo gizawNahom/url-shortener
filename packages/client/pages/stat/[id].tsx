@@ -1,6 +1,7 @@
 import { ClickCount } from '@/components/clickCount';
 import { Loading } from '@/components/loading';
 import { StatHeading } from '@/components/statHeading';
+import { TopDeviceTypes } from '@/components/topDeviceTypes';
 import { Url, getUrl } from '@/utilities/httpClient';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -45,7 +46,7 @@ export default function Stat() {
     }
 
     function displayContent() {
-      return hasNoClicks() ? displayPlaceHolder() : displayClickCount();
+      return hasNoClicks() ? displayPlaceHolder() : displayStats();
 
       function hasNoClicks() {
         return url?.totalClicks === 0;
@@ -105,8 +106,17 @@ export default function Stat() {
         );
       }
 
-      function displayClickCount() {
-        return <ClickCount id={router.query.id as string} />;
+      function displayStats() {
+        return (
+          <div className="grid grid-cols-4 gap-3">
+            <div className="col-span-4">
+              <ClickCount id={router.query.id as string} />
+            </div>
+            <div className="col-span-2">
+              <TopDeviceTypes id={id} />
+            </div>
+          </div>
+        );
       }
     }
   }
