@@ -44,7 +44,11 @@ export async function findElementByText(
 
 export async function clickCopyButton(button: HTMLElement) {
   userEvent.setup();
-  await userEvent.click(button);
+  await clickElement(button);
+}
+
+export async function clickElement(element: HTMLElement) {
+  await userEvent.click(element);
 }
 
 export function removeHTTPS(url: string) {

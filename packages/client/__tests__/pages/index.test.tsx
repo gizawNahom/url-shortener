@@ -9,6 +9,7 @@ import {
   queryElementByText,
   removeHTTPS,
   assertClipBoardContainsText,
+  clickElement,
 } from '__tests__/testUtils';
 import { longUrl, shortenedUrl } from 'mocks/values';
 import Index from 'pages';
@@ -51,7 +52,7 @@ async function typeUrlAndClickShorten(url: string) {
 }
 
 async function clickShortenButton() {
-  await userEvent.click(getElementByText(shortenButtonText));
+  await clickElement(getElementByText(shortenButtonText));
 }
 
 async function typeUrlIntoInput(validUrl: string) {

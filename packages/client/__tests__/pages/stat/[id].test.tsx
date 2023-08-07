@@ -5,6 +5,7 @@ import { idWith0Clicks, invalidId, url, validId } from 'mocks/values';
 import Stat from 'pages/stat/[id]';
 import {
   assertLoadingTextIsDisplayedAndRemoved,
+  clickElement,
   findElementByText,
   getElementByText,
   queryElementByText,
@@ -13,7 +14,6 @@ import {
   topDevicesText,
 } from '__tests__/testUtils';
 import { useRouter } from 'next/router';
-import userEvent from '@testing-library/user-event';
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
@@ -109,7 +109,7 @@ test('shows top device stat and hides "show more stats" button after clicking bu
   mockRouter(validId);
   renderSUT();
 
-  await userEvent.click(await findElementByText(showMoreStatsText));
+  await clickElement(await findElementByText(showMoreStatsText));
 
   await waitFor(() => {
     getElementByText(topDevicesText);
