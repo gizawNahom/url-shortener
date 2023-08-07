@@ -30,16 +30,16 @@ export function TopDeviceTypes({ id }: { id: string }) {
         <h4 className="text-xs font-bold">Top devices</h4>
         <div role="list" className="flex flex-col gap-1 pt-2">
           {topDeviceTypes?.map((e, i) => {
+            const formattedPercentage = formatPercentage(e.percentage);
             return (
               <div role="listitem" key={i} className="text-xs relative">
                 <div className="flex justify-between p-2 z-10 relative">
                   <p className="font-semibold">{e.type}</p>
-                  <p>{e.percentage}</p>
+                  <p>{formattedPercentage}</p>
                 </div>
                 <div
-                  className={`h-full w-[${formatPercentage(
-                    e.percentage
-                  )}] max-w-full bg-cyan-400 absolute top-0 right-0`}
+                  className={`h-full max-w-full bg-cyan-400 absolute top-0 right-0`}
+                  style={{ width: formattedPercentage }}
                 ></div>
               </div>
             );

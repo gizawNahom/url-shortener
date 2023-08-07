@@ -51,3 +51,5 @@ export const topDeviceTypes: DeviceTypePercentage[] = [
     percentage: 0.1,
   },
 ];
+
+export const formattedTopDeviceTypePercentages = ['50%', '30%', '10%'];

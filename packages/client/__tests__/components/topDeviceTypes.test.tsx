@@ -8,7 +8,11 @@ import {
   setUpMSW,
 } from '__tests__/testUtils';
 import { render, screen } from '__tests__/wrapper';
-import { topDeviceTypes, validId } from 'mocks/values';
+import {
+  formattedTopDeviceTypePercentages,
+  topDeviceTypes,
+  validId,
+} from 'mocks/values';
 
 const topDevicesText = /Top devices/i;
 
@@ -28,16 +32,17 @@ function assertAllListItemsAreInTheList(
 }
 
 function assertListContainsTopDeviceTypes(list: HTMLElement) {
-  topDeviceTypes.forEach((deviceType) =>
-    assertListContainsDeviceType(list, deviceType)
+  topDeviceTypes.forEach((deviceType, i) =>
+    assertListContainsDeviceType(list, deviceType, i)
   );
 
   function assertListContainsDeviceType(
     list: HTMLElement,
-    deviceTypePercentage: DeviceTypePercentage
+    deviceTypePercentage: DeviceTypePercentage,
+    index: number
   ) {
     expect(list).toHaveTextContent(deviceTypePercentage.type);
-    expect(list).toHaveTextContent(deviceTypePercentage.percentage.toString());
+    expect(list).toHaveTextContent(formattedTopDeviceTypePercentages[index]);
   }
 }
 
