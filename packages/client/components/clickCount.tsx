@@ -24,7 +24,7 @@ export function ClickCount({ id }: { id: string }) {
 
   return (
     <StatView
-      className="bg-slate-50 rounded-lg p-5 w-full h-auto"
+      className="bg-slate-50 rounded-lg p-5 w-full h-96"
       data-testid="clickCount"
       onFetchData={fetchTotalClicksByDay()}
     >
@@ -40,12 +40,14 @@ export function ClickCount({ id }: { id: string }) {
 
   function displayChart() {
     return (
-      <div>
-        <div className="pb-3">
-          <h4 className="text-xs font-bold">Total Clicks</h4>
-          <p className="text-cyan-600 text-md">{clickStat?.totalClicks}</p>
+      <div className="flex flex-col h-full gap-3">
+        <div>
+              <h4 className="text-xs font-bold">Total Clicks</h4>
+              <p className="text-cyan-600 text-md">{clickStat?.totalClicks}</p>
         </div>
-        <Bar data={buildDataSets()} options={buildOptions()} />
+        <div className="flex-grow">
+          <Bar data={buildDataSets()} options={buildOptions()} />
+        </div>
       </div>
     );
   }
@@ -67,6 +69,7 @@ export function ClickCount({ id }: { id: string }) {
     return {
       plugins: buildPluginsSettings(),
       scales: buildScalesSettings(),
+      maintainAspectRatio: false,
     };
 
     function buildPluginsSettings() {
