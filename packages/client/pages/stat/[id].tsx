@@ -126,7 +126,7 @@ export default function Stat() {
         }
 
         function displayTopDeviceTypes() {
-          return <div className="col-span-2">
+          return <div className="col-span-2 mb-3">
             <TopDeviceTypes id={id} />
           </div>;
         }
