@@ -110,27 +110,39 @@ export default function Stat() {
       function displayStats() {
         return (
           <div className="grid grid-cols-4 gap-3">
-            <div className="col-span-4">
-              <ClickCount id={router.query.id as string} />
-            </div>
+            {displayClickCount()}
             {showMoreStat ? (
-              <div className="col-span-2">
-                <TopDeviceTypes id={id} />
-              </div>
+              displayTopDeviceTypes()
             ) : (
-              <div className='col-span-4 pt-1 pb-4'>
-                <button
-                  onClick={() => {
-                    setShowStat(true);
-                  }}
-                  className='mx-auto block border-cyan-500 border-2 px-5 py-2 font-bold text-cyan-500 text-sm rounded hover:text-white hover:bg-cyan-500 duration-200'
-                >
-                  Show more stats
-                </button>
-              </div>
+              displayMoreStatButton()
             )}
           </div>
         );
+
+        function displayClickCount() {
+          return <div className="col-span-4">
+            <ClickCount id={router.query.id as string} />
+          </div>;
+        }
+
+        function displayTopDeviceTypes() {
+          return <div className="col-span-2">
+            <TopDeviceTypes id={id} />
+          </div>;
+        }
+
+        function displayMoreStatButton() {
+          return <div className='col-span-4 pt-1 pb-4'>
+            <button
+              onClick={() => {
+                setShowStat(true);
+              } }
+              className='mx-auto block border-cyan-500 border-2 px-5 py-2 font-bold text-cyan-500 text-sm rounded hover:text-white hover:bg-cyan-500 duration-200'
+            >
+              Show more stats
+            </button>
+          </div>;
+        }
       }
     }
   }
