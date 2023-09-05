@@ -1,8 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import pinoHttp from 'pino-http';
 import Routes from './routes';
 
 const app = express();
+
+const logger = pinoHttp();
+app.use(logger);
 
 const corsOptions: cors.CorsOptions = {
   origin: process.env.CLIENT_ORIGIN,
