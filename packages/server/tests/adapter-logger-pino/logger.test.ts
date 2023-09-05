@@ -1,5 +1,5 @@
 import pino from 'pino';
-import { PinoLogger } from '../src/adapter-logger-pino/pinoLogger';
+import { PinoLogger } from '../../src/adapter-logger-pino/pinoLogger';
 
 test('logs error', () => {
   const logger = pino();
