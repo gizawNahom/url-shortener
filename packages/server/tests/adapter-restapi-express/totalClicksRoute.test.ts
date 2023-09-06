@@ -12,7 +12,6 @@ import {
   setLoggerSpy,
   validId,
 } from './utilities';
-import { ValidationMessages } from '../../src/core/validationMessages';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 import { saveClick } from '../utilities';
