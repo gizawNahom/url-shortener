@@ -1,5 +1,6 @@
 import { RequestHandler, Response } from 'express';
 import { ValidationError } from '../../core/validationError';
+import Context from '../context';
 
 export class ErrorHandler {
   static getHandlers(): Array<RequestHandler> {
@@ -9,9 +10,14 @@ export class ErrorHandler {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handle(error, req, res, next) {
+    this.logError(error);
     if (this.isValidationError(error))
       this.respond400WithValidationMessage(res, error.message);
     else this.respond500WithGenericMessage(res);
+  }
+
+  private logError(error: Error) {
+    Context.logger.logError(error);
   }
 
   private isValidationError(error: unknown) {
