@@ -2,17 +2,21 @@ import {
   assert500WithGenericMessage,
   assertBadRequestWithMessage,
   assertBody,
+  assertLogErrorWasCalledWith,
   assertStatusCode,
   describeInvalidId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
+  setLoggerSpy,
   validId,
 } from './utilities';
 import { ValidationMessages } from '../../src/core/validationMessages';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 import { saveClick } from '../utilities';
+import { ValidationError } from '../../src/core/validationError';
+import { ExceptionStorageStub } from './exceptionStorageStub';
 
 async function sendRequest(id: string) {
   return await sendGetRequest('/api/urls/' + id + '/total-clicks-by-day');
@@ -24,19 +28,24 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
   });
 
   describeInvalidId((id, errorMessage) => {
-    test(`returns 400 for id: ${id}`, async () => {
+    test(`logs and returns 400 for id: ${id}`, async () => {
+      setLoggerSpy();
+
       const response = await sendRequest(id as string);
 
       assertBadRequestWithMessage(response, errorMessage);
+      assertLogErrorWasCalledWith(new ValidationError(errorMessage));
     });
   });
 
-  test('returns 500 for unknown exception', async () => {
+  test('logs and returns 500 for unknown exception', async () => {
     setExceptionStorageStub();
+    setLoggerSpy();
 
     const response = await sendRequest(validId);
 
     assert500WithGenericMessage(response);
+    assertLogErrorWasCalledWith(ExceptionStorageStub.stubError);
   });
 
   test('returns 200 for a saved valid id', async () => {
