@@ -9,8 +9,9 @@ import {
   Messages,
   assertBadRequestWithMessage,
   assertBody,
-  assertLogErrorWasCalledWith,
   assertStatusCode,
+  assertStorageStubErrorWasLogged,
+  assertValidationErrorWasLoggedWithMessage,
   buildShortUrl,
   setExceptionStorageStub,
   setLoggerSpy,
@@ -18,8 +19,6 @@ import {
 } from './utilities';
 import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
 import { DeviceTypePercentage } from '../../src/core/domain/deviceTypePercentage';
-import { ExceptionStorageStub } from './exceptionStorageStub';
-import { ValidationError } from '../../src/core/validationError';
 
 const longUrl = url.getLongUrl();
 
@@ -56,7 +55,7 @@ describe('POST /api/urls', () => {
       const response = await sendRequest(urlObject);
 
       assertBadRequestWithMessage(response, errorMessage);
-      assertLogErrorWasCalledWith(new ValidationError(errorMessage));
+      assertValidationErrorWasLoggedWithMessage(errorMessage);
     });
   });
 
@@ -83,7 +82,7 @@ describe('POST /api/urls', () => {
     assertBody(response, {
       message: Messages.SERVER_ERROR,
     });
-    assertLogErrorWasCalledWith(ExceptionStorageStub.stubError);
+    assertStorageStubErrorWasLogged();
   });
 
   test('responds 200 for a preexisting url', async () => {

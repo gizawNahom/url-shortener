@@ -5,6 +5,7 @@ import Context from '../../src/adapter-restapi-express/context';
 import { ExceptionStorageStub } from './exceptionStorageStub';
 import { ID_INVALID } from '../core/utilities';
 import { LoggerSpy } from './loggerSpy';
+import { ValidationError } from '../../src/core/validationError';
 
 export function assertBadRequestWithMessage(response, message: string) {
   assertStatusCode(response, 400);
@@ -26,7 +27,15 @@ export function assert500WithGenericMessage(response) {
   });
 }
 
-export function assertLogErrorWasCalledWith(error: Error) {
+export function assertStorageStubErrorWasLogged() {
+  assertLogErrorWasCalledWith(ExceptionStorageStub.stubError);
+}
+
+export function assertValidationErrorWasLoggedWithMessage(message: string) {
+  assertLogErrorWasCalledWith(new ValidationError(message));
+}
+
+function assertLogErrorWasCalledWith(error: Error) {
   expect(LoggerSpy.wasCalled).toBe(true);
   expect(LoggerSpy.wasCalledWith).toStrictEqual(error);
 }
