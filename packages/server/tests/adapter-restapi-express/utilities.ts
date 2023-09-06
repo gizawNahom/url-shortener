@@ -4,6 +4,7 @@ import { Url } from '../../src/core/domain/url';
 import Context from '../../src/adapter-restapi-express/context';
 import { ExceptionStorageStub } from './ExceptionStorageStub';
 import { ID_INVALID } from '../core/utilities';
+import { LoggerSpy } from './loggerSpy';
 
 export function assertBadRequestWithMessage(response, message: string) {
   assertStatusCode(response, 400);
@@ -25,6 +26,11 @@ export function assert500WithGenericMessage(response) {
   });
 }
 
+export function assertLogErrorWasCalledWith(error: Error) {
+  expect(LoggerSpy.wasCalled).toBe(true);
+  expect(LoggerSpy.wasCalledWith).toStrictEqual(error);
+}
+
 export function sendGetRequest(path: string) {
   return request(app).get(path);
 }
@@ -39,6 +45,11 @@ export async function saveUrl() {
 
 export function setExceptionStorageStub() {
   Context.urlStorage = new ExceptionStorageStub();
+}
+
+export function setLoggerSpy() {
+  const spy = new LoggerSpy();
+  Context.logger = spy;
 }
 
 export function buildShortUrl(id: string) {

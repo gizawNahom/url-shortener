@@ -9,14 +9,15 @@ import {
   Messages,
   assertBadRequestWithMessage,
   assertBody,
+  assertLogErrorWasCalledWith,
   assertStatusCode,
   buildShortUrl,
   setExceptionStorageStub,
+  setLoggerSpy,
   url,
 } from './utilities';
 import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
 import { DeviceTypePercentage } from '../../src/core/domain/deviceTypePercentage';
-import { Logger } from '../../src/core/ports/logger';
 import { ExceptionStorageStub } from './ExceptionStorageStub';
 import { ValidationError } from '../../src/core/validationError';
 
@@ -28,11 +29,6 @@ function stubUrlIdGenerator(gSpy: GeneratorSpy) {
 
 async function sendRequest(body) {
   return await request(app).post('/api/urls').send(body);
-}
-
-function setLoggerSpy() {
-  const spy = new LoggerSpy();
-  Context.logger = spy;
 }
 
 function describeInvalidUrl(
@@ -105,15 +101,6 @@ describe('POST /api/urls', () => {
   });
 });
 
-class LoggerSpy implements Logger {
-  static wasCalled: boolean;
-  static wasCalledWith: Error;
-  logError(error: Error) {
-    LoggerSpy.wasCalled = true;
-    LoggerSpy.wasCalledWith = error;
-  }
-}
-
 class PreexistingStorageStub implements UrlStorage {
   preexistingUrl = url;
 
@@ -138,8 +125,4 @@ class PreexistingStorageStub implements UrlStorage {
   }
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   async save() {}
-}
-function assertLogErrorWasCalledWith(error: Error) {
-  expect(LoggerSpy.wasCalled).toBe(true);
-  expect(LoggerSpy.wasCalledWith).toStrictEqual(error);
 }
