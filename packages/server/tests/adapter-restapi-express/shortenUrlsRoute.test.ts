@@ -18,7 +18,7 @@ import {
 } from './utilities';
 import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
 import { DeviceTypePercentage } from '../../src/core/domain/deviceTypePercentage';
-import { ExceptionStorageStub } from './ExceptionStorageStub';
+import { ExceptionStorageStub } from './exceptionStorageStub';
 import { ValidationError } from '../../src/core/validationError';
 
 const longUrl = url.getLongUrl();

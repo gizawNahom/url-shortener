@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../../src/adapter-restapi-express/app';
 import { Url } from '../../src/core/domain/url';
 import Context from '../../src/adapter-restapi-express/context';
-import { ExceptionStorageStub } from './ExceptionStorageStub';
+import { ExceptionStorageStub } from './exceptionStorageStub';
 import { ID_INVALID } from '../core/utilities';
 import { LoggerSpy } from './loggerSpy';
 
