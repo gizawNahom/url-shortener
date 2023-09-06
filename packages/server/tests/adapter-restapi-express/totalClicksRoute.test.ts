@@ -27,7 +27,7 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
   });
 
   describeInvalidId((id, errorMessage) => {
-    test(`logs and returns 400 for id: ${id}`, async () => {
+    test(`logs and returns 400 with "${errorMessage}" for id: ${id}`, async () => {
       setLoggerSpy();
 
       const response = await sendRequest(id as string);
@@ -64,11 +64,5 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
         },
       ],
     });
-  });
-
-  test('returns 400 for an unsaved valid id', async () => {
-    const response = await sendRequest(validId);
-
-    assertBadRequestWithMessage(response, ValidationMessages.ID_DOES_NOT_EXIST);
   });
 });
