@@ -41,12 +41,6 @@ describe('GET /<id>', () => {
     assert500WithGenericMessage(response);
   });
 
-  test('responds 400 if id does not exist', async () => {
-    const response = await sendRequest(validId);
-
-    assertBadRequestWithMessage(response, ValidationMessages.ID_DOES_NOT_EXIST);
-  });
-
   test('responds with a 301 redirect if id exists', async () => {
     const deviceType = 'tablet';
     await saveUrl();

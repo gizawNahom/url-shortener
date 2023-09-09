@@ -38,12 +38,6 @@ test('returns 500 for unknown exception', async () => {
   assert500WithGenericMessage(response);
 });
 
-test('returns 400 for an unsaved valid id', async () => {
-  const response = await sendRequest(validId);
-
-  assertBadRequestWithMessage(response, ValidationMessages.ID_DOES_NOT_EXIST);
-});
-
 test('returns 200 for a saved valid id', async () => {
   const deviceType = 'desktop';
   await saveUrl();

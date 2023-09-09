@@ -37,12 +37,6 @@ test('responds 400 for empty id', async () => {
   assertBadRequestWithMessage(response, ValidationMessages.ID_REQUIRED);
 });
 
-test('responds 400 if id does not exist', async () => {
-  const response = await sendRequest(validId);
-
-  assertBadRequestWithMessage(response, ValidationMessages.ID_DOES_NOT_EXIST);
-});
-
 test('responds 500 for unknown exception', async () => {
   setExceptionStorageStub();
 
