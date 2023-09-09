@@ -1,16 +1,14 @@
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 import Context from '../../src/adapter-restapi-express/context';
-import { ValidationMessages } from '../../src/core/validationMessages';
 import { saveClick } from '../utilities';
 import {
   assert500WithGenericMessage,
-  assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
-  describeBadId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
+  testBadIds,
   validId,
 } from './utilities';
 
@@ -22,13 +20,7 @@ beforeEach(() => {
   Context.urlStorage = new FakeUrlStorage();
 });
 
-describeBadId((id, errorMessage) => {
-  test(`returns 400 for id: ${id}`, async () => {
-    const response = await sendRequest(id as string);
-
-    assertBadRequestWithMessage(response, errorMessage);
-  });
-});
+testBadIds(sendRequest);
 
 test('returns 500 for unknown exception', async () => {
   setExceptionStorageStub();

@@ -1,22 +1,21 @@
 import {
   assert500WithGenericMessage,
-  assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
   assertStorageStubErrorWasLogged,
-  assertValidationErrorWasLoggedWithMessage,
-  describeBadId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
   setLoggerSpy,
+  testBadIds,
   validId,
 } from './utilities';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 import { saveClick } from '../utilities';
+import { Response } from 'supertest';
 
-async function sendRequest(id: string) {
+async function sendRequest(id: string): Promise<Response> {
   return await sendGetRequest('/api/urls/' + id + '/total-clicks-by-day');
 }
 
@@ -25,16 +24,7 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
     Context.urlStorage = new FakeUrlStorage();
   });
 
-  describeBadId((id, errorMessage) => {
-    test(`logs and returns 400 with "${errorMessage}" for id: ${id}`, async () => {
-      setLoggerSpy();
-
-      const response = await sendRequest(id as string);
-
-      assertBadRequestWithMessage(response, errorMessage);
-      assertValidationErrorWasLoggedWithMessage(errorMessage);
-    });
-  });
+  testBadIds(sendRequest);
 
   test('logs and returns 500 for unknown exception', async () => {
     setExceptionStorageStub();

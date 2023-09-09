@@ -5,10 +5,10 @@ import {
   assertBody,
   assertStatusCode,
   buildShortUrl,
-  describeBadId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
+  testBadIds,
   url,
   validId,
 } from './utilities';
@@ -23,13 +23,7 @@ afterEach(() => {
   Context.urlStorage = new FakeUrlStorage();
 });
 
-describeBadId((id, errorMessage) => {
-  test(`returns 400 for id: ${id}`, async () => {
-    const response = await sendRequest(id as string);
-
-    assertBadRequestWithMessage(response, errorMessage);
-  });
-});
+testBadIds(sendRequest);
 
 test('responds 400 for empty id', async () => {
   const response = await sendRequest('');

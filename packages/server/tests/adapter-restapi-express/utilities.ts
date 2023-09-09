@@ -1,4 +1,5 @@
 import request from 'supertest';
+import { Response } from 'supertest';
 import app from '../../src/adapter-restapi-express/app';
 import { Url } from '../../src/core/domain/url';
 import Context from '../../src/adapter-restapi-express/context';
@@ -69,7 +70,20 @@ export const validId = 'googleId1';
 
 export const url = new Url('https://google.com', validId, 0);
 
-export function describeBadId(
+export function testBadIds(sendRequest: (id: string) => Promise<Response>) {
+  describeBadId((id, errorMessage) => {
+    test(`logs and returns 400 with "${errorMessage}" for id: ${id}`, async () => {
+      setLoggerSpy();
+
+      const response = await sendRequest(id as string);
+
+      assertBadRequestWithMessage(response, errorMessage);
+      assertValidationErrorWasLoggedWithMessage(errorMessage);
+    });
+  });
+}
+
+function describeBadId(
   testInvalidId: (id: string | undefined, errorMessage: string) => void
 ) {
   describe.each(getInvalidIdTests())('Invalid id', (id, errorMessage) => {
