@@ -4,7 +4,7 @@ import app from '../../src/adapter-restapi-express/app';
 import { Url } from '../../src/core/domain/url';
 import Context from '../../src/adapter-restapi-express/context';
 import { ExceptionStorageStub } from './exceptionStorageStub';
-import { ID_DOES_NOT_EXIST, ID_INVALID } from '../core/utilities';
+import { ID_DOES_NOT_EXIST, invalidIds } from '../core/utilities';
 import { LoggerSpy } from './loggerSpy';
 import { ValidationError } from '../../src/core/validationError';
 
@@ -94,12 +94,7 @@ function describeBadId(
     | [string, string]
     | [undefined, string]
   )[] {
-    return [
-      ['longIdWith12', ID_INVALID],
-      ['shortId', ID_INVALID],
-      ['google*d2', ID_INVALID],
-      [validId, ID_DOES_NOT_EXIST],
-    ];
+    return [[validId, ID_DOES_NOT_EXIST], ...invalidIds];
   }
 }
 

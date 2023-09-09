@@ -21,6 +21,12 @@ export function getDateString(date: Date) {
   return date.toISOString();
 }
 
+export const invalidIds: readonly [string, string][] = [
+  ['longIdWith12', ID_INVALID],
+  ['shortId', ID_INVALID],
+  ['google*d2', ID_INVALID],
+];
+
 export function describeInvalidId(
   testInvalidId: (id: string | undefined, errorMessage: string) => void
 ) {
@@ -35,10 +41,8 @@ export function describeInvalidId(
     return [
       ['', ID_REQUIRED],
       [undefined, ID_REQUIRED],
-      ['longIdWith12', ID_INVALID],
-      ['shortId', ID_INVALID],
-      ['google*d2', ID_INVALID],
       ['f+./_- 89', ID_INVALID],
+      ...invalidIds,
     ];
   }
 }
