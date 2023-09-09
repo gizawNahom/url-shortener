@@ -6,19 +6,18 @@ import { GeneratorSpy } from '../core/generatorSpy';
 import { Url } from '../../src/core/domain/url';
 import { UrlStorage } from '../../src/core/ports/urlStorage';
 import {
-  Messages,
   assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
-  assertStorageStubErrorWasLogged,
   assertValidationErrorWasLoggedWithMessage,
   buildShortUrl,
-  setExceptionStorageStub,
   setLoggerSpy,
+  testUnknownException,
   url,
 } from './utilities';
 import DailyClickCountStat from '../../src/core/domain/dailyClickCountStat';
 import { DeviceTypePercentage } from '../../src/core/domain/deviceTypePercentage';
+import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
 
 const longUrl = url.getLongUrl();
 
@@ -48,6 +47,10 @@ function describeInvalidUrl(
 }
 
 describe('POST /api/urls', () => {
+  beforeEach(() => {
+    Context.urlStorage = new FakeUrlStorage();
+  });
+
   describeInvalidUrl((urlObject, errorMessage) => {
     test(`logs and responds 400 with "${errorMessage}" message for ${urlObject['url']}`, async () => {
       setLoggerSpy();
@@ -58,6 +61,8 @@ describe('POST /api/urls', () => {
       assertValidationErrorWasLoggedWithMessage(errorMessage);
     });
   });
+
+  testUnknownException(() => sendRequest({ url: longUrl }));
 
   test('responds 201 with proper body for a valid long url', async () => {
     const gSpy = new GeneratorSpy();
@@ -70,19 +75,6 @@ describe('POST /api/urls', () => {
       longUrl,
       shortUrl: buildShortUrl(gSpy.generatedId),
     });
-  });
-
-  test('logs and responds 500 for unknown exception', async () => {
-    setExceptionStorageStub();
-    setLoggerSpy();
-
-    const response = await sendRequest({ url: longUrl });
-
-    assertStatusCode(response, 500);
-    assertBody(response, {
-      message: Messages.SERVER_ERROR,
-    });
-    assertStorageStubErrorWasLogged();
   });
 
   test('responds 200 for a preexisting url', async () => {

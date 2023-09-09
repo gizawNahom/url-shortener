@@ -1,13 +1,10 @@
 import {
-  assert500WithGenericMessage,
   assertBody,
   assertStatusCode,
-  assertStorageStubErrorWasLogged,
   saveUrl,
   sendGetRequest,
-  setExceptionStorageStub,
-  setLoggerSpy,
   testBadIds,
+  testUnknownException,
   validId,
 } from './utilities';
 import Context from '../../src/adapter-restapi-express/context';
@@ -26,15 +23,7 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
 
   testBadIds(sendRequest);
 
-  test('logs and returns 500 for unknown exception', async () => {
-    setExceptionStorageStub();
-    setLoggerSpy();
-
-    const response = await sendRequest(validId);
-
-    assert500WithGenericMessage(response);
-    assertStorageStubErrorWasLogged();
-  });
+  testUnknownException(() => sendRequest(validId));
 
   test('returns 200 for a saved valid id', async () => {
     const clickDate = new Date();

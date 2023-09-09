@@ -1,12 +1,11 @@
 import { ValidationMessages } from '../../src/core/validationMessages';
 import {
-  assert500WithGenericMessage,
   assertBadRequestWithMessage,
   assertStatusCode,
   saveUrl,
   sendGetRequest,
-  setExceptionStorageStub,
   testBadIds,
+  testUnknownException,
   url,
   validId,
 } from './utilities';
@@ -27,13 +26,7 @@ describe('GET /<id>', () => {
 
   testBadIds(sendRequest);
 
-  test('responds 500 for unknown exceptions', async () => {
-    setExceptionStorageStub();
-
-    const response = await sendRequest(validId);
-
-    assert500WithGenericMessage(response);
-  });
+  testUnknownException(() => sendRequest(validId));
 
   test('responds with a 301 redirect if id exists', async () => {
     const deviceType = 'tablet';

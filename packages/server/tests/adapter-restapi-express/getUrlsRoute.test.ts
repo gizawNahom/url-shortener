@@ -1,14 +1,13 @@
 import { ValidationMessages } from '../../src/core/validationMessages';
 import {
-  assert500WithGenericMessage,
   assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
   buildShortUrl,
   saveUrl,
   sendGetRequest,
-  setExceptionStorageStub,
   testBadIds,
+  testUnknownException,
   url,
   validId,
 } from './utilities';
@@ -25,18 +24,12 @@ afterEach(() => {
 
 testBadIds(sendRequest);
 
+testUnknownException(() => sendRequest(validId));
+
 test('responds 400 for empty id', async () => {
   const response = await sendRequest('');
 
   assertBadRequestWithMessage(response, ValidationMessages.ID_REQUIRED);
-});
-
-test('responds 500 for unknown exception', async () => {
-  setExceptionStorageStub();
-
-  const response = await sendRequest(validId);
-
-  assert500WithGenericMessage(response);
 });
 
 test('responds 200 for a saved url', async () => {

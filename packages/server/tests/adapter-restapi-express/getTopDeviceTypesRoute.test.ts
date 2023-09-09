@@ -2,13 +2,12 @@ import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorag
 import Context from '../../src/adapter-restapi-express/context';
 import { saveClick } from '../utilities';
 import {
-  assert500WithGenericMessage,
   assertBody,
   assertStatusCode,
   saveUrl,
   sendGetRequest,
-  setExceptionStorageStub,
   testBadIds,
+  testUnknownException,
   validId,
 } from './utilities';
 
@@ -22,13 +21,7 @@ beforeEach(() => {
 
 testBadIds(sendRequest);
 
-test('returns 500 for unknown exception', async () => {
-  setExceptionStorageStub();
-
-  const response = await sendRequest(validId);
-
-  assert500WithGenericMessage(response);
-});
+testUnknownException(() => sendRequest(validId));
 
 test('returns 200 for a saved valid id', async () => {
   const deviceType = 'desktop';

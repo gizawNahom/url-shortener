@@ -102,3 +102,15 @@ function describeBadId(
     ];
   }
 }
+
+export function testUnknownException(sendRequest: () => Promise<Response>) {
+  test('logs and responds 500 for unknown exception', async () => {
+    setExceptionStorageStub();
+    setLoggerSpy();
+
+    const response = await sendRequest();
+
+    assert500WithGenericMessage(response);
+    assertStorageStubErrorWasLogged();
+  });
+}
