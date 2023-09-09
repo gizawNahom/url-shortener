@@ -7,7 +7,7 @@ import {
   assertBadRequestWithMessage,
   assertBody,
   assertStatusCode,
-  describeInvalidId,
+  describeBadId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
@@ -22,7 +22,7 @@ beforeEach(() => {
   Context.urlStorage = new FakeUrlStorage();
 });
 
-describeInvalidId((id, errorMessage) => {
+describeBadId((id, errorMessage) => {
   test(`returns 400 for id: ${id}`, async () => {
     const response = await sendRequest(id as string);
 

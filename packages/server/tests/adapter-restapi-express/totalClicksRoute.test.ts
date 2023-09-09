@@ -5,7 +5,7 @@ import {
   assertStatusCode,
   assertStorageStubErrorWasLogged,
   assertValidationErrorWasLoggedWithMessage,
-  describeInvalidId,
+  describeBadId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
@@ -25,7 +25,7 @@ describe('GET api/urls/<id>/total-clicks-by-day', () => {
     Context.urlStorage = new FakeUrlStorage();
   });
 
-  describeInvalidId((id, errorMessage) => {
+  describeBadId((id, errorMessage) => {
     test(`logs and returns 400 with "${errorMessage}" for id: ${id}`, async () => {
       setLoggerSpy();
 

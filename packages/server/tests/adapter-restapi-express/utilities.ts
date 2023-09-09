@@ -69,7 +69,7 @@ export const validId = 'googleId1';
 
 export const url = new Url('https://google.com', validId, 0);
 
-export function describeInvalidId(
+export function describeBadId(
   testInvalidId: (id: string | undefined, errorMessage: string) => void
 ) {
   describe.each(getInvalidIdTests())('Invalid id', (id, errorMessage) => {

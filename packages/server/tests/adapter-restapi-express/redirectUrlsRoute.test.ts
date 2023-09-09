@@ -3,7 +3,7 @@ import {
   assert500WithGenericMessage,
   assertBadRequestWithMessage,
   assertStatusCode,
-  describeInvalidId,
+  describeBadId,
   saveUrl,
   sendGetRequest,
   setExceptionStorageStub,
@@ -12,8 +12,6 @@ import {
 } from './utilities';
 import Context from '../../src/adapter-restapi-express/context';
 import { FakeUrlStorage } from '../../src/adapter-persistence-fake/fakeUrlStorage';
-import { UrlId } from '../../src/core/domain/urlId';
-import { UrlStorage } from '../../src/core/ports/urlStorage';
 import { assertSavedDeviceType } from '../utilities';
 
 function sendRequest(id: string) {
@@ -27,7 +25,7 @@ describe('GET /<id>', () => {
     assertBadRequestWithMessage(response, ValidationMessages.ID_REQUIRED);
   });
 
-  describeInvalidId((id, errorMessage) => {
+  describeBadId((id, errorMessage) => {
     test(`returns 400 for id: ${id}`, async () => {
       const response = await sendRequest(id as string);
 
