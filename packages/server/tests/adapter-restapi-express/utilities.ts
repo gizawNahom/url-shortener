@@ -5,7 +5,7 @@ import { Url } from '../../src/core/domain/url';
 import Context from '../../src/adapter-restapi-express/context';
 import { ExceptionStorageStub } from './exceptionStorageStub';
 import { ID_DOES_NOT_EXIST, invalidIds } from '../core/utilities';
-import { LoggerSpy } from './loggerSpy';
+import { LoggerSpy } from '../core/loggerSpy';
 import { ValidationError } from '../../src/core/validationError';
 
 export function assertBadRequestWithMessage(response, message: string) {
@@ -37,8 +37,7 @@ export function assertValidationErrorWasLoggedWithMessage(message: string) {
 }
 
 function assertLogErrorWasCalledWith(error: Error) {
-  expect(LoggerSpy.wasCalled).toBe(true);
-  expect(LoggerSpy.wasCalledWith).toStrictEqual(error);
+  expect(LoggerSpy.logErrorWasCalledWith).toStrictEqual(error);
 }
 
 export function sendGetRequest(path: string) {
