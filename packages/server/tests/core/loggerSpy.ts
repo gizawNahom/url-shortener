@@ -1,12 +1,13 @@
 import { Logger } from '../../src/core/ports/logger';
 
 export class LoggerSpy implements Logger {
-  static logErrorWasCalledWith: Error;
+  logErrorWasCalledWith: Error;
+  logInfoWasCalledWith: string;
   logError(error: Error) {
-    LoggerSpy.logErrorWasCalledWith = error;
+    this.logErrorWasCalledWith = error;
   }
 
   logInfo(message: string) {
-    throw new Error('Method not implemented.');
+    this.logInfoWasCalledWith = message;
   }
 }

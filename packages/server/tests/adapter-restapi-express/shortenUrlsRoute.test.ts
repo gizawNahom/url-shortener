@@ -11,6 +11,7 @@ import {
   assertStatusCode,
   assertValidationErrorWasLoggedWithMessage,
   buildShortUrl,
+  createLoggerSpy,
   setLoggerSpy,
   testUnknownException,
   url,
@@ -53,12 +54,13 @@ describe('POST /api/urls', () => {
 
   describeInvalidUrl((urlObject, errorMessage) => {
     test(`logs and responds 400 with "${errorMessage}" message for ${urlObject['url']}`, async () => {
-      setLoggerSpy();
+      const spy = createLoggerSpy();
+      setLoggerSpy(spy);
 
       const response = await sendRequest(urlObject);
 
       assertBadRequestWithMessage(response, errorMessage);
-      assertValidationErrorWasLoggedWithMessage(errorMessage);
+      assertValidationErrorWasLoggedWithMessage(spy, errorMessage);
     });
   });
 

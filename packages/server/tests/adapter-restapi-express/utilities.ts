@@ -21,30 +21,18 @@ export function assertBody(response, body: unknown) {
   expect(response.body).toEqual(body);
 }
 
-export function assert500WithGenericMessage(response) {
-  assertStatusCode(response, 500);
-  assertBody(response, {
-    message: Messages.SERVER_ERROR,
-  });
-}
-
-export function assertStorageStubErrorWasLogged() {
-  assertLogErrorWasCalledWith(ExceptionStorageStub.stubError);
-}
-
-export function assertValidationErrorWasLoggedWithMessage(message: string) {
-  assertLogErrorWasCalledWith(new ValidationError(message));
-}
-
-function assertLogErrorWasCalledWith(error: Error) {
-  expect(LoggerSpy.logErrorWasCalledWith).toStrictEqual(error);
+export function assertValidationErrorWasLoggedWithMessage(
+  loggerSpy: LoggerSpy,
+  message: string
+) {
+  assertLogErrorWasCalledWith(loggerSpy, new ValidationError(message));
 }
 
 export function sendGetRequest(path: string) {
   return request(app).get(path);
 }
 
-export const Messages = {
+const Messages = {
   SERVER_ERROR: 'Server Error',
 };
 
@@ -52,12 +40,11 @@ export async function saveUrl() {
   await Context.urlStorage.save(url);
 }
 
-export function setExceptionStorageStub() {
-  Context.urlStorage = new ExceptionStorageStub();
+export function createLoggerSpy() {
+  return new LoggerSpy();
 }
 
-export function setLoggerSpy() {
-  const spy = new LoggerSpy();
+export function setLoggerSpy(spy: LoggerSpy) {
   Context.logger = spy;
 }
 
@@ -72,39 +59,60 @@ export const url = new Url('https://google.com', validId, 0);
 export function testBadIds(sendRequest: (id: string) => Promise<Response>) {
   describeBadId((id, errorMessage) => {
     test(`logs and returns 400 with "${errorMessage}" for id: ${id}`, async () => {
-      setLoggerSpy();
+      const spy = createLoggerSpy();
+      setLoggerSpy(spy);
 
       const response = await sendRequest(id as string);
 
       assertBadRequestWithMessage(response, errorMessage);
-      assertValidationErrorWasLoggedWithMessage(errorMessage);
+      assertValidationErrorWasLoggedWithMessage(spy, errorMessage);
     });
   });
-}
 
-function describeBadId(
-  testInvalidId: (id: string | undefined, errorMessage: string) => void
-) {
-  describe.each(getInvalidIdTests())('Invalid id', (id, errorMessage) => {
-    testInvalidId(id, errorMessage);
-  });
+  function describeBadId(
+    testInvalidId: (id: string | undefined, errorMessage: string) => void
+  ) {
+    describe.each(getInvalidIdTests())('Invalid id', (id, errorMessage) => {
+      testInvalidId(id, errorMessage);
+    });
 
-  function getInvalidIdTests(): readonly (
-    | [string, string]
-    | [undefined, string]
-  )[] {
-    return [[validId, ID_DOES_NOT_EXIST], ...invalidIds];
+    function getInvalidIdTests(): readonly (
+      | [string, string]
+      | [undefined, string]
+    )[] {
+      return [[validId, ID_DOES_NOT_EXIST], ...invalidIds];
+    }
   }
 }
 
 export function testUnknownException(sendRequest: () => Promise<Response>) {
   test('logs and responds 500 for unknown exception', async () => {
     setExceptionStorageStub();
-    setLoggerSpy();
+    const spy = createLoggerSpy();
+    setLoggerSpy(spy);
 
     const response = await sendRequest();
 
     assert500WithGenericMessage(response);
-    assertStorageStubErrorWasLogged();
+    assertStorageStubErrorWasLogged(spy);
   });
+
+  function setExceptionStorageStub() {
+    Context.urlStorage = new ExceptionStorageStub();
+  }
+
+  function assert500WithGenericMessage(response) {
+    assertStatusCode(response, 500);
+    assertBody(response, {
+      message: Messages.SERVER_ERROR,
+    });
+  }
+
+  function assertStorageStubErrorWasLogged(loggerSpy: LoggerSpy) {
+    assertLogErrorWasCalledWith(loggerSpy, ExceptionStorageStub.stubError);
+  }
+}
+
+function assertLogErrorWasCalledWith(loggerSpy: LoggerSpy, error: Error) {
+  expect(loggerSpy.logErrorWasCalledWith).toStrictEqual(error);
 }
