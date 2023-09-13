@@ -11,8 +11,7 @@ export class TotalClicksUseCase {
 
   async getTotalClicksByDay(id: string): Promise<TotalClicksUseCaseResponse> {
     const uId = this.buildUrlId(id);
-    await checkIfUrlIsRegistered(this.urlStorage, uId);
-    this.logChecking(id);
+    await checkIfUrlIsRegistered(uId, this.urlStorage, this.logger);
     const stat = await this.fetchDailyClickCountStat(uId);
     this.logFetching(id);
     return this.buildResponse(stat);
@@ -20,10 +19,6 @@ export class TotalClicksUseCase {
 
   private buildUrlId(id: string) {
     return new UrlId(id);
-  }
-
-  private logChecking(id: string) {
-    this.logger.logInfo(`Checked URL registration by id(${id})`);
   }
 
   private async fetchDailyClickCountStat(uId: UrlId) {

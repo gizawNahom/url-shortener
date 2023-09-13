@@ -7,18 +7,22 @@ import {
   GetTopDevicesUseCaseResponse,
 } from '../../../src/core/useCases/getTopDeviceTypesUseCase';
 import { saveClick as sC } from '../../utilities';
+import { LoggerSpy } from '../loggerSpy';
 import {
   ID_DOES_NOT_EXIST,
+  URL_REGISTRATION_LOG_MESSAGE,
   assertValidationErrorWithMessage,
   describeInvalidId,
   tabletDeviceType,
 } from '../utilities';
 
 let storage: FakeUrlStorage;
+let loggerSpy: LoggerSpy;
 const validId = 'googleId1';
 
 function createUseCase() {
-  return new GetTopDeviceTypesUseCase(storage);
+  loggerSpy = new LoggerSpy();
+  return new GetTopDeviceTypesUseCase(storage, loggerSpy);
 }
 
 function getTopDeviceTypes(
@@ -104,4 +108,19 @@ test('returns correct response for two clicks from two device types', async () =
       new DeviceTypePercentage(mobileDeviceType, 1 / 3),
     ],
   });
+});
+
+test('logs info for happy path', async () => {
+  await saveUrl();
+  const uC = createUseCase();
+
+  await getTopDeviceTypes(uC, validId);
+
+  expect(loggerSpy.logInfoCalls.length).toBe(2);
+  expect(loggerSpy.logInfoCalls[0]).toBe(
+    `${URL_REGISTRATION_LOG_MESSAGE}(${validId})`
+  );
+  expect(loggerSpy.logInfoCalls[1]).toBe(
+    `Fetched top 3 device types using id(${validId})`
+  );
 });

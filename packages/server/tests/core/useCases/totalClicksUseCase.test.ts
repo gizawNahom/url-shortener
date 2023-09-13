@@ -3,6 +3,7 @@ import { TotalClicksUseCase } from '../../../src/core/useCases/totalClicksUseCas
 import { Url } from '../../../src/core/domain/url';
 import {
   ID_DOES_NOT_EXIST,
+  URL_REGISTRATION_LOG_MESSAGE,
   assertValidationErrorWithMessage,
   describeInvalidId,
   getDateString,
@@ -160,7 +161,7 @@ test('logs info for happy path', async () => {
 
   expect(loggerSpy.logInfoCalls.length).toBe(2);
   expect(loggerSpy.logInfoCalls[0]).toBe(
-    `Checked URL registration by id(${validId1})`
+    `${URL_REGISTRATION_LOG_MESSAGE}(${validId1})`
   );
   expect(loggerSpy.logInfoCalls[1]).toBe(
     `Fetched total clicks by day using id(${validId1})`

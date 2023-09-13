@@ -4,6 +4,7 @@ export const ID_REQUIRED = 'Id is required';
 export const ID_INVALID = 'Id is invalid';
 export const ID_DOES_NOT_EXIST = 'Id does not exist';
 export const tabletDeviceType = 'tablet';
+export const URL_REGISTRATION_LOG_MESSAGE = 'Checked URL registration by id';
 
 export async function assertValidationErrorWithMessage(
   task: () => unknown,

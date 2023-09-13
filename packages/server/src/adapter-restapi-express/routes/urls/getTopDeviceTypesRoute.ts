@@ -26,7 +26,7 @@ export class GetTopDeviceTypesRoute {
   }
 
   private buildUseCase() {
-    return new GetTopDeviceTypesUseCase(Context.urlStorage);
+    return new GetTopDeviceTypesUseCase(Context.urlStorage, Context.logger);
   }
 
   private async getResponse(uC: GetTopDeviceTypesUseCase, req: Request) {
