@@ -10,12 +10,14 @@ import {
 import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import Context from '../../../src/adapter-restapi-express/context';
 import { saveClick as sC } from '../../utilities';
+import { LoggerSpy } from '../loggerSpy';
 
 let storage: UrlStorage;
 const validId1 = 'googleId1';
 const validId2 = 'googleId2';
 const clickDate1 = new Date();
 const clickDate2 = new Date(1999, 1, 1);
+let loggerSpy: LoggerSpy;
 
 function saveUrlAndClickItOnce() {
   saveUrl(validId1);
@@ -44,7 +46,8 @@ function saveClick(id: string, clickDate: Date) {
 }
 
 function createTotalClicksUseCase() {
-  return new TotalClicksUseCase(storage);
+  loggerSpy = new LoggerSpy();
+  return new TotalClicksUseCase(storage, loggerSpy);
 }
 
 function getTotalClicksByDay(uC: TotalClicksUseCase, id: string) {
@@ -146,5 +149,20 @@ test('throws validation error if url was not saved', async () => {
   await assertValidationErrorWithMessage(
     () => getTotalClicksByDay(uC, 'googleId1'),
     ID_DOES_NOT_EXIST
+  );
+});
+
+test('logs info for happy path', async () => {
+  saveUrl(validId1);
+  const uC = createTotalClicksUseCase();
+
+  await getTotalClicksByDay(uC, validId1);
+
+  expect(loggerSpy.logInfoCalls.length).toBe(2);
+  expect(loggerSpy.logInfoCalls[0]).toBe(
+    `Checked URL registration by id(${validId1})`
+  );
+  expect(loggerSpy.logInfoCalls[1]).toBe(
+    `Fetched total clicks by day using id(${validId1})`
   );
 });

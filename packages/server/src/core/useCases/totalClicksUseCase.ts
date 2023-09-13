@@ -2,16 +2,19 @@ import DailyClickCountStat, {
   DailyClickCount,
 } from '../domain/dailyClickCountStat';
 import { UrlId } from '../domain/urlId';
+import { Logger } from '../ports/logger';
 import { UrlStorage } from '../ports/urlStorage';
 import { checkIfUrlIsRegistered } from './domainServices';
 
 export class TotalClicksUseCase {
-  constructor(private urlStorage: UrlStorage) {}
+  constructor(private urlStorage: UrlStorage, private logger: Logger) {}
 
   async getTotalClicksByDay(id: string): Promise<TotalClicksUseCaseResponse> {
     const uId = this.buildUrlId(id);
     await checkIfUrlIsRegistered(this.urlStorage, uId);
-    const stat = await this.getDailyClickCountStat(uId);
+    this.logChecking(id);
+    const stat = await this.fetchDailyClickCountStat(uId);
+    this.logFetching(id);
     return this.buildResponse(stat);
   }
 
@@ -19,8 +22,16 @@ export class TotalClicksUseCase {
     return new UrlId(id);
   }
 
-  private async getDailyClickCountStat(uId: UrlId) {
+  private logChecking(id: string) {
+    this.logger.logInfo(`Checked URL registration by id(${id})`);
+  }
+
+  private async fetchDailyClickCountStat(uId: UrlId) {
     return await this.urlStorage.getTotalClicksByDay(uId);
+  }
+
+  private logFetching(id: string) {
+    this.logger.logInfo(`Fetched total clicks by day using id(${id})`);
   }
 
   private buildResponse(stat: DailyClickCountStat): TotalClicksUseCaseResponse {

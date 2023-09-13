@@ -26,7 +26,7 @@ export class TotalClicksRoute {
   }
 
   private buildTotalClicksUseCase() {
-    return new TotalClicksUseCase(Context.urlStorage);
+    return new TotalClicksUseCase(Context.urlStorage, Context.logger);
   }
 
   private async getResponse(uC: TotalClicksUseCase, req) {
