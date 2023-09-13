@@ -13,7 +13,7 @@ import {
   URL_REGISTRATION_LOG_MESSAGE,
   assertValidationErrorWithMessage,
   describeInvalidId,
-  tabletDeviceType,
+  TABLET_DEVICE_TYPE,
 } from '../utilities';
 
 let storage: FakeUrlStorage;
@@ -37,7 +37,7 @@ async function saveUrl() {
 }
 
 async function saveClickWithTabletDeviceType() {
-  await saveClick(tabletDeviceType);
+  await saveClick(TABLET_DEVICE_TYPE);
 }
 
 async function saveClick(deviceType: string) {
@@ -88,7 +88,7 @@ test('returns correct response for a single click', async () => {
   const response = await getTopDeviceTypes(uC, validId);
 
   expect(response).toEqual({
-    devices: [new DeviceTypePercentage(tabletDeviceType, 1)],
+    devices: [new DeviceTypePercentage(TABLET_DEVICE_TYPE, 1)],
   });
 });
 
@@ -104,7 +104,7 @@ test('returns correct response for two clicks from two device types', async () =
 
   expect(response).toEqual({
     devices: [
-      new DeviceTypePercentage(tabletDeviceType, 2 / 3),
+      new DeviceTypePercentage(TABLET_DEVICE_TYPE, 2 / 3),
       new DeviceTypePercentage(mobileDeviceType, 1 / 3),
     ],
   });

@@ -5,7 +5,7 @@ import {
   ID_DOES_NOT_EXIST,
   assertValidationErrorWithMessage,
   describeInvalidId,
-  tabletDeviceType,
+  TABLET_DEVICE_TYPE,
   getTodayString,
 } from '../utilities';
 import { UrlId } from '../../../src/core/domain/urlId';
@@ -25,7 +25,7 @@ function executeUseCase(rUC: RedirectUseCase, id: string, deviceType?: string) {
 }
 
 function executeUseCaseWithTablet(rUC: RedirectUseCase, id: string) {
-  return executeUseCase(rUC, id, tabletDeviceType);
+  return executeUseCase(rUC, id, TABLET_DEVICE_TYPE);
 }
 
 async function assertCorrectClickCountStat() {
@@ -81,7 +81,7 @@ test('registers click', async () => {
   await assertSavedDeviceType(
     storageFake,
     url.getShortenedId(),
-    tabletDeviceType
+    TABLET_DEVICE_TYPE
   );
 });
 
