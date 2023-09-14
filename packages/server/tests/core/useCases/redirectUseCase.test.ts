@@ -34,8 +34,12 @@ function executeUseCaseWithTablet(rUC: RedirectUseCase, id: string) {
   return executeUseCase(rUC, id, TABLET_DEVICE_TYPE);
 }
 
+function getDateWithoutMilliSeconds(isoString: string): string {
+  return isoString.slice(0, -4);
+}
+
 async function assertCorrectClickCountStat() {
-  const todayWithOutMilliSeconds = getTodayString().slice(0, -4);
+  const todayWithOutMilliSeconds = getDateWithoutMilliSeconds(getTodayString());
   const stat = await storageFake.getTotalClicksByDay(
     new UrlId(url.getShortenedId())
   );
@@ -112,11 +116,15 @@ test('logs happy path', async () => {
     [buildFoundUrlLogMessage(id), url],
     [
       `Saved click using id(${id})`,
-      new Click(
-        new UrlId(url.getShortenedId()),
-        new Date(),
-        TABLET_DEVICE_TYPE
-      ),
+      (arg: unknown) => {
+        expect(arg instanceof Click).toBe(true);
+        const c = arg as Click;
+        expect(c.getId()).toBe(url.getShortenedId());
+        expect(getDateWithoutMilliSeconds(c.getTimestamp().toISOString())).toBe(
+          getDateWithoutMilliSeconds(getTodayString())
+        );
+        expect(c.getDeviceType()).toBe(TABLET_DEVICE_TYPE);
+      },
     ],
   ]);
 });

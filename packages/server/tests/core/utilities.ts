@@ -27,16 +27,19 @@ export function assertLogInfoCalls(
   calls: (string | object)[][]
 ) {
   expect(getNumberOfLogInfoCalls()).toBe(calls.length);
-  calls.forEach((e, i) => {
-    expect(getLogInfoCall(i)).toEqual(e);
+  calls.forEach((call, i) => {
+    call.forEach((value, j) => {
+      if (value instanceof Function) value(getArg(i, j));
+      else expect(getArg(i, j)).toEqual(value);
+    });
   });
 
   function getNumberOfLogInfoCalls(): number {
     return loggerSpy.logInfoCalls.length;
   }
 
-  function getLogInfoCall(index: number): unknown[] {
-    return loggerSpy.logInfoCalls[index];
+  function getArg(i: number, j: number): unknown {
+    return loggerSpy.logInfoCalls[i][j];
   }
 }
 
