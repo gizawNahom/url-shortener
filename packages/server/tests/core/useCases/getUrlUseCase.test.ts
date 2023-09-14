@@ -7,6 +7,7 @@ import {
   ID_DOES_NOT_EXIST,
   assertLogInfoCalls,
   assertValidationErrorWithMessage,
+  buildFoundUrlLogMessage,
   describeInvalidId,
 } from '../utilities';
 
@@ -55,5 +56,5 @@ test('logs if url was found', async () => {
 
   await uC.getUrl(validId);
 
-  assertLogInfoCalls(loggerSpy, [[`Found url using id(${validId})`, url]]);
+  assertLogInfoCalls(loggerSpy, [[buildFoundUrlLogMessage(validId), url]]);
 });

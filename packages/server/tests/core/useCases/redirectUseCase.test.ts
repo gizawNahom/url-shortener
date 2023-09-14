@@ -8,6 +8,7 @@ import {
   TABLET_DEVICE_TYPE,
   getTodayString,
   assertLogInfoCalls,
+  buildFoundUrlLogMessage,
 } from '../utilities';
 import { UrlId } from '../../../src/core/domain/urlId';
 import { assertSavedDeviceType } from '../../utilities';
@@ -108,7 +109,7 @@ test('logs happy path', async () => {
   await executeUseCaseWithTablet(rUC, id);
 
   assertLogInfoCalls(loggerSpy, [
-    [`Found url using id(${id})`, url],
+    [buildFoundUrlLogMessage(id), url],
     [
       `Saved click using id(${id})`,
       new Click(

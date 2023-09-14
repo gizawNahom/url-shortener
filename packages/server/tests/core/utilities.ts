@@ -10,6 +10,10 @@ export function buildUrlRegistrationLogMessage(id: string) {
   return `Checked URL registration by id(${id})`;
 }
 
+export function buildFoundUrlLogMessage(id: string) {
+  return `Found url using id(${id})`;
+}
+
 export async function assertValidationErrorWithMessage(
   task: () => unknown,
   message: string
