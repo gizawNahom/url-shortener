@@ -1,19 +1,18 @@
 import { UrlId } from '../domain/urlId';
-import { Url } from '../domain/url';
 import { UrlStorage } from '../ports/urlStorage';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';
 import { Click } from '../domain/click';
 import { Logger } from '../ports/logger';
+import { findUrlById } from './domainServices';
 
 export class RedirectUseCase {
   constructor(private storage: UrlStorage, private logger: Logger) {}
 
   async execute(id: string, deviceType?: string): Promise<string> {
     const uId = this.buildUrlId(id);
-    const url = await this.findUrlById(uId);
+    const url = await findUrlById(uId, this.storage, this.logger);
     if (url) {
-      this.logFound(id, url);
       const c = this.buildClick(uId, deviceType);
       await this.saveClick(c);
       this.logClicked(id, c);
@@ -23,14 +22,6 @@ export class RedirectUseCase {
 
   private buildUrlId(id: string) {
     return new UrlId(id);
-  }
-
-  private async findUrlById(id: UrlId) {
-    return await this.storage.findById(id.getId());
-  }
-
-  private logFound(id: string, url: Url) {
-    this.logger.logInfo(`Found url using id(${id})`, url);
   }
 
   private buildClick(uId: UrlId, deviceType: string) {

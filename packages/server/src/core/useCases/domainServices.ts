@@ -30,3 +30,17 @@ export async function checkIfUrlIsRegistered(
     logger.logInfo(`Checked URL registration by id(${id})`);
   }
 }
+
+export async function findUrlById(
+  uId: UrlId,
+  urlStorage: UrlStorage,
+  logger: Logger
+) {
+  const url = await urlStorage.findById(uId.getId());
+  logFound(uId.getId(), url);
+  return url;
+
+  function logFound(id: string, url: Url) {
+    logger.logInfo(`Found url using id(${id})`, url);
+  }
+}
