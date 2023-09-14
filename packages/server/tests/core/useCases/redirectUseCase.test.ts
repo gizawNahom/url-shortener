@@ -7,17 +7,22 @@ import {
   describeInvalidId,
   TABLET_DEVICE_TYPE,
   getTodayString,
+  assertLogInfoCalls,
 } from '../utilities';
 import { UrlId } from '../../../src/core/domain/urlId';
 import { assertSavedDeviceType } from '../../utilities';
+import { LoggerSpy } from '../loggerSpy';
+import { Click } from '../../../src/core/domain/click';
 
 const url = new Url('https://google.com', 'googleId1', 0);
 
 let storageFake: FakeUrlStorage;
+let loggerSpy: LoggerSpy;
 
 function createUseCase() {
   storageFake = new FakeUrlStorage();
-  return new RedirectUseCase(storageFake);
+  loggerSpy = new LoggerSpy();
+  return new RedirectUseCase(storageFake, loggerSpy);
 }
 
 function executeUseCase(rUC: RedirectUseCase, id: string, deviceType?: string) {
@@ -93,4 +98,24 @@ test('saves "desktop" for unknown device types', async () => {
 
   await assertCorrectClickCountStat();
   await assertSavedDeviceType(storageFake, url.getShortenedId(), 'desktop');
+});
+
+test('logs happy path', async () => {
+  const rUC = createUseCase();
+  const id = url.getShortenedId();
+  storageFake.save(url);
+
+  await executeUseCaseWithTablet(rUC, id);
+
+  assertLogInfoCalls(loggerSpy, [
+    [`Found url using id(${id})`, url],
+    [
+      `Saved click using id(${id})`,
+      new Click(
+        new UrlId(url.getShortenedId()),
+        new Date(),
+        TABLET_DEVICE_TYPE
+      ),
+    ],
+  ]);
 });

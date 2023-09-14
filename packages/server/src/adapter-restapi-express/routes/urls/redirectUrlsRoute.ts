@@ -24,7 +24,7 @@ export class RedirectUrlsRoute {
   }
 
   private buildRedirectUseCase() {
-    return new RedirectUseCase(Context.urlStorage);
+    return new RedirectUseCase(Context.urlStorage, Context.logger);
   }
 
   private async getRedirectUrl(uC: RedirectUseCase, req): Promise<string> {
