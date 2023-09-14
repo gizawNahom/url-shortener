@@ -14,6 +14,7 @@ import {
   assertValidationErrorWithMessage,
   describeInvalidId,
   TABLET_DEVICE_TYPE,
+  assertLogInfoCalls,
 } from '../utilities';
 
 let storage: FakeUrlStorage;
@@ -116,11 +117,8 @@ test('logs info for happy path', async () => {
 
   await getTopDeviceTypes(uC, validId);
 
-  expect(loggerSpy.logInfoCalls.length).toBe(2);
-  expect(loggerSpy.logInfoCalls[0]).toEqual([
-    `${URL_REGISTRATION_LOG_MESSAGE}(${validId})`,
-  ]);
-  expect(loggerSpy.logInfoCalls[1]).toEqual([
-    `Fetched top 3 device types using id(${validId})`,
+  assertLogInfoCalls(loggerSpy, [
+    [`${URL_REGISTRATION_LOG_MESSAGE}(${validId})`],
+    [`Fetched top 3 device types using id(${validId})`],
   ]);
 });

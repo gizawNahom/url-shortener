@@ -4,6 +4,7 @@ import { Url } from '../../../src/core/domain/url';
 import {
   ID_DOES_NOT_EXIST,
   URL_REGISTRATION_LOG_MESSAGE,
+  assertLogInfoCalls,
   assertValidationErrorWithMessage,
   describeInvalidId,
   getDateString,
@@ -159,11 +160,8 @@ test('logs info for happy path', async () => {
 
   await getTotalClicksByDay(uC, validId1);
 
-  expect(loggerSpy.logInfoCalls.length).toBe(2);
-  expect(loggerSpy.logInfoCalls[0]).toEqual([
-    `${URL_REGISTRATION_LOG_MESSAGE}(${validId1})`,
-  ]);
-  expect(loggerSpy.logInfoCalls[1]).toEqual([
-    `Fetched total clicks by day using id(${validId1})`,
+  assertLogInfoCalls(loggerSpy, [
+    [`${URL_REGISTRATION_LOG_MESSAGE}(${validId1})`],
+    [`Fetched total clicks by day using id(${validId1})`],
   ]);
 });

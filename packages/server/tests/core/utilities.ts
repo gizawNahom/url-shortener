@@ -1,4 +1,5 @@
 import { ValidationError } from '../../src/core/validationError';
+import { LoggerSpy } from './loggerSpy';
 
 export const ID_REQUIRED = 'Id is required';
 export const ID_INVALID = 'Id is invalid';
@@ -12,6 +13,24 @@ export async function assertValidationErrorWithMessage(
 ) {
   await expect(task()).rejects.toThrowError(message);
   await expect(task()).rejects.toThrowError(ValidationError);
+}
+
+export function assertLogInfoCalls(
+  loggerSpy: LoggerSpy,
+  calls: (string | object)[][]
+) {
+  expect(getNumberOfLogInfoCalls()).toBe(calls.length);
+  calls.forEach((e, i) => {
+    expect(getLogInfoCall(i)).toEqual(e);
+  });
+
+  function getNumberOfLogInfoCalls(): number {
+    return loggerSpy.logInfoCalls.length;
+  }
+
+  function getLogInfoCall(index: number): unknown[] {
+    return loggerSpy.logInfoCalls[index];
+  }
 }
 
 export function getTodayString() {
