@@ -1,4 +1,4 @@
 export interface Logger {
   logError(error: Error);
-  logInfo(message: string);
+  logInfo(message: string, obj?: object);
 }

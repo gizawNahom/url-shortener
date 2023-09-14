@@ -39,3 +39,14 @@ test('logs info', () => {
   expect(spy).toHaveBeenCalledTimes(1);
   expect(spy).toHaveBeenCalledWith(message);
 });
+
+test('logs info with object', () => {
+  const { logger, spy } = createLoggerWithASpyOnMethod('info');
+  const message = 'Event happened';
+  const obj = { test: 1 };
+
+  logger.logInfo(message, obj);
+
+  expect(spy).toHaveBeenCalledTimes(1);
+  expect(spy).toHaveBeenCalledWith(obj, message);
+});

@@ -8,7 +8,8 @@ export class PinoLogger implements ILogger {
     this.logger.error(error);
   }
 
-  logInfo(message: string) {
-    this.logger.info(message);
+  logInfo(message: string, obj?: object) {
+    if (obj) this.logger.info(obj, message);
+    else this.logger.info(message);
   }
 }
