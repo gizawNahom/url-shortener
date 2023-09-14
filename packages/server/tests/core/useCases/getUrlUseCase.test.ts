@@ -2,16 +2,20 @@ import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlSto
 import { Url } from '../../../src/core/domain/url';
 import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import { GetUrlUseCase } from '../../../src/core/useCases/getUrlUseCase';
+import { LoggerSpy } from '../loggerSpy';
 import {
   ID_DOES_NOT_EXIST,
+  assertLogInfoCalls,
   assertValidationErrorWithMessage,
   describeInvalidId,
 } from '../utilities';
 
 const validId = 'googleId1';
+let loggerSpy: LoggerSpy;
 
 function createUseCase(urlStorage?: UrlStorage) {
-  return new GetUrlUseCase(urlStorage ?? new FakeUrlStorage());
+  loggerSpy = new LoggerSpy();
+  return new GetUrlUseCase(urlStorage ?? new FakeUrlStorage(), loggerSpy);
 }
 
 describeInvalidId((id: string | undefined, errorMessage: string) => {
@@ -41,4 +45,15 @@ test('returns saved url', async () => {
   const u = await uC.getUrl(validId);
 
   expect(u).toEqual(url);
+});
+
+test('logs if url was found', async () => {
+  const storageFake = new FakeUrlStorage();
+  const url = new Url('https://google.com', validId, 0);
+  storageFake.save(url);
+  const uC = createUseCase(storageFake);
+
+  await uC.getUrl(validId);
+
+  assertLogInfoCalls(loggerSpy, [[`Found url using id(${validId})`, url]]);
 });

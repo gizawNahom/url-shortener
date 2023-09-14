@@ -24,7 +24,7 @@ export class GetUrlsRoute {
   }
 
   private buildUseCase() {
-    return new GetUrlUseCase(Context.urlStorage);
+    return new GetUrlUseCase(Context.urlStorage, Context.logger);
   }
 
   private getUrl(uC: GetUrlUseCase, req: Request) {
