@@ -140,7 +140,9 @@ test('logs if preexisting url is found', async () => {
 
   await uC.execute(url.getLongUrl());
 
-  assertLogInfoCalls(loggerSpy, [[`Found preexisting url`, url]]);
+  assertLogInfoCalls(loggerSpy, [
+    [`Found preexisting url using long url(${url.getLongUrl()})`, url],
+  ]);
 });
 
 class StorageSpy implements UrlStorage {

@@ -17,7 +17,7 @@ export class ShortenUseCase {
     this.validateLongUrl(longUrl);
     const preUrl = await this.findPreexistingUrl(longUrl);
     if (preUrl) {
-      this.logFound(preUrl);
+      this.logFound(longUrl, preUrl);
       return this.buildResponseForPreexisting(preUrl);
     } else {
       this.logNotFound(longUrl);
@@ -56,8 +56,11 @@ export class ShortenUseCase {
     return await this.storage.findByLongUrl(longUrl);
   }
 
-  private logFound(preUrl: Url) {
-    this.logger.logInfo('Found preexisting url', preUrl);
+  private logFound(longUrl: string, preUrl: Url) {
+    this.logger.logInfo(
+      `Found preexisting url using long url(${longUrl})`,
+      preUrl
+    );
   }
 
   private buildResponseForPreexisting(preUrl: Url): ShortenUseCaseResponse {
