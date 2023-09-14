@@ -11,7 +11,7 @@ export class GetTopDeviceTypesUseCase {
     const uId = this.buildUrlId(id);
     await checkIfUrlIsRegistered(uId, this.urlStorage, this.logger);
     const devices = await this.fetchTop3DeviceTypes(uId);
-    this.logFetching(id);
+    this.logFetching(id, devices);
     return this.buildResponse(devices);
   }
 
@@ -23,8 +23,8 @@ export class GetTopDeviceTypesUseCase {
     return this.urlStorage.getTop3DeviceTypes(uId);
   }
 
-  private logFetching(id: string) {
-    this.logger.logInfo(`Fetched top 3 device types using id(${id})`);
+  private logFetching(id: string, devices: DeviceTypePercentage[]) {
+    this.logger.logInfo(`Fetched top 3 device types using id(${id})`, devices);
   }
 
   private buildResponse(

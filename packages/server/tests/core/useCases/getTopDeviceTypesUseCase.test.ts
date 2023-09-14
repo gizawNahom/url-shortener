@@ -113,12 +113,16 @@ test('returns correct response for two clicks from two device types', async () =
 
 test('logs info for happy path', async () => {
   await saveUrl();
+  await saveClickWithTabletDeviceType();
   const uC = createUseCase();
 
   await getTopDeviceTypes(uC, validId);
 
   assertLogInfoCalls(loggerSpy, [
     [buildUrlRegistrationLogMessage(validId)],
-    [`Fetched top 3 device types using id(${validId})`],
+    [
+      `Fetched top 3 device types using id(${validId})`,
+      [new DeviceTypePercentage(TABLET_DEVICE_TYPE, 1)],
+    ],
   ]);
 });
