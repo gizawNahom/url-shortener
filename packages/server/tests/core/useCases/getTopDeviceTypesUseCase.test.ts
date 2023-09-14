@@ -10,11 +10,11 @@ import { saveClick as sC } from '../../utilities';
 import { LoggerSpy } from '../loggerSpy';
 import {
   ID_DOES_NOT_EXIST,
-  URL_REGISTRATION_LOG_MESSAGE,
   assertValidationErrorWithMessage,
   describeInvalidId,
   TABLET_DEVICE_TYPE,
   assertLogInfoCalls,
+  buildUrlRegistrationLogMessage,
 } from '../utilities';
 
 let storage: FakeUrlStorage;
@@ -118,7 +118,7 @@ test('logs info for happy path', async () => {
   await getTopDeviceTypes(uC, validId);
 
   assertLogInfoCalls(loggerSpy, [
-    [`${URL_REGISTRATION_LOG_MESSAGE}(${validId})`],
+    [buildUrlRegistrationLogMessage(validId)],
     [`Fetched top 3 device types using id(${validId})`],
   ]);
 });

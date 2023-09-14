@@ -3,9 +3,9 @@ import { TotalClicksUseCase } from '../../../src/core/useCases/totalClicksUseCas
 import { Url } from '../../../src/core/domain/url';
 import {
   ID_DOES_NOT_EXIST,
-  URL_REGISTRATION_LOG_MESSAGE,
   assertLogInfoCalls,
   assertValidationErrorWithMessage,
+  buildUrlRegistrationLogMessage,
   describeInvalidId,
   getDateString,
 } from '../utilities';
@@ -161,7 +161,7 @@ test('logs info for happy path', async () => {
   await getTotalClicksByDay(uC, validId1);
 
   assertLogInfoCalls(loggerSpy, [
-    [`${URL_REGISTRATION_LOG_MESSAGE}(${validId1})`],
+    [buildUrlRegistrationLogMessage(validId1)],
     [`Fetched total clicks by day using id(${validId1})`],
   ]);
 });
