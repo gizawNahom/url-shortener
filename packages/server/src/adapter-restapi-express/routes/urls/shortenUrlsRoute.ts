@@ -49,7 +49,11 @@ export class ShortenUrlsRoute {
   }
 
   private buildShortenUseCase() {
-    return new ShortenUseCase(Context.urlStorage, Context.urlIdGenerator);
+    return new ShortenUseCase(
+      Context.urlStorage,
+      Context.urlIdGenerator,
+      Context.logger
+    );
   }
 
   private async getResponse(uC: ShortenUseCase, req) {

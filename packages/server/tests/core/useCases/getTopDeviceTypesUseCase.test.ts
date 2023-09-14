@@ -117,10 +117,10 @@ test('logs info for happy path', async () => {
   await getTopDeviceTypes(uC, validId);
 
   expect(loggerSpy.logInfoCalls.length).toBe(2);
-  expect(loggerSpy.logInfoCalls[0]).toBe(
-    `${URL_REGISTRATION_LOG_MESSAGE}(${validId})`
-  );
-  expect(loggerSpy.logInfoCalls[1]).toBe(
-    `Fetched top 3 device types using id(${validId})`
-  );
+  expect(loggerSpy.logInfoCalls[0]).toEqual([
+    `${URL_REGISTRATION_LOG_MESSAGE}(${validId})`,
+  ]);
+  expect(loggerSpy.logInfoCalls[1]).toEqual([
+    `Fetched top 3 device types using id(${validId})`,
+  ]);
 });

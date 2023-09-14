@@ -160,10 +160,10 @@ test('logs info for happy path', async () => {
   await getTotalClicksByDay(uC, validId1);
 
   expect(loggerSpy.logInfoCalls.length).toBe(2);
-  expect(loggerSpy.logInfoCalls[0]).toBe(
-    `${URL_REGISTRATION_LOG_MESSAGE}(${validId1})`
-  );
-  expect(loggerSpy.logInfoCalls[1]).toBe(
-    `Fetched total clicks by day using id(${validId1})`
-  );
+  expect(loggerSpy.logInfoCalls[0]).toEqual([
+    `${URL_REGISTRATION_LOG_MESSAGE}(${validId1})`,
+  ]);
+  expect(loggerSpy.logInfoCalls[1]).toEqual([
+    `Fetched total clicks by day using id(${validId1})`,
+  ]);
 });

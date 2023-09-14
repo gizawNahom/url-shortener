@@ -4,15 +4,27 @@ import { UrlStorage } from '../ports/urlStorage';
 import validUrl from 'valid-url';
 import { ValidationError } from '../validationError';
 import { ValidationMessages } from '../validationMessages';
+import { Logger } from '../ports/logger';
 
 export class ShortenUseCase {
-  constructor(private storage: UrlStorage, private generator: UrlIdGenerator) {}
+  constructor(
+    private storage: UrlStorage,
+    private generator: UrlIdGenerator,
+    private logger: Logger
+  ) {}
 
   async execute(longUrl: string): Promise<ShortenUseCaseResponse> {
     this.validateLongUrl(longUrl);
     const preUrl = await this.findPreexistingUrl(longUrl);
-    if (preUrl) return this.buildResponseForPreexisting(preUrl);
-    return this.buildResponse(await this.createNewUrl(longUrl));
+    if (preUrl) {
+      this.logFound(preUrl);
+      return this.buildResponseForPreexisting(preUrl);
+    } else {
+      this.logNotFound(longUrl);
+      const nU = await this.createNewUrl(longUrl);
+      this.logCreated(nU);
+      return this.buildResponse(nU);
+    }
   }
 
   private validateLongUrl(longUrl: string) {
@@ -44,6 +56,10 @@ export class ShortenUseCase {
     return await this.storage.findByLongUrl(longUrl);
   }
 
+  private logFound(preUrl: Url) {
+    this.logger.logInfo('Found preexisting url', preUrl);
+  }
+
   private buildResponseForPreexisting(preUrl: Url): ShortenUseCaseResponse {
     return { ...this.buildResponse(preUrl), preexisting: true };
   }
@@ -53,6 +69,10 @@ export class ShortenUseCase {
     const url = this.buildUrl(longUrl, shortenedId);
     await this.saveUrl(url);
     return url;
+  }
+
+  private logCreated(nU: Url) {
+    this.logger.logInfo('Created new url', nU);
   }
 
   private async generateShortenedId() {
@@ -66,6 +86,10 @@ export class ShortenUseCase {
 
   private async saveUrl(url: Url) {
     await this.storage.save(url);
+  }
+
+  private logNotFound(longUrl: string) {
+    this.logger.logInfo(`Didn't find preexisting url(${longUrl})`);
   }
 
   private buildResponse(url: Url) {

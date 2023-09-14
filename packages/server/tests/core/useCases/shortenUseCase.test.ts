@@ -9,21 +9,36 @@ import { assertValidationErrorWithMessage } from '../utilities';
 import { FakeUrlStorage } from '../../../src/adapter-persistence-fake/fakeUrlStorage';
 import DailyClickCountStat from '../../../src/core/domain/dailyClickCountStat';
 import { DeviceTypePercentage } from '../../../src/core/domain/deviceTypePercentage';
-import { UrlId } from '../../../src/core/domain/urlId';
+import { LoggerSpy } from '../loggerSpy';
 
-const url = new Url('https://yahoo.com', 'fe23fe', 0);
 const URL_REQUIRED = 'URL is required';
 const URL_INVALID = 'URL is not valid';
 
 let generatorSpy: GeneratorSpy;
+let url: Url;
+let loggerSpy: LoggerSpy;
 
 function createUseCase(storage?: UrlStorage) {
   generatorSpy = new GeneratorSpy();
-  return new ShortenUseCase(storage || createStorage(), generatorSpy);
+  url = new Url('https://yahoo.com', generatorSpy.generatedId, 0);
+  loggerSpy = new LoggerSpy();
+  return new ShortenUseCase(
+    storage || createStorage(),
+    generatorSpy,
+    loggerSpy
+  );
 }
 
 function createStorage() {
   return new FakeUrlStorage();
+}
+
+function getNumberOfLogInfoCalls(): number {
+  return loggerSpy.logInfoCalls.length;
+}
+
+function getLogInfoCall(index: number): unknown[] {
+  return loggerSpy.logInfoCalls[index];
 }
 
 async function assertUrlWasSaved(storage: FakeUrlStorage) {
@@ -109,6 +124,28 @@ test('returns correct response for a preexisting url', async () => {
     shortenedId: url.getShortenedId(),
     preexisting: true,
   });
+});
+
+test('logs if preexisting url is not found', async () => {
+  const lU = url.getLongUrl();
+  const uC = createUseCase();
+
+  await uC.execute(lU);
+
+  expect(getNumberOfLogInfoCalls()).toBe(2);
+  expect(getLogInfoCall(0)).toEqual([`Didn't find preexisting url(${lU})`]);
+  expect(getLogInfoCall(1)).toEqual(['Created new url', url]);
+});
+
+test('logs if preexisting url is found', async () => {
+  const storage = createStorage();
+  storage.save(url);
+  const uC = createUseCase(storage);
+
+  await uC.execute(url.getLongUrl());
+
+  expect(getNumberOfLogInfoCalls()).toBe(1);
+  expect(getLogInfoCall(0)).toEqual([`Found preexisting url`, url]);
 });
 
 class StorageSpy implements UrlStorage {
