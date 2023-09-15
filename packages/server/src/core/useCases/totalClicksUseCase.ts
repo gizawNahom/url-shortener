@@ -13,7 +13,7 @@ export class TotalClicksUseCase {
     const uId = this.buildUrlId(id);
     await checkIfUrlIsRegistered(uId, this.urlStorage, this.logger);
     const stat = await this.fetchDailyClickCountStat(uId);
-    this.logFetching(id);
+    this.logFetching(id, stat);
     return this.buildResponse(stat);
   }
 
@@ -25,8 +25,8 @@ export class TotalClicksUseCase {
     return await this.urlStorage.getTotalClicksByDay(uId);
   }
 
-  private logFetching(id: string) {
-    this.logger.logInfo(`Fetched total clicks by day using id(${id})`);
+  private logFetching(id: string, stat: DailyClickCountStat) {
+    this.logger.logInfo(`Fetched total clicks by day using id(${id})`, stat);
   }
 
   private buildResponse(stat: DailyClickCountStat): TotalClicksUseCaseResponse {

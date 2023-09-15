@@ -13,6 +13,9 @@ import { UrlStorage } from '../../../src/core/ports/urlStorage';
 import Context from '../../../src/adapter-restapi-express/context';
 import { saveClick as sC } from '../../utilities';
 import { LoggerSpy } from '../loggerSpy';
+import DailyClickCountStat, {
+  DailyClickCount,
+} from '../../../src/core/domain/dailyClickCountStat';
 
 let storage: UrlStorage;
 const validId1 = 'googleId1';
@@ -155,13 +158,18 @@ test('throws validation error if url was not saved', async () => {
 });
 
 test('logs info for happy path', async () => {
-  saveUrl(validId1);
+  saveUrlAndClickItOnce();
   const uC = createTotalClicksUseCase();
 
   await getTotalClicksByDay(uC, validId1);
 
   assertLogInfoCalls(loggerSpy, [
     [buildUrlRegistrationLogMessage(validId1)],
-    [`Fetched total clicks by day using id(${validId1})`],
+    [
+      `Fetched total clicks by day using id(${validId1})`,
+      new DailyClickCountStat(1, [
+        new DailyClickCount(getDateString(clickDate1), 1),
+      ]),
+    ],
   ]);
 });
