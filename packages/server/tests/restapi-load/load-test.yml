@@ -1,0 +1,76 @@
+config:
+  target: 'http://127.0.0.1:3000'
+  payload:
+    - path: 'urls.csv'
+      fields:
+        - 'url'
+    - path: 'shortened-urls.csv'
+      fields:
+        - 'shortenedUrl'
+      loadAll: true
+      name: shortened
+  processor: './processor.js'
+  phases:
+    - duration: 30
+      arrivalRate: 5
+  plugins:
+    ensure: {}
+    expect:
+      reportFailuresAsErrors: true
+    metrics-by-endpoint: {}
+  ensure:
+    thresholds:
+      - http.response_time.p99: 80
+before:
+  flow:
+    - loop:
+        - log: 'Shorten urls'
+        - post:
+            url: '/api/urls'
+            json:
+              url: '{{ $loopElement.shortenedUrl }}'
+            capture:
+              - json: $.shortUrl
+                as: shortUrl
+            afterResponse: 'addToShortenedPathNames'
+      over: shortened
+scenarios:
+  - name: 'Shorten'
+    weight: 47
+    flow:
+      - post:
+          url: '/api/urls'
+          json:
+            url: '{{ url }}'
+          expect:
+            - statusCode:
+                - 200
+                - 201
+  - name: 'Redirect'
+    weight: 476
+    beforeScenario: 'pickShortenedPathName'
+    flow:
+      - get:
+          url: '{{ shortenedPathName }}'
+          expect:
+            - statusCode: 301
+  - name: 'Get URL and total clicks by day'
+    weight: 190
+    beforeScenario: 'pickShortenedPathName'
+    flow:
+      - get:
+          url: '/api/urls{{ shortenedPathName }}'
+          expect:
+            - statusCode: 200
+      - get:
+          url: '/api/urls{{ shortenedPathName }}/total-clicks-by-day'
+          expect:
+            - statusCode: 200
+  - name: 'Top device types'
+    weight: 90
+    beforeScenario: 'pickShortenedPathName'
+    flow:
+      - get:
+          url: '/api/urls{{ shortenedPathName }}/top-device-types'
+          expect:
+            - statusCode: 200
