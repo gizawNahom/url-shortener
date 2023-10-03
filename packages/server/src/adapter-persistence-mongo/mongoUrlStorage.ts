@@ -86,7 +86,9 @@ export class MongoUrlStorage implements UrlStorage {
   }
 
   private async queryByLongUrl(longUrl: string) {
-    return await this.db.collection(this.URLS_COLLECTION).findOne({ longUrl });
+    return await this.db
+      .collection(this.URLS_COLLECTION)
+      .findOne({ longUrl: { $eq: longUrl } });
   }
 
   async findById(id: string): Promise<Url> {
