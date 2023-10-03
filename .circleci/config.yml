@@ -5,8 +5,8 @@ orbs:
 
 executors:
   node:
-    name: node/default
-    tag: '18.17.1'
+    docker:
+      - image: cimg/node:18.17.1
   node_and_mongo:
     docker:
       - image: cimg/node:18.17.1
