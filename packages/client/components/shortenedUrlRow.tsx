@@ -36,6 +36,7 @@ export function ShortenedUrlRow({
         className="text-cyan-500 hover:text-cyan-600"
         href={shortenedUrl?.shortUrl}
         target="_blank"
+        rel="noopener noreferrer"
       >
         {removeProtocol(shortenedUrl?.shortUrl)}
       </a>
