@@ -3,11 +3,18 @@ version: 2.1
 orbs:
   node: circleci/node@4.7
 
+executors:
+  node:
+    name: node/default
+    tag: '18.17.1'
+  node_and_mongo:
+    docker:
+      - image: cimg/node:18.17.1
+      - image: mongo:6.0
+
 jobs:
   lint_and_unit_test:
-    executor:
-      name: node/default
-      tag: '18.0.0'
+    executor: node
     steps:
       - checkout
       - node/install-packages
@@ -19,9 +26,7 @@ jobs:
           command: npx nx affected:test --base=HEAD~1 --head=HEAD --testPathIgnorePatterns=mongoUrlStorage.test.ts,providerContract.test.ts
 
   mongodb_integration_test:
-    docker:
-      - image: cimg/node:18.0.0
-      - image: mongo:6.0
+    executor: node_and_mongo
     steps:
       - checkout
       - node/install-packages
@@ -30,9 +35,7 @@ jobs:
           command: npx nx test server --testFile=tests/mongoUrlStorage.test.ts
 
   contract_test:
-    executor:
-      name: node/default
-      tag: '18.0.0'
+    executor: node
     steps:
       - checkout
       - node/install-packages
@@ -41,9 +44,7 @@ jobs:
           command: npx nx test server --testFile=tests/providerContract.test.ts
 
   server_e2e_test:
-    docker:
-      - image: cimg/node:18.0.0
-      - image: mongo:6.0
+    executor: node_and_mongo
     environment:
       PORT: 80
     steps:
@@ -66,9 +67,7 @@ jobs:
           command: npx nx run server-e2e:e2e
 
   load_test:
-    docker:
-      - image: cimg/node:18.0.0
-      - image: mongo:6.0
+    executor: node_and_mongo
     environment:
       PORT: 80
     steps:
