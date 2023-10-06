@@ -1,9 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import pinoHttp from 'pino-http';
+import helmet from 'helmet';
 import Routes from './routes';
 
 const app = express();
+
+app.use(helmet());
 
 const logger = pinoHttp();
 app.use(logger);
