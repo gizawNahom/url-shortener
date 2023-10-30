@@ -1,0 +1,158 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'URL shortener API'
+paths:
+  /api/urls/{shortenedId}:
+    get:
+      summary: 'Get shortened url'
+      parameters:
+        - in: path
+          name: shortenedId
+          required: true
+          schema:
+            type: string
+          description: 'The ID of the shortened URL'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  longUrl:
+                    type: string
+                    example: 'https://example.com/path/0/2'
+                  shortUrl:
+                    type: string
+                    example: 'https://sh.rt/r3fh89qw2'
+                  totalClicks:
+                    type: integer
+                    example: 5
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Id is invalid'
+  /api/urls/{shortenedId}/top-device-types:
+    get:
+      summary: 'Get top device types'
+      parameters:
+        - in: path
+          name: shortenedId
+          required: true
+          schema:
+            type: string
+          description: 'The ID of the shortened URL'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  devices:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: 'desktop'
+                        percentage:
+                          type: number
+                          format: float
+                          example: 0.9
+  /api/urls/{shortenedId}/total-clicks-by-day:
+    get:
+      summary: 'Get total clicks by day'
+      parameters:
+        - name: 'shortenedId'
+          in: 'path'
+          required: true
+          schema:
+            type: 'string'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  totalClicks:
+                    type: 'integer'
+                    example: 5
+                  dailyClickCounts:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        day:
+                          type: 'string'
+                          format: 'date-time'
+                          example: '2023-11-06T10:06'
+                        totalClicks:
+                          type: 'integer'
+                          example: 5
+  /api/urls:
+    post:
+      summary: 'Shorten Url'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                url:
+                  type: 'string'
+                  example: 'https://example.com/path/0/2'
+      responses:
+        '201':
+          description: 'Shortened URL successfully'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  longUrl:
+                    type: 'string'
+                    example: 'https://example.com/path/0/2'
+                  shortUrl:
+                    type: 'string'
+                    example: 'https://sh.rt/r3fh89qw2'
+        '200':
+          description: 'URL already exists'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  longUrl:
+                    type: 'string'
+                    example: 'https://example.com/path/0/2'
+                  shortUrl:
+                    type: 'string'
+                    example: 'https://sh.rt/r3fh89qw2'
+  /api:
+    get:
+      summary: 'Greeting'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                type: 'object'
+                properties:
+                  greeting:
+                    type: 'string'
+                    example: 'Hello World'
