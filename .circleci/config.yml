@@ -12,6 +12,23 @@ executors:
       - image: cimg/node:18.17.1
       - image: mongo:6.0
 
+commands:
+  start_server:
+    description: 'Start server and wait'
+    steps:
+      - run:
+          name: Start server
+          command: npx nx run server:serve:production
+          environment:
+            MONGODB_URI: mongodb://localhost:27017
+            MONGODB_DATABASE_NAME: url-shortener
+            SERVER_DOMAIN: sh.rt
+            CLIENT_ORIGIN: https://client-origin-for-cors.com
+          background: true
+      - run:
+          name: Wait for server to start
+          command: sleep 15
+
 jobs:
   lint_and_unit_test:
     executor: node
@@ -50,18 +67,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages
-      - run:
-          name: Start server
-          command: npx nx run server:serve:production
-          environment:
-            MONGODB_URI: mongodb://localhost:27017
-            MONGODB_DATABASE_NAME: url-shortener
-            SERVER_DOMAIN: sh.rt
-            CLIENT_ORIGIN: https://client-origin-for-cors.com
-          background: true
-      - run:
-          name: Wait for server to start
-          command: sleep 15
+      - start_server
       - run:
           name: Run e2e test
           command: npx nx run server-e2e:e2e
@@ -73,21 +79,33 @@ jobs:
     steps:
       - checkout
       - node/install-packages
-      - run:
-          name: Start server
-          command: npx nx run server:serve:production
-          environment:
-            MONGODB_URI: mongodb://localhost:27017
-            MONGODB_DATABASE_NAME: url-shortener
-            SERVER_DOMAIN: sh.rt
-            CLIENT_ORIGIN: https://client-origin-for-cors.com
-          background: true
-      - run:
-          name: Wait for server to start
-          command: sleep 15
+      - start_server
       - run:
           name: Execute load tests
           command: npx artillery run packages/server/tests/restapi-load/load-test.yml
+
+  dynamic_security_test:
+    docker:
+      - image: cimg/node:18.17.1
+      - image: mongo:6.0
+      - image: owasp/zap2docker-stable
+        command: sleep 20m
+    environment:
+      PORT: 80
+    steps:
+      - checkout
+      - node/install-packages
+      - start_server
+      - setup_remote_docker:
+          version: 20.10.7
+          docker_layer_caching: true
+      - run:
+          name: Execute ZAP API tests
+          command: |
+            export ZAP=$(docker ps -qf "ancestor=owasp/zap2docker-stable")
+            docker exec $ZAP mkdir -p /zap/wrk/
+            docker cp ./packages/server/src/adapter-restapi-express/apiSpec.yml $ZAP:/zap/wrk/apiSpec.yml
+            docker exec $ZAP zap-api-scan.py -t apiSpec.yml -f openapi -d -g conf -I
 
 workflows:
   build_and_test:
@@ -103,6 +121,11 @@ workflows:
           requires:
             - lint_and_unit_test
       - load_test:
+          requires:
+            - mongodb_integration_test
+            - contract_test
+            - server_e2e_test
+      - dynamic_security_test:
           requires:
             - mongodb_integration_test
             - contract_test
