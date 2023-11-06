@@ -105,8 +105,11 @@ jobs:
             export ZAP=$(docker ps -qf "ancestor=owasp/zap2docker-stable")
             docker exec $ZAP mkdir -p /zap/wrk/
             docker cp ./packages/server/src/adapter-restapi-express/apiSpec.yml $ZAP:/zap/wrk/apiSpec.yml
-            docker exec $ZAP zap-api-scan.py -t apiSpec.yml -f openapi -d -g conf -I
-
+            docker exec $ZAP zap-api-scan.py -t apiSpec.yml -f openapi -d -g conf -I -r report.html
+            docker cp $ZAP:/zap/wrk/report.html ./report.html
+      - store_artifacts:
+          path: ./report.html
+          destination: zap_report
 workflows:
   build_and_test:
     jobs:
