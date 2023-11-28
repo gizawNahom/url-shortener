@@ -1,5 +1,12 @@
 version: 2.1
 
+parameters:
+  workflow:
+    type: enum
+    default: test
+    description: The workflow to trigger.
+    enum: [test, deploy]
+
 orbs:
   node: circleci/node@4.7
 
@@ -126,6 +133,7 @@ jobs:
             curl $RENDER_SERVER_DEPLOY_HOOK
 workflows:
   build_and_test:
+    when: { equal: [test, << pipeline.parameters.workflow >>] }
     jobs:
       - lint_and_unit_test
       - mongodb_integration_test:
@@ -147,11 +155,7 @@ workflows:
             - mongodb_integration_test
             - contract_test
             - server_e2e_test
-      - approve_deploy:
-          type: approval
-          requires:
-            - load_test
-            - dynamic_security_test
-      - deploy:
-          requires:
-            - approve_deploy
+  deploy:
+    when: { equal: [deploy, << pipeline.parameters.workflow >>] }
+    jobs:
+      - deploy
