@@ -110,6 +110,20 @@ jobs:
       - store_artifacts:
           path: ./report.html
           destination: zap_report
+
+  deploy:
+    docker:
+      - image: cimg/deploy:2023.09
+    steps:
+      - checkout
+      - run:
+          name: Deploy client to Render
+          command: |
+            curl $RENDER_CLIENT_DEPLOY_HOOK
+      - run:
+          name: Deploy server to Render
+          command: |
+            curl $RENDER_SERVER_DEPLOY_HOOK
 workflows:
   build_and_test:
     jobs:
@@ -133,3 +147,11 @@ workflows:
             - mongodb_integration_test
             - contract_test
             - server_e2e_test
+      - approve_deploy:
+          type: approval
+          requires:
+            - load_test
+            - dynamic_security_test
+      - deploy:
+          requires:
+            - approve_deploy

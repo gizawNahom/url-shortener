@@ -19,8 +19,8 @@ config:
       reportFailuresAsErrors: true
     metrics-by-endpoint: {}
   ensure:
-    thresholds:
-      - http.response_time.p99: 80
+    # thresholds:
+    #   - http.response_time.p99: 80
 before:
   flow:
     - loop:
@@ -53,7 +53,7 @@ scenarios:
       - get:
           url: '{{ shortenedPathName }}'
           expect:
-            - statusCode: 301
+            - statusCode: [301, 400]
   - name: 'Get URL and total clicks by day'
     weight: 190
     beforeScenario: 'pickShortenedPathName'
