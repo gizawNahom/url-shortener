@@ -19,8 +19,8 @@ config:
       reportFailuresAsErrors: true
     metrics-by-endpoint: {}
   ensure:
-    # thresholds:
-    #   - http.response_time.p99: 80
+    thresholds:
+      - http.response_time.p99: 80
 before:
   flow:
     - loop:
