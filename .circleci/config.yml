@@ -126,11 +126,11 @@ jobs:
       - run:
           name: Deploy client to Render
           command: |
-            curl $RENDER_CLIENT_DEPLOY_HOOK
+            curl -f $RENDER_CLIENT_DEPLOY_HOOK
       - run:
           name: Deploy server to Render
           command: |
-            curl $RENDER_SERVER_DEPLOY_HOOK
+            curl -f $RENDER_SERVER_DEPLOY_HOOK
 workflows:
   build_and_test:
     when: { equal: [test, << pipeline.parameters.workflow >>] }
