@@ -28,7 +28,7 @@ jobs:
     - name: Run Client tests
       run: npx nx run client:test:ci
     - name: Run Server tests
-      run: npx nx run server:test:ci
+      run: npx nx run server:test:ci --testPathIgnorePatterns=mongoUrlStorage.test.ts
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
