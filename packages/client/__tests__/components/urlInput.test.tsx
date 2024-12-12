@@ -65,4 +65,20 @@ describe('Url Input', () => {
     expect(queryShortenButtonByText()).toBeEnabled();
     expect(queryShortenButtonByText()).toBeVisible();
   });
+
+  test('hides error while loading', () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const emptyFunction = () => {};
+    render(
+      <UrlInput
+        isLoading={true}
+        onLinkChange={emptyFunction}
+        onSubmit={emptyFunction}
+        error="error text"
+        link=""
+      />
+    );
+
+    expect(queryElementByText(/error text/i)).not.toBeInTheDocument()
+  });
 });

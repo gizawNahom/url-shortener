@@ -28,7 +28,7 @@ export function UrlInput({
     <div>
       <div
         className={`flex gap-2 bg-slate-100 p-5 rounded-lg border-2 ${
-          error ? 'border-red-400' : 'border-transparent'
+          canDisplayError() ? 'border-red-400' : 'border-transparent'
         }`}
       >
         <LinkIcon className="h-4 w-4 my-auto" />
@@ -58,11 +58,15 @@ export function UrlInput({
           {isLoading ? <Loading /> : 'Shorten'}
         </Button>
       </div>
-      {error && <p className="text-red-600 text-sm pt-2">{error}</p>}
+      {canDisplayError() && <p className="text-red-600 text-sm pt-2">{error}</p>}
     </div>
   );
 
   function IsEnterKey(event: KeyboardEvent<HTMLInputElement>) {
     return event.key === 'Enter';
+  }
+
+  function canDisplayError() {
+    return error && !isLoading;
   }
 }
