@@ -9,7 +9,7 @@ import {
 
 const shortenButtonText = /^shorten/i;
 
-function renderSUT(isLoading = false) {
+function renderSUT({isLoading = false, error = ""}: {isLoading?: boolean, error?: string}) {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const emptyFunction = () => {};
   render(
@@ -17,7 +17,7 @@ function renderSUT(isLoading = false) {
       isLoading={isLoading}
       onLinkChange={emptyFunction}
       onSubmit={emptyFunction}
-      error=""
+      error={error}
       link=""
     />
   );
@@ -29,56 +29,47 @@ function queryShortenButtonByText(): HTMLElement | null {
 
 describe('Url Input', () => {
   test('url input is empty by default', () => {
-    renderSUT();
+    renderSUT({});
 
     expect(getUrlInput()).not.toHaveValue();
   });
 
   test('url input has proper placeholder text', () => {
-    renderSUT();
+    renderSUT({});
 
     expect(getUrlInput()).toHaveAttribute('placeholder', 'Enter link');
   });
 
   test('shorten button has proper text', () => {
-    renderSUT();
+    renderSUT({});
 
     expect(queryElementByRole('button')).toHaveTextContent(shortenButtonText);
   });
 
   test('url input starts focused', () => {
-    renderSUT();
+    renderSUT({});
 
     expect(getUrlInput()).toHaveFocus();
   });
 
   test('shorten button state while loading', () => {
-    renderSUT(true);
+    renderSUT({isLoading: true});
 
     expect(queryElementByRole('button')).toBeDisabled();
     expect(queryShortenButtonByText()).not.toBeInTheDocument();
   });
 
   test('shorten button state when not loading', () => {
-    renderSUT(false);
+    renderSUT({});
 
     expect(queryShortenButtonByText()).toBeEnabled();
     expect(queryShortenButtonByText()).toBeVisible();
   });
 
   test('hides error while loading', () => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const emptyFunction = () => {};
-    render(
-      <UrlInput
-        isLoading={true}
-        onLinkChange={emptyFunction}
-        onSubmit={emptyFunction}
-        error="error text"
-        link=""
-      />
-    );
+    const errorText = "error text";
+    renderSUT({isLoading: true, error: errorText})
 
-    expect(queryElementByText(/error text/i)).not.toBeInTheDocument()
+    expect(queryElementByText(new RegExp(errorText, 'i'))).not.toBeInTheDocument()
   });
 });
