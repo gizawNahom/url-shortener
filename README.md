@@ -1,4 +1,5 @@
 # UrlShortener
+[![codecov](https://codecov.io/github/gizawNahom/url-shortener/graph/badge.svg?token=2ZF9JBQUJ7)](https://codecov.io/github/gizawNahom/url-shortener)
 
 The project does what its name implies–it creates short links(URLs) that redirect to long ones. In addition, it collects and visualizes the clicks on the Short URLs.
 
