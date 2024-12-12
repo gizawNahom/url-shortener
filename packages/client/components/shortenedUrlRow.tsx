@@ -27,13 +27,13 @@ export function ShortenedUrlRow({
   );
 
   function displayLongUrl() {
-    return <p className="grow">{removeProtocol(shortenedUrl?.longUrl)}</p>;
+    return <p className="grow max-w-[55%] text-ellipsis whitespace-nowrap overflow-hidden">{removeProtocol(shortenedUrl?.longUrl)}</p>;
   }
 
   function displayShortUrl() {
     return (
       <a
-        className="text-cyan-500 hover:text-cyan-600"
+        className="text-cyan-500 hover:text-cyan-600 text-ellipsis whitespace-nowrap overflow-hidden"
         href={shortenedUrl?.shortUrl}
         target="_blank"
         rel="noopener noreferrer"
