@@ -123,61 +123,29 @@ export class MongoUrlStorage implements UrlStorage {
   }
 
   private async aggregateClicksByDay(id: UrlId) {
-    return await this.db
-      .collection(this.CLICKS_COLLECTION)
-      .aggregate([
-        sumTotalClicksByDay(),
-        projectFields(),
-        sortChronologically(),
-      ])
-      .toArray();
-
-    function sumTotalClicksByDay() {
-      return {
+    return await this.db.collection(this.CLICKS_COLLECTION).aggregate([
+      {
+        $match: {
+          urlId: id.getId(),
+        },
+      },
+      {
         $group: {
-          _id: {
-            urlId: id.getId(),
-            year: { $year: '$timestamp' },
-            month: { $month: '$timestamp' },
-            day: { $dayOfMonth: '$timestamp' },
-          },
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$timestamp' } },
           totalClicks: { $sum: 1 },
         },
-      };
-    }
-
-    function projectFields() {
-      return {
+      },
+      {
         $project: {
-          _id: 0,
-          day: buildISODayString(),
+          day: '$_id',
           totalClicks: 1,
+          _id: 0,
         },
-      };
-
-      function buildISODayString() {
-        return {
-          $dateToString: {
-            format: '%Y-%m-%d',
-            date: {
-              $dateFromParts: {
-                year: '$_id.year',
-                month: '$_id.month',
-                day: '$_id.day',
-              },
-            },
-          },
-        };
-      }
-    }
-
-    function sortChronologically() {
-      return {
-        $sort: {
-          day: 1,
-        },
-      };
-    }
+      },
+      {
+        $sort: { day: 1 },
+      },
+    ]).toArray();
   }
 
   private buildDailyClickCountStat(

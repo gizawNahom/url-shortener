@@ -139,7 +139,7 @@ describe('MongoDB integration', () => {
     });
   });
 
-  test('gets total clicks by day', async () => {
+  test('gets total clicks by day if a single click is saved', async () => {
     const storage = createStorage();
 
     expect(await storage.getTotalClicksByDay(new UrlId(savedValidId))).toEqual(
@@ -147,7 +147,22 @@ describe('MongoDB integration', () => {
     );
   });
 
-  test('saves click', async () => {
+  test('gets total clicks by day if another url click is saved', async () => {
+    const storage = createStorage();
+    const day = '2020-02-10';
+
+    await saveClick({
+      id: 'googleId3',
+      clickDate: new Date(`${day}T02:42:15.000Z`),
+    });
+
+
+    expect(await storage.getTotalClicksByDay(new UrlId(savedValidId))).toEqual(
+      new DailyClickCountStat(1, [new DailyClickCount(clickDay, 1)])
+    );
+  });
+
+  test('gets total clicks by day if multiple clicks are saved', async () => {
     const id = savedValidId;
     const day = '2020-02-10';
     const storage = createStorage();
@@ -203,3 +218,4 @@ describe('MongoDB integration', () => {
     ]);
   });
 });
+
