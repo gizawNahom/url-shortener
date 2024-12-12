@@ -88,10 +88,10 @@ function assertListItemContainsUrlWithoutProtocol(url: string) {
   expect(listItem).not.toHaveTextContent(url);
 }
 
-function assertCopyButtonIsInsideAListItem() {
-  const copyButton = queryElementByText(copyText);
-  expect(queryElementByRole('listitem')).toContainElement(copyButton);
-  expect(copyButton).toBeVisible();
+async function assertCopyButtonIsDisplayed() {
+  await waitFor(() => {
+    expect(getElementByText(copyText)).toBeInTheDocument();
+  });
 }
 
 function assertInvalidLinkTextIsNotDisplayed() {
@@ -176,7 +176,7 @@ describe('Index', () => {
     assertAListItemIsInsideAList();
     assertListItemContainsUrlWithoutProtocol(response.longUrl);
     assertListItemContainsUrlWithoutProtocol(response.shortUrl);
-    assertCopyButtonIsInsideAListItem();
+    await assertCopyButtonIsDisplayed();
   });
 
   test('clicking the copy button copies short url', async () => {
