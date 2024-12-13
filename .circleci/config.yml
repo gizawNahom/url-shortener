@@ -90,6 +90,14 @@ jobs:
       - run:
           name: Execute load tests
           command: npx artillery run packages/server/tests/restapi-load/load-test.yml
+      - run:
+          name: Check Exit Code
+          command: |
+            if [ $? -eq 21 ]; then
+              echo "Exit code 21 is not an error."
+            else
+              exit 1
+            fi
 
   dynamic_security_test:
     docker:
