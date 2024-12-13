@@ -11,7 +11,7 @@ export default function Index() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className="flex flex-col items-center h-screen gap-y-14 justify-center">
+    <div className="flex flex-col items-center h-screen gap-y-14 justify-center p-3 sm:p-0">
       {displayHeader()}
       {displayCard()}
     </div>
@@ -19,7 +19,7 @@ export default function Index() {
 
   function displayHeader() {
     return (
-      <h1 className="text-5xl font-semibold text-sky-600">
+      <h1 className="font-semibold text-sky-600 text-4xl sm:text-5xl">
         Create Short Links
       </h1>
     );
@@ -27,7 +27,7 @@ export default function Index() {
 
   function displayCard() {
     return (
-      <div className="rounded shadow-xl py-10 px-7 w-[600px] max-w-[600px]">
+      <div className="rounded shadow-xl py-10 px-2 w-full sm:w-[600px] sm:max-w-[600px]">
         <UrlInput
           onLinkChange={(link: string) => setLink(link)}
           onSubmit={submit}

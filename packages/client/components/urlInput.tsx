@@ -27,11 +27,11 @@ export function UrlInput({
   return (
     <div>
       <div
-        className={`flex gap-2 bg-slate-100 p-5 rounded-lg border-2 ${
-          canDisplayError() ? 'border-red-400' : 'border-transparent'
-        }`}
+        className={`flex items-center justify-between gap-2 bg-slate-100 rounded-lg px-3 ${
+          canDisplayError() ? 'border-red-400 border-2' : 'border-transparent border-0'
+        } sm:p-5 sm:border-2`}
       >
-        <LinkIcon className="h-4 w-4 my-auto" />
+        <LinkIcon className="hidden sm:block sm:h-4 sm:w-4 sm:my-auto" />
         <input
           type="text"
           name="url"
@@ -50,7 +50,7 @@ export function UrlInput({
           className={`${
             isLoading &&
             'cursor-not-allowed bg-cyan-500/60 hover:bg-cyan-500/60 hover:shadow-cyan-500/40'
-          } w-28 h-12 px-6 py-2 text-white text-lg transition duration-150 ease-in-out rounded-lg bg-cyan-500 shadow-md shadow-cyan-500/40 hover:shadow-cyan-500/80 hover:bg-cyan-600`}
+          } text-white text-lg w-24 h-9 transition duration-150 ease-in-out rounded-lg bg-cyan-500 shadow-md shadow-cyan-500/40 hover:shadow-cyan-500/80 hover:bg-cyan-600 p-0 sm:px-6 sm:py-2 sm:w-28 sm:h-12`}
           onClick={onSubmit}
           disabled={isLoading}
           data-testid="shorten-button"
@@ -58,7 +58,9 @@ export function UrlInput({
           {isLoading ? <Loading /> : 'Shorten'}
         </Button>
       </div>
-      {canDisplayError() && <p className="text-red-600 text-sm pt-2">{error}</p>}
+      {canDisplayError() && (
+        <p className="text-red-600 text-sm pt-2">{error}</p>
+      )}
     </div>
   );
 
