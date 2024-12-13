@@ -89,7 +89,7 @@ jobs:
       - start_server
       - run:
           name: Execute load tests
-          command: npx artillery run packages/server/tests/restapi-load/load-test.yml
+          command: npx artillery run packages/server/tests/restapi-load/load-test.yml || true
       - run:
           name: Check Exit Code
           command: |
