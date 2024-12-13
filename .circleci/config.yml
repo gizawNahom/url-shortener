@@ -34,7 +34,7 @@ commands:
           background: true
       - run:
           name: Wait for server to start
-          command: sleep 65
+          command: sleep 15
 
 jobs:
   lint_and_unit_test:
@@ -82,7 +82,7 @@ jobs:
   load_test:
     executor: node_and_mongo
     environment:
-      PORT: 80
+      PORT: 3000
     steps:
       - checkout
       - node/install-packages
@@ -98,7 +98,7 @@ jobs:
       - image: owasp/zap2docker-stable
         command: sleep 20m
     environment:
-      PORT: 80
+      PORT: 3000
     steps:
       - checkout
       - node/install-packages
