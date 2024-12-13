@@ -109,7 +109,7 @@ jobs:
       - run:
           name: Execute ZAP API tests
           command: |
-            export ZAP=$(docker ps -qf "ancestor=owasp/zap2docker-stable")
+            export ZAP=$(docker ps -qf "ancestor=ghcr.io/zaproxy/zaproxy")
             docker exec $ZAP mkdir -p /zap/wrk/
             docker cp ./packages/server/src/adapter-restapi-express/apiSpec.yml $ZAP:/zap/wrk/apiSpec.yml
             docker exec $ZAP zap-api-scan.py -t apiSpec.yml -f openapi -d -g conf -I -r report.html
