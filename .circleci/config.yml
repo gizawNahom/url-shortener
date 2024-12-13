@@ -70,7 +70,7 @@ jobs:
   server_e2e_test:
     executor: node_and_mongo
     environment:
-      PORT: 80
+      PORT: 3000
     steps:
       - checkout
       - node/install-packages
