@@ -1,5 +1,6 @@
 # UrlShortener
 [![codecov](https://codecov.io/github/gizawNahom/url-shortener/graph/badge.svg?token=2ZF9JBQUJ7)](https://codecov.io/github/gizawNahom/url-shortener)
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/DCEMNRUyfiDau4XSt2DuRB/Pw8EC7uVzMF8NZS6g89ERa/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/DCEMNRUyfiDau4XSt2DuRB/Pw8EC7uVzMF8NZS6g89ERa/tree/main)
 
 The project does what its name implies–it creates short links(URLs) that redirect to long ones. In addition, it collects and visualizes the clicks on the Short URLs.
 
