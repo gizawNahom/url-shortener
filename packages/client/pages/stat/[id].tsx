@@ -25,7 +25,7 @@ export default function Stat() {
   }, [id, router]);
 
   return (
-    <div className="mx-auto w-1/2 mt-24 h-[calc(100vh-96px)]">
+    <div className=" w-full px-5 max-w-[600px] mx-auto mt-7 sm:px-0 md:mt-24">
       {url ? displayPage() : displayLoading()}
     </div>
   );
@@ -126,7 +126,7 @@ export default function Stat() {
         }
 
         function displayTopDeviceTypes() {
-          return <div className="col-span-2 mb-3">
+          return <div className="col-span-4 mb-3 sm:col-span-2">
             <TopDeviceTypes id={id} />
           </div>;
         }
