@@ -95,6 +95,7 @@ jobs:
           command: |
             if [ $? -eq 21 ]; then
               echo "Exit code 21 is not an error."
+              exit 0
             else
               exit 1
             fi
