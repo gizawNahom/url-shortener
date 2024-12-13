@@ -34,7 +34,7 @@ commands:
           background: true
       - run:
           name: Wait for server to start
-          command: sleep 35
+          command: sleep 65
 
 jobs:
   lint_and_unit_test:
