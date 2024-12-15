@@ -89,15 +89,7 @@ jobs:
       - start_server
       - run:
           name: Execute load tests
-          command: |
-            npx artillery run packages/server/tests/restapi-load/load-test.yml
-            EXIT_CODE=$?
-            if [ $EXIT_CODE -eq 21 ]; then
-              echo "Exit code 21 is not an error."
-              exit 0
-            else
-              exit $EXIT_CODE
-            fi
+          command: bash ./packages/server/scripts/run_load_test.sh
   dynamic_security_test:
     docker:
       - image: cimg/node:18.17.1
@@ -152,11 +144,11 @@ workflows:
       - server_e2e_test:
           requires:
             - lint_and_unit_test
-      # - load_test:
-      #     requires:
-      #       - mongodb_integration_test
-      #       - contract_test
-      #       - server_e2e_test
+      - load_test:
+          requires:
+            - mongodb_integration_test
+            - contract_test
+            - server_e2e_test
       - dynamic_security_test:
           requires:
             - mongodb_integration_test
