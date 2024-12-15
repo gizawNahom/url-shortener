@@ -134,27 +134,26 @@ workflows:
   build_and_test:
     when: { equal: [test, << pipeline.parameters.workflow >>] }
     jobs:
-      # - lint_and_unit_test
-      # - mongodb_integration_test:
-      #     requires:
-      #       - lint_and_unit_test
-      # - contract_test:
-      #     requires:
-      #       - lint_and_unit_test
-      # - server_e2e_test:
-      #     requires:
-      #       - lint_and_unit_test
-      # - load_test:
-      #     requires:
-      #       - mongodb_integration_test
-      #       - contract_test
-      #       - server_e2e_test
-      # - dynamic_security_test:
-      #     requires:
-      #       - mongodb_integration_test
-      #       - contract_test
-      #       - server_e2e_test
-      - load_test
+      - lint_and_unit_test
+      - mongodb_integration_test:
+          requires:
+            - lint_and_unit_test
+      - contract_test:
+          requires:
+            - lint_and_unit_test
+      - server_e2e_test:
+          requires:
+            - lint_and_unit_test
+      - load_test:
+          requires:
+            - mongodb_integration_test
+            - contract_test
+            - server_e2e_test
+      - dynamic_security_test:
+          requires:
+            - mongodb_integration_test
+            - contract_test
+            - server_e2e_test
   deploy:
     when: { equal: [deploy, << pipeline.parameters.workflow >>] }
     jobs:
