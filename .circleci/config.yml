@@ -131,7 +131,7 @@ jobs:
           command: |
             curl -f $RENDER_SERVER_DEPLOY_HOOK
 workflows:
-  build_and_test:
+  test_and_deploy:
     when: { equal: [test, << pipeline.parameters.workflow >>] }
     jobs:
       - lint_and_unit_test
@@ -154,6 +154,9 @@ workflows:
             - mongodb_integration_test
             - contract_test
             - server_e2e_test
+      - deploy:
+          context:
+            - url-shortener-context
   deploy:
     when: { equal: [deploy, << pipeline.parameters.workflow >>] }
     jobs:
