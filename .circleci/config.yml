@@ -157,6 +157,9 @@ workflows:
       - deploy:
           context:
             - url-shortener-context
+          requires:
+            - load_test
+            - dynamic_security_test
   deploy:
     when: { equal: [deploy, << pipeline.parameters.workflow >>] }
     jobs:
