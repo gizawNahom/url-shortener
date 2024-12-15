@@ -89,15 +89,7 @@ jobs:
       - start_server
       - run:
           name: Execute load tests
-          command: |
-            npx artillery run packages/server/tests/restapi-load/load-test.yml
-            EXIT_CODE=$?
-            if [ $EXIT_CODE -eq 21 ]; then
-              echo "Exit code 21 is not an error."
-              exit 0
-            else
-              exit $EXIT_CODE
-            fi
+          command: ./run_load_test.sh
   dynamic_security_test:
     docker:
       - image: cimg/node:18.17.1
