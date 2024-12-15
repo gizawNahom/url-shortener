@@ -89,7 +89,7 @@ jobs:
       - start_server
       - run:
           name: Execute load tests
-          command: ./run_load_test.sh
+          command: ./packages/server/scripts/run_load_test.sh
   dynamic_security_test:
     docker:
       - image: cimg/node:18.17.1
