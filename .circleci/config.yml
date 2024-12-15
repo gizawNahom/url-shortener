@@ -158,3 +158,5 @@ workflows:
     when: { equal: [deploy, << pipeline.parameters.workflow >>] }
     jobs:
       - deploy
+        context:
+          - url-shortener-context
