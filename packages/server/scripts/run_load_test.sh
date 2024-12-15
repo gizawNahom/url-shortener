@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Running load test..."
-npx artillery run ../packages/server/tests/restapi-load/load-test.yml
+npx artillery run ./packages/server/tests/restapi-load/load-test.yml
 EXIT_CODE=$?
 echo $EXIT_CODE
 echo "Load test finished"
