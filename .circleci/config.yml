@@ -119,7 +119,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/deploy:2023.09
+      - image: cimg/deploy:2024.11.1
     steps:
       - checkout
       - run:
