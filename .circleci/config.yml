@@ -125,7 +125,7 @@ jobs:
       - run:
           name: Deploy client to Render
           command: |
-            curl -f $RENDER_CLIENT_DEPLOY_HOOK
+            curl -f $CLIENT_DEPLOY_HOOK
       - run:
           name: Deploy server to Render
           command: |
