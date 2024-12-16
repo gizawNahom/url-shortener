@@ -27,7 +27,7 @@ export default function Index() {
 
   function displayCard() {
     return (
-      <div className="rounded shadow-xl py-10 px-2 w-full sm:w-[600px] sm:max-w-[600px]">
+      <div className="rounded shadow-xl py-10 px-2 w-full sm:w-[600px] sm:max-w-[600px] sm:px-7">
         <UrlInput
           onLinkChange={(link: string) => setLink(link)}
           onSubmit={submit}
