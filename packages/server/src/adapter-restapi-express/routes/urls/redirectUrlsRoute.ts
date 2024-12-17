@@ -38,6 +38,6 @@ export class RedirectUrlsRoute {
   }
 
   private redirect(res: Response, redirectUrl: string) {
-    res.redirect(301, redirectUrl);
+    res.redirect(302, redirectUrl);
   }
 }

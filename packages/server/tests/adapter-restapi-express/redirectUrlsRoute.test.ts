@@ -28,7 +28,7 @@ describe('GET /<id>', () => {
 
   testUnknownException(() => sendRequest(validId));
 
-  test('responds with a 301 redirect if id exists', async () => {
+  test('responds with a 302 redirect if id exists', async () => {
     const deviceType = 'tablet';
     await saveUrl();
 
@@ -39,7 +39,7 @@ describe('GET /<id>', () => {
       tabletUserAgent
     );
 
-    assertStatusCode(response, 301);
+    assertStatusCode(response, 302);
     expect(response.headers.location).toBe(url.getLongUrl());
     await assertSavedDeviceType(
       Context.urlStorage,
