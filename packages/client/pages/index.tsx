@@ -11,7 +11,7 @@ export default function Index() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className="flex flex-col items-center h-screen gap-y-14 justify-center p-3 sm:p-0">
+    <div className="flex flex-col items-center h-screen gap-y-36 sm:gap-y-14 justify-center p-6 sm:p-0">
       {displayHeader()}
       {displayCard()}
     </div>
@@ -27,7 +27,7 @@ export default function Index() {
 
   function displayCard() {
     return (
-      <div className="rounded shadow-xl py-10 px-2 w-full sm:w-[600px] sm:max-w-[600px] sm:px-7">
+      <div className="rounded shadow-xl py-4 px-3 w-full bg-transparent sm:w-[600px] sm:max-w-[600px] sm:px-7 sm:py-10">
         <UrlInput
           onLinkChange={(link: string) => setLink(link)}
           onSubmit={submit}

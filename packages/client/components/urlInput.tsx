@@ -50,7 +50,7 @@ export function UrlInput({
           className={`${
             isLoading &&
             'cursor-not-allowed bg-cyan-500/60 hover:bg-cyan-500/60 hover:shadow-cyan-500/40'
-          } text-white text-lg w-24 h-9 transition duration-150 ease-in-out rounded-lg bg-cyan-500 shadow-md shadow-cyan-500/40 hover:shadow-cyan-500/80 hover:bg-cyan-600 p-0 sm:px-6 sm:py-2 sm:w-28 sm:h-12`}
+          } px-4 text-white text-lg w-24 h-9 transition duration-150 ease-in-out rounded-lg bg-cyan-500 shadow-md shadow-cyan-500/40 hover:shadow-cyan-500/80 hover:bg-cyan-600 p-0 sm:px-6 sm:py-2 sm:w-28 sm:h-12`}
           onClick={onSubmit}
           disabled={isLoading}
           data-testid="shorten-button"
