@@ -19,7 +19,7 @@ test('shortens url', async () => {
 test('redirects url', async () => {
   const res = await request.get(shortUrl.pathname);
 
-  expect(res.statusCode).toBe(301);
+  expect(res.statusCode).toBe(302);
   expect(res.headers.location).toBe(longUrl);
 });
 
